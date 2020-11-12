@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "98043042231",
+    "firebase_url": "https://jackpot-78bce.firebaseio.com",
+    "project_id": "jackpot-78bce",
+    "storage_bucket": "jackpot-78bce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98043042231:android:4aa248b229aa3d7ed67032",
+        "android_client_info": {
+          "package_name": "com.equitysoft.flutterjackpot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98043042231-om79bf1eb8pe4g53fmcr5hoaf3js8f7j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.equitysoft.flutterjackpot",
+            "certificate_hash": "49b413f09742df8bb7880b011f992d8d7267d69c"
+          }
+        },
+        {
+          "client_id": "98043042231-d2106r0hiul4vdvj06apg0l8l5neendn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.equitysoft.flutterjackpot",
+            "certificate_hash": "d3cdb5c4fab578480660151a05f8034ae7583ede"
+          }
+        },
+        {
+          "client_id": "98043042231-vfsh7pm3k4tif4jglec702tqomiokol2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2znYQjhMxRLO5ciG07GNJY6V_EflCmB4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98043042231-vfsh7pm3k4tif4jglec702tqomiokol2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "98043042231-3ih2vor40oavf2a2uvjtd8cuopsbf1g6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.triviastax"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98043042231:android:79f7c209414032e4d67032",
+        "android_client_info": {
+          "package_name": "com.triviastax"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98043042231-m6sql8n4aoesusfdllmvd6dis5n181dq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.triviastax",
+            "certificate_hash": "49b413f09742df8bb7880b011f992d8d7267d69c"
+          }
+        },
+        {
+          "client_id": "98043042231-vfsh7pm3k4tif4jglec702tqomiokol2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2znYQjhMxRLO5ciG07GNJY6V_EflCmB4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98043042231-vfsh7pm3k4tif4jglec702tqomiokol2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "98043042231-3ih2vor40oavf2a2uvjtd8cuopsbf1g6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.triviastax"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
