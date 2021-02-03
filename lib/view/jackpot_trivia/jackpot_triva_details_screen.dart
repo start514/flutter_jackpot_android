@@ -242,6 +242,7 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
     });
     AdMobClass.showVideoAdd(
       isSpin: false,
+      isInterstitial: true,
       afterVideoEnd: () {
         Navigator.push(
           context,

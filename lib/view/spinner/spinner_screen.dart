@@ -333,6 +333,7 @@ class _SpinnerScreenState extends State<SpinnerScreen> {
     });
     AdMobClass.showVideoAdd(
       isSpin: true,
+      isInterstitial: false,
       afterVideoEnd: () {
         setState(() {
           _isLoading = false;

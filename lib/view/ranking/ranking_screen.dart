@@ -48,129 +48,129 @@ class _RankingScreenState extends State<RankingScreen> {
   Widget _bodyWidget(List<TopRankerRecord> topRankerList) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          sizedBoxAddMob(42.0),
-          Container(
-            margin: EdgeInsets.all(8.0),
-            width: double.infinity,
-            padding: EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              color: blackColor,
-              border: Border.all(
-                color: whiteColor,
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: Text(
-              "Rankings",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 30.0,
-                color: greenColor,
-              ),
-            ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
-            child: layoutBuilderDot(whiteColor),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: blackColor,
-              border: Border.all(
-                color: whiteColor,
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(0.0),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 10.0,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            sizedBoxAddMob(42.0),
+            Container(
+              margin: EdgeInsets.all(8.0),
+              width: double.infinity,
+              padding: EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: blackColor,
+                border: Border.all(
+                  color: whiteColor,
+                  width: 2,
                 ),
-                Container(
-                  padding: EdgeInsets.only(
-                      top: 5.0, bottom: 5.0, right: 30.0, left: 30.0),
-                  decoration: BoxDecoration(
-                    color: whiteColor,
-                    border: Border.all(
-                      color: blackColor,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(29.5),
-                  ),
-                  child: Text(
-                    "Top 100",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: blackColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Text(
+                "Rankings",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30.0,
+                  color: greenColor,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 8.0, left: 0.0, right: 0.0, bottom: 0.0),
-                  child: Table(
-                    border: TableBorder.all(),
-                    children: [
-                      TableRow(
-                        decoration: BoxDecoration(
-                          color: greenColor,
-                        ),
-                        children: [
-                          Center(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                              child: AutoSizeText(
-                                "#",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                              child: AutoSizeText(
-                                "@USERNAME",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                              child: AutoSizeText(
-                                "Points",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0),
+              child: layoutBuilderDot(whiteColor),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: blackColor,
+                border: Border.all(
+                  color: whiteColor,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(0.0),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(
+                        top: 5.0, bottom: 5.0, right: 30.0, left: 30.0),
+                    decoration: BoxDecoration(
+                      color: whiteColor,
+                      border: Border.all(
+                        color: blackColor,
+                        width: 2,
                       ),
-                    ],
+                      borderRadius: BorderRadius.circular(29.5),
+                    ),
+                    child: Text(
+                      "Top 100",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: blackColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
-                SingleChildScrollView(
-                  child: Container(
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 8.0, left: 0.0, right: 0.0, bottom: 0.0),
+                    child: Table(
+                      border: TableBorder.all(),
+                      children: [
+                        TableRow(
+                          decoration: BoxDecoration(
+                            color: greenColor,
+                          ),
+                          children: [
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, bottom: 8.0),
+                                child: AutoSizeText(
+                                  "#",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, bottom: 8.0),
+                                child: AutoSizeText(
+                                  "@USERNAME",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, bottom: 8.0),
+                                child: AutoSizeText(
+                                  "Points",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
                     margin: EdgeInsets.only(
                         top: 0.0, left: 0.0, right: 0.0, bottom: 0.0),
                     color: blackColor,
@@ -199,7 +199,7 @@ class _RankingScreenState extends State<RankingScreen> {
                                     padding: const EdgeInsets.only(
                                         top: 5.0, bottom: 5.0),
                                     child: Text(
-                                      element.topRankerUserDetails.name,
+                                      element.topRankerUserDetails?.name ?? "",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: whiteColor,
@@ -228,11 +228,11 @@ class _RankingScreenState extends State<RankingScreen> {
                           .toList(),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

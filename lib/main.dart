@@ -33,6 +33,13 @@ class MyApp extends StatelessWidget {
       showNotification: false,
     );
     return MaterialApp(
+      builder: (BuildContext context, Widget child) {
+        final MediaQueryData data = MediaQuery.of(context);
+        return MediaQuery(
+          data: data.copyWith(textScaleFactor: 1.0),
+          child: child,
+        );
+      },
       theme: ThemeData(
         fontFamily: "Baskerville Old Face",
       ),

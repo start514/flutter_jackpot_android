@@ -94,7 +94,9 @@ class AdMobClass {
   }
 
   static void showVideoAdd(
-      {@required void afterVideoEnd(), @required bool isSpin}) {
+      {@required void afterVideoEnd(),
+      @required bool isSpin,
+      @required bool isInterstitial}) {
     try {
       Preferences.getString(Preferences.pfKConsumableIdNoads).then(
         (value) {
@@ -102,26 +104,11 @@ class AdMobClass {
             AppLovin.requestInterstitial((AppLovinAdListener event) {
               print(event);
               if (event == AppLovinAdListener.adReceived) {
-                AppLovin.showInterstitial(interstitial: true);
+                AppLovin.showInterstitial(interstitial: isInterstitial);
               } else if (event == AppLovinAdListener.videoPlaybackEnded) {
                 afterVideoEnd();
               }
-            }, interstitial: true);
-
-            // OLD ID : ca-app-pub-3940256099942544/8691691433
-            // var interstitialAd = InterstitialAd(
-            //   adUnitId: "ca-app-pub-4114721748955868/1553425137",
-            //   targetingInfo: _getMobileAdTargetingInfo(),
-            //   listener: (MobileAdEvent event) {
-            //     print("InterstitialAd event is $event");
-            //     if (event.index == 6) {
-            //       afterVideoEnd();
-            //     }
-            //   },
-            // );
-            // interstitialAd
-            //   ..load()
-            //   ..show(anchorOffset: 0.0, anchorType: AnchorType.bottom);
+            }, interstitial: isInterstitial);
           } else {
             afterVideoEnd();
           }

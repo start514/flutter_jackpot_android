@@ -321,10 +321,12 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                                 top: 15.0,
                                 bottom: 15.0),
                             decoration: BoxDecoration(
-                              color: _option.isAnswer == "1" &&
-                                      _option.isSelected
-                                  ? greenColor
-                                  : _option.isSelected ? redColor : blackColor,
+                              color:
+                                  _option.isAnswer == "1" && _option.isSelected
+                                      ? greenColor
+                                      : _option.isSelected
+                                          ? redColor
+                                          : blackColor,
                               border: Border.all(
                                 color: whiteColor,
                                 width: 2.5,
@@ -349,7 +351,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                         decoration: BoxDecoration(
                           color: _option.isAnswer == "1" && _option.isSelected
                               ? greenColor
-                              : _option.isSelected ? redColor : blackColor,
+                              : _option.isSelected
+                                  ? redColor
+                                  : blackColor,
                           border: Border.all(
                             color: whiteColor,
                             width: 2.5,
@@ -470,6 +474,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               getBonus();
               AdMobClass.showVideoAdd(
                 isSpin: false,
+                isInterstitial: false,
                 afterVideoEnd: () {
                   Navigator.pushAndRemoveUntil(
                       context,
@@ -524,6 +529,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                   getBonus();
                   AdMobClass.showVideoAdd(
                     isSpin: false,
+                    isInterstitial: false,
                     afterVideoEnd: () {
                       Navigator.pushAndRemoveUntil(
                           context,

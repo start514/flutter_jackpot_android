@@ -14,8 +14,10 @@ import 'package:flutterjackpot/utils/image_utils.dart';
 import 'package:flutterjackpot/view/spinner/spinner_controller.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutterjackpot/main.dart';
 import 'home/home_screen.dart';
+import 'package:flutterjackpot/view/login_signUp/login_signup_model.dart';
+import 'dart:convert';
 
 const bool kAutoConsume = true;
 const String _kConsumableId = 'com.triviastax.elitepackage';
@@ -115,7 +117,38 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            sizedBoxAddMob(100.0),
+            sizedBoxAddMob(70.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, bottom: 30),
+                  child: Container(
+                    height: 40.0,
+                    width: 65.0,
+                    padding: EdgeInsets.only(bottom: 0.0),
+                    margin: EdgeInsets.only(bottom: 0.0),
+                    decoration: BoxDecoration(
+                      color: greenColor,
+                      border: Border.all(
+                        color: blackColor,
+                        width: 3.0,
+                      ),
+                      borderRadius: BorderRadius.circular(12.5),
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: blackColor,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
             Padding(
               padding: const EdgeInsets.only(bottom: 30.0),
               child: Text(
@@ -297,8 +330,8 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
           children: [
             Align(
               child: Container(
-                margin: EdgeInsets.only(top: 14.0),
-                height: 150.0,
+                margin: EdgeInsets.only(top: 0.0),
+                height: 100.0,
                 decoration: BoxDecoration(
                   color: blackColor,
                   border: Border.all(
@@ -314,95 +347,32 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
                 Align(
                   alignment: Alignment.topCenter,
                   child: Container(
-                    margin: EdgeInsets.only(top: 0.0, bottom: 8.0),
+                    margin: EdgeInsets.only(top: 10.0, bottom: 0.0),
                     padding:
                         EdgeInsets.symmetric(vertical: 5.0, horizontal: 12.0),
-                    decoration: BoxDecoration(
-                      color: whiteColor,
-                      border: Border.all(
-                        color: blackColor,
-                        width: 2.5,
-                      ),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
                     child: Text(
-                      "NO ADS!",
+                      "NO ADS!!",
                       style: TextStyle(
-                        color: blackColor,
-                        fontSize: 18.0,
+                        color: whiteColor,
+                        fontSize: 25.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
                 Align(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        height: 100.0,
-                        width: 100.0,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: greenColor,
-                          border: Border.all(
-                            color: blackColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        child: Text(
-                          "2X \n REWARDS / \n JACKPOTS",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: blackColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 0.0, bottom: 8.0),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 5.0, horizontal: 12.0),
+                    child: Text(
+                      "Enjoy our game with ad free experience",
+                      style: TextStyle(
+                        color: whiteColor,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Container(
-                        height: 100.0,
-                        width: 100.0,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: greenColor,
-                          border: Border.all(
-                            color: blackColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        child: AutoSizeText(
-                          "10 OF \n EACH \n POWER UP",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: blackColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 100.0,
-                        width: 100.0,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: greenColor,
-                          border: Border.all(
-                            color: blackColor,
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        child: Text(
-                          "MONTHLY \n VIP ONLY \n QUIZZES",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: blackColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -423,26 +393,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                       child: AutoSizeText(
-                        "VIP Member",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 122.0,
-                      padding: EdgeInsets.all(7.0),
-                      decoration: BoxDecoration(
-                        color: whiteColor,
-                        border: Border.all(
-                          color: blackColor,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: AutoSizeText(
-                        "\$ 1.99 / month",
+                        "\$ 3.99 / month",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -452,26 +403,6 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
                   ],
                 ),
               ],
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                height: 43.5,
-                width: 43.5,
-                decoration: BoxDecoration(
-                  color: whiteColor,
-                  border: Border.all(
-                    color: blackColor,
-                    width: 2.5,
-                  ),
-                  borderRadius: BorderRadius.circular(29.5),
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.info_outline),
-                  onPressed: () {},
-                ),
-              ),
             ),
           ],
         ),
@@ -616,8 +547,11 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
 
   Card _buildProductList(int count) {
     List<ProductDetails> _selectedProducts = [];
-    ProductDetails proDetails = _products[count];
-    _selectedProducts.add(proDetails);
+    print(_products);
+    if (_products.length > count) {
+      ProductDetails proDetails = _products[count];
+      _selectedProducts.add(proDetails);
+    }
 
     if (_loading) {
       return Card(
@@ -632,10 +566,27 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
     List<ListTile> productList = <ListTile>[];
     if (_notFoundIds.isNotEmpty) {
       productList.add(ListTile(
-          title: Text('[${_notFoundIds.join(", ")}] not found',
+          title: Text('Product ID [${_notFoundIds.join(", ")}] not found',
               style: TextStyle(color: ThemeData.light().errorColor)),
           subtitle: Text(
-              'This app needs special configuration to run. Please see example/README.md for instructions.')));
+              'You have to add in-app purchase products in appstoreconnect.'),
+          trailing: FlatButton(
+            child: Text("TestBuy"),
+            color: Colors.green[800],
+            textColor: Colors.white,
+            onPressed: () {
+              PurchaseDetails purchaseDetails = new PurchaseDetails(
+                purchaseID: "",
+                productID: _kConsumableId,
+                verificationData: null,
+                transactionDate: "",
+                skPaymentTransaction: null,
+                billingClientPurchase: null,
+              );
+              whenPurchaseComplete(purchaseDetails);
+              refreshMainWidget();
+            },
+          )));
     }
 
     // This loading previous purchases code is just a demo. Please do not use this as it is.
@@ -716,8 +667,11 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
           _purchasePending = false;
           _loading = false;
         });
+        print(productDetailResponse.error.message);
         return;
       }
+
+      print(_products);
 
       if (productDetailResponse.productDetails.isEmpty) {
         setState(() {
@@ -826,15 +780,11 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
       );
 //      navigateToHomeScreen();
     } else if (purchaseDetails.productID == _kConsumableId_noads) {
-      await sendRewardWhenPurchaseComplete(
-        item: bomb,
-        count: "10",
-      );
       await Preferences.setString(
         Preferences.pfKConsumableIdNoads,
         purchaseDetails.productID,
       );
-//      navigateToHomeScreen();
+      //      navigateToHomeScreen();
     } else if (purchaseDetails.productID == _kConsumableId_powerup_one) {
       await sendRewardWhenPurchaseComplete(
         item: bomb,
@@ -925,6 +875,27 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
         _purchasePending = false;
       });
     }
+
+    refreshMainWidget();
+  }
+
+  void refreshMainWidget() {
+    Preferences.getString(Preferences.pfUserLogin).then((value) {
+      if (value != null) {
+        LoginSignUpModel model = LoginSignUpModel.fromJson(
+          json.decode(value),
+        );
+        LoginSpinDetails spinDetailsNew = model.userRecord.loginSpinDetails;
+        spinDetails.id = spinDetailsNew.id;
+        spinDetails.userId = spinDetailsNew.userId;
+        spinDetails.theBomb = spinDetailsNew.theBomb;
+        spinDetails.theHeart = spinDetailsNew.theHeart;
+        spinDetails.theTime = spinDetailsNew.theTime;
+        spinDetails.thePlayer = spinDetailsNew.thePlayer;
+        spinDetails.createdAt = spinDetailsNew.createdAt;
+        spinDetails.updatedAt = spinDetailsNew.updatedAt;
+      }
+    });
   }
 
   void handleError(IAPError error) {
@@ -1050,13 +1021,12 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
     await sendSpinRewardController.sendSpinRewardAPI(item: item, count: count);
   }
 
-  void navigateToHomeScreen(){
+  void navigateToHomeScreen() {
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) => HomeScreen(),
         ),
-            (route) => false);
+        (route) => false);
   }
-
 }

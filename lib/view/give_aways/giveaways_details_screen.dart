@@ -219,6 +219,7 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
                   });
                   AdMobClass.showVideoAdd(
                     isSpin: false,
+                    isInterstitial: true,
                     afterVideoEnd: () {
                       setState(() {
                         _isLoading = false;

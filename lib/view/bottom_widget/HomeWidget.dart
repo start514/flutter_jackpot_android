@@ -116,7 +116,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                         context: context,
                         child: new SimpleDialog(
                           title: new Text(
-                            "Are You Sure You Want To LogOut This App!",
+                            "Are You Sure You Want To Log Out Of This App!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -134,7 +134,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                           horizontal: 12.0),
                                       child: InkWell(
                                         child: new Text(
-                                          "Cancle",
+                                          "Cancel",
                                           style: TextStyle(
                                               fontSize: 18.0,
                                               fontWeight: FontWeight.bold,
