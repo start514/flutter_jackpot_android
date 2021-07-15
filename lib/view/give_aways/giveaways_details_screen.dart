@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -18,7 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class GiveWaysDetailsScreen extends StatefulWidget {
-  final GiveAWaysRecord giveAWaysRecord;
+  final GiveAWaysRecord? giveAWaysRecord;
 
   GiveWaysDetailsScreen({this.giveAWaysRecord});
 
@@ -27,22 +26,24 @@ class GiveWaysDetailsScreen extends StatefulWidget {
 }
 
 class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
-  RewardedVideoAd mRewardedVideoAd;
-
   GiveAWaysController giveAWaysController = new GiveAWaysController();
 
-  List<GiveAWaysDetailsModelRecord> giveAWaysDetails = new List();
+  List<GiveAWaysDetailsModelRecord>? giveAWaysDetails = List.empty();
 
   bool _isLoading = true;
+  double unitHeightValue = 1;
+  double unitWidthValue = 1;
 
   @override
   void initState() {
     super.initState();
-    getGiveAWaysDetails(widget.giveAWaysRecord);
+    getGiveAWaysDetails(widget.giveAWaysRecord!);
   }
 
   @override
   Widget build(BuildContext context) {
+    unitHeightValue = MediaQuery.of(context).size.height * 0.001;
+     unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
     return Stack(
       children: [
         bgImage(context),
@@ -54,7 +55,7 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
                     radius: 15.0,
                   ),
                 )
-              : _bodyWidget(giveAWaysDetails),
+              : _bodyWidget(giveAWaysDetails!),
         ),
       ],
     );
@@ -62,68 +63,99 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
 
   Widget _bodyWidget(List<GiveAWaysDetailsModelRecord> giveAWaysDetails) {
     GiveAWaysDetailsModelRecord details = giveAWaysDetails[0];
-    String formattedDate = DateFormat("M/d/yy").format(details.endDate);
+    String formattedDate = DateFormat("M/d/yy").format(details.endDate!);
     print("DATETIME");
     print(formattedDate);
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: EdgeInsets.all(12.0),
       child: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              sizedBoxAddMob(90.0),
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: blackColor,
-                  border: Border.all(
-                    color: whiteColor,
-                    width: 2,
+              sizedBoxAddMob(unitHeightValue * 42.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: unitHeightValue * 45.0,
+                      width: unitWidthValue * 100,
+                    child: RaisedButton(
+                      child: Icon(
+                        Icons.arrow_back_outlined,
+                        color: greenColor,
+                        size: unitHeightValue * 24.0,
+                        semanticLabel:
+                            'Text to announce in accessibility modes',
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      color: blackColor,
+                      textColor: blackColor,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(color: greenColor, width: unitWidthValue * 2.0),
+                        borderRadius: BorderRadius.circular(unitHeightValue * 29.5),
+                      ),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                child: Text(
-                  "Giveaways",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    color: greenColor,
+                  SizedBox(
+                    width: unitWidthValue * 10,
                   ),
-                ),
+                  Expanded(
+                      child: Container(
+                    // width: unitWidthValue * double.infinity,
+                    padding: EdgeInsets.fromLTRB( unitWidthValue * 8.0, unitHeightValue * 2.0, unitWidthValue * 8.0, unitHeightValue * 2.0),
+                    decoration: BoxDecoration(
+                      color: blackColor,
+                      border: Border.all(
+                        color: greenColor,
+                        width: unitWidthValue * 2,
+                      ),
+                      borderRadius: BorderRadius.circular(unitHeightValue * 15.0),
+                    ),
+                    child: Text(
+                      "GIVEAWAYS",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: unitHeightValue * 32.0,
+                          color: whiteColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ))
+                ],
               ),
               SizedBox(
-                height: 20.0,
+                height: unitHeightValue * 20.0,
               ),
               Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
                   Container(
-                    padding: EdgeInsets.only(bottom: 0.0),
-                    margin: EdgeInsets.only(bottom: 15.0),
-                    height: 160.0,
-                    width: double.infinity,
+                    padding: EdgeInsets.only(bottom: unitHeightValue * 0.0),
+                    margin: EdgeInsets.fromLTRB( unitWidthValue * 15, unitHeightValue * 0, unitWidthValue * 15.0, unitHeightValue * 15.0),
+                    height: unitHeightValue * 160.0,
+                    width: unitWidthValue * double.infinity,
                     decoration: BoxDecoration(
                       color: whiteColor,
                       border: Border.all(
                         color: blackColor,
-                        width: 2,
+                        width: unitWidthValue * 2,
                       ),
-                      borderRadius: BorderRadius.circular(27.0),
+                      borderRadius: BorderRadius.circular(unitHeightValue * 27.0),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(0.0),
+                      padding: EdgeInsets.all(0.0),
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25.0),
+                          borderRadius: BorderRadius.circular(unitHeightValue * 25.0),
                           border: Border.all(
                             color: blackColor,
-                            width: 1.5,
+                            width: unitWidthValue * 1.5,
                           ),
                           image: DecorationImage(
                             image: NetworkImage(
-                              UrlImageGiveAWaysPrefixUrl + details.photoThumb,
+                              UrlImageGiveAWaysPrefixUrl + details.photoThumb!,
                             ),
                             fit: BoxFit.scaleDown,
                           ),
@@ -132,22 +164,22 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
                     ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width - 60,
-                    padding: EdgeInsets.all(5.0),
+                    width:  MediaQuery.of(context).size.width - unitWidthValue * 150,
+                    padding: EdgeInsets.all(unitHeightValue * 2.0),
                     decoration: BoxDecoration(
-                      color: whiteColor,
+                      color: greenColor,
                       border: Border.all(
                         color: blackColor,
-                        width: 2,
+                        width: unitWidthValue * 2,
                       ),
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(unitHeightValue * 6.0),
                     ),
                     child: AutoSizeText(
-                      details.name,
+                      details.name!.toUpperCase(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: blackColor,
-                        fontSize: 16.0,
+                        fontSize: unitHeightValue * 24.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -155,28 +187,54 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
                 ],
               ),
               SizedBox(
-                height: 25.0,
+                height: unitHeightValue * 25.0,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
+                  SizedBox(
+                    width: unitWidthValue * 20,
+                  ),
                   Expanded(
                     child: _roundedButtons(
-                      title: "Ends",
-                      subTitle: formattedDate,
+                      title: "ENDS " + formattedDate,
                     ),
                   ),
                   SizedBox(
-                    width: 7.0,
+                    width: unitWidthValue * 40,
                   ),
                   Expanded(
                     child: _roundedButtons(
-                      title: "Free",
-                      subTitle: "Entry",
-                      color: greenColor,
+                      title: "GAME RULES",
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => RulesDialog(
+                            details: details,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: unitWidthValue * 20,
+                  ),
+                ],
+              ),
+              SizedBox(height: unitHeightValue * 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  SizedBox(
+                    width: unitWidthValue * 20,
+                  ),
+                  Expanded(
+                    child: _entryButton(
+                      title: "FREE ENTRY",
+                      entryCount: 1,
                       onTap: () {
                         giveAWaysController.submitfreeEntryGiveaway(
-                            giveaway_id: widget.giveAWaysRecord.id);
+                            giveaway_id: widget.giveAWaysRecord!.id);
                         showDialog(
                           context: context,
                           builder: (BuildContext context) => EarnedDialog(
@@ -188,81 +246,108 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
                     ),
                   ),
                   SizedBox(
-                    width: 7.0,
+                    width: unitWidthValue * 40,
                   ),
                   Expanded(
-                    child: _roundedButtons(
-                      title: "Game",
-                      subTitle: "Rules",
+                    child: _entryButton(
+                      entryCount: 3,
+                      image: "play.png",
                       onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) => RulesDialog(
-                            details: details,
-                          ),
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        AdMobClass.showVideoAdd(
+                          isSpin: false,
+                          afterVideoEnd: () {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => EarnedDialog(
+                                details: details,
+                                isEntry: false,
+                              ),
+                            );
+                          },
                         );
                       },
                     ),
                   ),
+                  SizedBox(
+                    width: unitWidthValue * 20,
+                  ),
                 ],
               ),
               SizedBox(
-                height: 10.0,
+                height: unitHeightValue * 10.0,
               ),
-              _roundedAddOption(
-                image: "youtube_flat.png",
-                title: details.task[0].name,
-                entries: details.task[0].entry,
-                onTap: () {
-                  setState(() {
-                    _isLoading = true;
-                  });
-                  AdMobClass.showVideoAdd(
-                    isSpin: false,
-                    isInterstitial: true,
-                    afterVideoEnd: () {
-                      setState(() {
-                        _isLoading = false;
-                      });
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => EarnedDialog(
-                          details: details,
-                          isEntry: false,
-                        ),
-                      );
-                    },
-                  );
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  SizedBox(
+                    width: unitWidthValue * 20,
+                  ),
+                  Expanded(
+                    child: _entryButton(
+                        entryCount: 5,
+                        image: "tiktok.png",
+                        onTap: () {
+                          _launchURL(details.task![4].url);
+                        }),
+                  ),
+                  SizedBox(
+                    width: unitWidthValue * 40,
+                  ),
+                  Expanded(
+                    child: _entryButton(
+                        entryCount: 5,
+                        image: "facebook_.png",
+                        onTap: () {
+                          _launchURL(details.task![1].url);
+                        }),
+                  ),
+                  SizedBox(
+                    width: unitWidthValue * 20,
+                  ),
+                ],
               ),
-              _roundedAddOption(
-                  image: "facebook.png",
-                  title: details.task[1].name,
-                  entries: details.task[1].entry,
-                  onTap: () {
-                    _launchURL(details.task[1].url);
-                  }),
-              _roundedAddOption(
-                  image: "facebook.png",
-                  title: details.task[2].name,
-                  entries: details.task[2].entry,
-                  onTap: () {
-                    _launchURL(details.task[2].url);
-                  }),
-              _roundedAddOption(
-                  image: "youtube_flat.png",
-                  title: details.task[3].name,
-                  entries: details.task[3].entry,
-                  onTap: () {
-                    _launchURL(details.task[3].url);
-                  }),
-              _roundedAddOption(
-                  image: "twitter_circle.png",
-                  title: details.task[4].name,
-                  entries: details.task[4].entry,
-                  onTap: () {
-                    _launchURL(details.task[4].url);
-                  }),
+              SizedBox(
+                height: unitHeightValue * 10.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  SizedBox(
+                    width: unitWidthValue * 20,
+                  ),
+                  Expanded(
+                    child: _entryButton(
+                        entryCount: 5,
+                        image: "share.png",
+                        onTap: () {
+                          _launchURL(details.task![2].url);
+                        }),
+                  ),
+                  SizedBox(
+                    width: unitWidthValue * 40,
+                  ),
+                  Expanded(
+                    child: _entryButton(
+                        entryCount: 5,
+                        image: "youtube.png",
+                        onTap: () {
+                          _launchURL(details.task![3].url);
+                        }),
+                  ),
+                  SizedBox(
+                    width: unitWidthValue * 20,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: unitHeightValue * 10.0,
+              )
             ],
           ),
         ),
@@ -271,23 +356,23 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
   }
 
   Widget _roundedButtons(
-      {String title, String subTitle, Color color, void onTap()}) {
+      {String? title, String? subTitle, Color? color, void onTap()?}) {
     return InkWell(
       child: Container(
-        width: MediaQuery.of(context).size.width - 60,
-        padding: EdgeInsets.only(top: 6.0, bottom: 3.0, right: 3.0, left: 3.0),
+        width: MediaQuery.of(context).size.width - unitWidthValue * 60,
+        padding: EdgeInsets.only(top: unitHeightValue * 6.0, bottom: unitHeightValue * 3.0, right: unitWidthValue *2.0, left: unitWidthValue *2.0),
         decoration: BoxDecoration(
-          color: color != null ? color : whiteColor,
+          color: blackColor,
           border: Border.all(
-            color: blackColor,
-            width: 2,
+            color: greenColor,
+            width: unitWidthValue * 2,
           ),
           borderRadius: BorderRadius.all(
-            Radius.circular(25.0),
+            Radius.circular(unitHeightValue * 6.0),
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: EdgeInsets.all(unitHeightValue * 5.0),
           child: Column(
             children: <Widget>[
               title != null
@@ -295,8 +380,8 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
                       title,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: blackColor,
-                        fontSize: 16.0,
+                        color: greenColor,
+                        fontSize: unitHeightValue * 20.0,
                         fontWeight: FontWeight.bold,
                       ),
                     )
@@ -308,7 +393,7 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
                         "html": Style(
                           textAlign: TextAlign.center,
                           color: blackColor,
-                          fontSize: FontSize(16.0),
+                          fontSize: FontSize(unitHeightValue * 16.0),
                           fontWeight: FontWeight.bold,
                         ),
                       },
@@ -322,29 +407,140 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
     );
   }
 
+  Widget _entryButton(
+      {String? title,
+      int? entryCount,
+      String? image,
+      bool? plus,
+      void onTap()?}) {
+    return Container(
+      padding: EdgeInsets.all(unitHeightValue * 5.0),
+      child: InkWell(
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: <Widget>[
+            Align(
+              child: Container(
+                height: unitHeightValue * 140,
+                alignment: Alignment.topCenter,
+                padding: EdgeInsets.all(0.0),
+                margin: EdgeInsets.only(top: unitHeightValue * 10),
+                decoration: BoxDecoration(
+                  color: blackColor,
+                  border: Border.all(
+                    color: whiteColor,
+                    width: unitWidthValue * 2,
+                  ),
+                  borderRadius: BorderRadius.circular(unitHeightValue * 8),
+                ),
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(bottom: unitHeightValue * 40),
+                  child: title != null
+                      ? AutoSizeText(
+                          title,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: greenColor,
+                            fontSize: unitHeightValue * 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : Image.asset(
+                          "assets/$image",
+                          height: unitHeightValue * 80.0,
+                          // width: unitWidthValue * 100.0,
+                          fit: BoxFit.fill,
+                        ),
+                ),
+              ),
+            ),
+            Align(
+                alignment: Alignment.topLeft,
+                child: plus == true
+                    ? Container(
+                        width: unitWidthValue * 60.0,
+                        margin: EdgeInsets.fromLTRB( unitWidthValue * 10, unitHeightValue * 2.0, 0, 0),
+                        padding: EdgeInsets.all(2.0),
+                        decoration: BoxDecoration(
+                          color: blackColor,
+                          border: Border.all(
+                            color: greenColor,
+                            width: unitWidthValue * 2,
+                          ),
+                          borderRadius: BorderRadius.circular(unitHeightValue * 4.0),
+                        ),
+                        child: AutoSizeText(
+                          "+",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: greenColor,
+                            fontSize: unitHeightValue * 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    : Container()),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.all( unitHeightValue * 2 ),
+                           margin: EdgeInsets.all( 0 ),
+                           decoration: BoxDecoration(
+                            color: blackColor,
+                            border: Border.all(
+                              color: whiteColor,
+                              width: unitWidthValue * 2,
+                            ),
+                            borderRadius: BorderRadius.circular(unitHeightValue * 8),
+                          ),
+                          child: AutoSizeText(
+                            "+" +
+                                entryCount.toString() +
+                                (entryCount == 1 ? " ENTRY" : " ENTRIES"),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                color: whiteColor,
+                                fontSize: unitHeightValue * 24,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ])),
+          ],
+        ),
+        onTap: onTap,
+      ),
+    );
+  }
+
   Widget _roundedAddOption(
-      {String title, String image, String entries, void onTap()}) {
+      {required String title, String? image, String? entries, void onTap()?}) {
     return InkWell(
       child: Stack(
         children: <Widget>[
           Container(
             margin:
-                EdgeInsets.only(top: 10.0, bottom: 8.0, right: 8.0, left: 8.0),
-            width: double.infinity,
-            padding: EdgeInsets.only(top: 10.0, bottom: 11.5),
+                EdgeInsets.only(top: unitHeightValue * 10.0, bottom: unitHeightValue * 8.0, right: 8.0, left: 8.0),
+            width: unitWidthValue * double.infinity,
+            padding: EdgeInsets.only(top: unitHeightValue * 10.0, bottom: unitHeightValue * 11.5),
             decoration: BoxDecoration(
               color: whiteColor,
               border: Border.all(
                 color: blackColor,
-                width: 2,
+                width: unitWidthValue * 2,
               ),
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.circular(unitHeightValue * 15.0),
             ),
             child: AutoSizeText(
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: unitHeightValue * 16.0,
                 fontWeight: FontWeight.bold,
                 color: blackColor,
               ),
@@ -353,19 +549,19 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              margin: EdgeInsets.only(top: 4.0, left: 5.0),
+              margin: EdgeInsets.only(top: unitHeightValue * 4.0, left: 5.0),
               decoration: BoxDecoration(
                 color: whiteColor,
                 border: Border.all(
                   color: blackColor,
-                  width: 2,
+                  width: unitWidthValue * 2,
                 ),
-                borderRadius: BorderRadius.circular(29.5),
+                borderRadius: BorderRadius.circular(unitHeightValue * 29.5),
               ),
               child: Image.asset(
                 "assets/$image",
-                height: 50.0,
-                width: 50.0,
+                height: unitHeightValue * 50.0,
+                width: unitWidthValue * unitHeightValue * 50.0,
                 fit: BoxFit.fill,
               ),
             ),
@@ -373,19 +569,19 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
           Align(
             alignment: Alignment.centerRight,
             child: Container(
-              margin: EdgeInsets.only(top: 7.5, right: 4.5, bottom: 2.0),
+              margin: EdgeInsets.only(top: unitHeightValue * 7.5, right: 4.5, bottom: unitHeightValue * 2.0),
               padding: EdgeInsets.all(7.0),
               decoration: BoxDecoration(
                 color: greenColor,
                 border: Border.all(
                   color: blackColor,
-                  width: 2,
+                  width: unitWidthValue * 2,
                 ),
-                borderRadius: BorderRadius.circular(29.5),
+                borderRadius: BorderRadius.circular(unitHeightValue * 29.5),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 0.0, bottom: 0.0, right: 8.0, left: 8.0),
+                padding: EdgeInsets.only(
+                    top: unitHeightValue * 0.0, bottom: unitHeightValue * 0.0, right: 8.0, left: 8.0),
                 child: Text(
                   "$entries\nEntries",
                   textAlign: TextAlign.center,
@@ -400,7 +596,7 @@ class _GiveWaysDetailsScreenState extends State<GiveWaysDetailsScreen> {
         ],
       ),
       onTap: () {
-        onTap();
+        onTap!();
       },
     );
   }

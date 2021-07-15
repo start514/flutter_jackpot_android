@@ -15,9 +15,9 @@ class TopRankerScore {
     this.rankerRecords,
   });
 
-  int s;
-  String m;
-  List<RankerRecord> rankerRecords;
+  int? s;
+  String? m;
+  List<RankerRecord>? rankerRecords;
 
   factory TopRankerScore.fromJson(Map<String, dynamic> json) => TopRankerScore(
         s: json["s"] == null ? null : json["s"],
@@ -32,7 +32,7 @@ class TopRankerScore {
         "m": m == null ? null : m,
         "records": rankerRecords == null
             ? null
-            : List<dynamic>.from(rankerRecords.map((x) => x.toJson())),
+            : List<dynamic>.from(rankerRecords!.map((x) => x.toJson())),
       };
 }
 
@@ -43,9 +43,9 @@ class RankerRecord {
     this.userDetails,
   });
 
-  String userId;
-  String totalPoints;
-  UserDetails userDetails;
+  String? userId;
+  String? totalPoints;
+  UserDetails? userDetails;
 
   factory RankerRecord.fromJson(Map<String, dynamic> json) => RankerRecord(
         userId: json["user_id"] == null ? null : json["user_id"],
@@ -58,7 +58,7 @@ class RankerRecord {
   Map<String, dynamic> toJson() => {
         "user_id": userId == null ? null : userId,
         "total_points": totalPoints == null ? null : totalPoints,
-        "user_details": userDetails == null ? null : userDetails.toJson(),
+        "user_details": userDetails == null ? null : userDetails!.toJson(),
       };
 }
 
@@ -72,12 +72,12 @@ class UserDetails {
     this.status,
   });
 
-  String id;
-  String name;
-  String email;
-  String apiKey;
-  String token;
-  String status;
+  String? id;
+  String? name;
+  String? email;
+  String? apiKey;
+  String? token;
+  String? status;
 
   factory UserDetails.fromJson(Map<String, dynamic> json) => UserDetails(
         id: json["id"] == null ? null : json["id"],

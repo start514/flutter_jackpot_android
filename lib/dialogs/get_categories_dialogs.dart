@@ -6,7 +6,7 @@ import 'package:flutterjackpot/view/jackpot_trivia/jackpot_categories_controller
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_categories_model.dart';
 
 class GetCategoriesDialog extends StatefulWidget {
-  final List<Categories> categories;
+  final List<Categories>? categories;
 
   GetCategoriesDialog(this.categories);
 
@@ -44,15 +44,15 @@ class _GetCategoriesDialogState extends State<GetCategoriesDialog> {
                 ),
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: widget.categories.length,
+                itemCount: widget.categories!.length,
                 itemBuilder: (context, index) {
-                  Categories _categories = widget.categories[index];
+                  Categories _categories = widget.categories![index];
 
                   return InkWell(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       child: AutoSizeText(
-                        _categories.name,
+                        _categories.name!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 17.0,
@@ -73,7 +73,7 @@ class _GetCategoriesDialogState extends State<GetCategoriesDialog> {
     );
   }
 
-  void _getCategoriesByQuiz(String id) {
+  void _getCategoriesByQuiz(String? id) {
     Navigator.pop(context, id);
   }
 }

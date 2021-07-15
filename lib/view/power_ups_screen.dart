@@ -14,10 +14,8 @@ import 'package:flutterjackpot/utils/image_utils.dart';
 import 'package:flutterjackpot/view/spinner/spinner_controller.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
-import 'package:flutterjackpot/main.dart';
+
 import 'home/home_screen.dart';
-import 'package:flutterjackpot/view/login_signUp/login_signup_model.dart';
-import 'dart:convert';
 
 const bool kAutoConsume = true;
 const String _kConsumableId = 'com.triviastax.elitepackage';
@@ -43,20 +41,22 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
       new SendSpinRewardController();
 
   final InAppPurchaseConnection _connection = InAppPurchaseConnection.instance;
-  StreamSubscription<List<PurchaseDetails>> _subscription;
+  late StreamSubscription<List<PurchaseDetails>> _subscription;
   List<ProductDetails> _products = [];
   List<PurchaseDetails> _purchases = [];
-  List<String> _consumables = [];
+  List<String?> _consumables = [];
   List<String> _notFoundIds = [];
   bool _isAvailable = false;
   bool _purchasePending = false;
   bool _loading = true;
-  String _queryProductError;
+  String? _queryProductError;
 
   String bomb = "1";
   String heart = "2";
   String time = "3";
   String player = "4";
+  double unitHeightValue = 1;
+  double unitWidthValue = 1;
 
   @override
   void initState() {
@@ -69,13 +69,15 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
       _subscription.cancel();
     }, onError: (error) {
       // handle error here.
-    });
+    }) as StreamSubscription<List<PurchaseDetails>>;
     initStoreInfo();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    unitHeightValue = MediaQuery.of(context).size.height * 0.001;
+    unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
     return Stack(
       children: [
         bgImage(context),
@@ -87,7 +89,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
             },
             child: new Consumer<SendSpinRewardController>(
               builder: (BuildContext context,
-                  SendSpinRewardController controller, Widget child) {
+                  SendSpinRewardController controller, Widget? child) {
                 if (sendSpinRewardController == null)
                   sendSpinRewardController = controller;
 
@@ -114,94 +116,102 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
   Widget _bodyWidget() {
     return Center(
       child: SingleChildScrollView(
+        padding: EdgeInsets.only(
+            left: unitWidthValue * 10, right: unitWidthValue * 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            sizedBoxAddMob(70.0),
+            sizedBoxAddMob(unitHeightValue * 42.0),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, bottom: 30),
-                  child: Container(
-                    height: 40.0,
-                    width: 65.0,
-                    padding: EdgeInsets.only(bottom: 0.0),
-                    margin: EdgeInsets.only(bottom: 0.0),
-                    decoration: BoxDecoration(
+                SizedBox(
+                  height: unitHeightValue * 45.0,
+                  width: unitWidthValue * 100,
+                  child: RaisedButton(
+                    child: Icon(
+                      Icons.arrow_back_outlined,
                       color: greenColor,
-                      border: Border.all(
-                        color: blackColor,
-                        width: 3.0,
-                      ),
-                      borderRadius: BorderRadius.circular(12.5),
+                      size: unitHeightValue * 24.0,
+                      semanticLabel: 'Text to announce in accessibility modes',
                     ),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: blackColor,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    color: blackColor,
+                    textColor: blackColor,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: greenColor, width: unitWidthValue * 2.0),
+                      borderRadius:
+                          BorderRadius.circular(unitHeightValue * 29.5),
                     ),
                   ),
                 ),
+                SizedBox(
+                  width: unitWidthValue * 10,
+                ),
+                Expanded(
+                    child: Container(
+                  // width: unitWidthValue * double.infinity,
+                  padding: EdgeInsets.symmetric(
+                      vertical: unitHeightValue * 2.0,
+                      horizontal: unitWidthValue * 8.0),
+                  decoration: BoxDecoration(
+                    color: blackColor,
+                    border: Border.all(
+                      color: greenColor,
+                      width: unitWidthValue * 2,
+                    ),
+                    borderRadius: BorderRadius.circular(unitHeightValue * 15.0),
+                  ),
+                  child: Text(
+                    "NO ADS/POWER UPS",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: unitHeightValue * 32.0,
+                        color: whiteColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ))
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 30.0),
-              child: Text(
-                "Increase your chances!",
-                style: TextStyle(
-                    color: greenColor,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic),
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width - 70,
-              padding: EdgeInsets.symmetric(vertical: 11.0, horizontal: 0.0),
-              decoration: BoxDecoration(
-                color: blackColor,
-                border: Border.all(
-                  color: greenColor,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Text(
-                "Power ups / VIP",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: greenColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+
             SizedBox(
-              height: 20.0,
+              height: unitHeightValue * 20.0,
+            ),
+            noAdds(),
+            SizedBox(
+              height: unitHeightValue * 10.0,
+            ),
+            powerUps(),
+            SizedBox(
+              height: unitHeightValue * 20.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                _roundedCard(title: "x 2", price: "\$ .99", count: 2),
-                _roundedCard(title: "x 5", price: "\$ 1.99", count: 4),
-                _roundedCard(title: "x 8", price: "\$ 2.99", count: 3),
+                _roundedCard(each: 2, price: "\$ 0.99", count: 2),
+                _roundedCard(each: 5, price: "\$ 1.99", count: 4),
               ],
             ),
             SizedBox(
-              height: 10.0,
+              height: unitHeightValue * 10.0,
             ),
-            noAdds(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                _roundedCard(each: 8, price: "\$ 2.99", count: 3),
+                _roundedCard(each: 15, price: "\$ 4.99", count: 0),
+              ],
+            ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0),
-              child: layoutBuilderDot(whiteColor),
+              padding: EdgeInsets.symmetric(
+                  vertical: unitHeightValue * 4.0,
+                  horizontal: unitWidthValue * 12.0),
+              // child: layoutBuilderDot(whiteColor),
             ),
-            _noAds(),
+            // _noAds(),
             //_buildProductList(0)
           ],
         ),
@@ -209,109 +219,65 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
     );
   }
 
-  Widget _roundedCard({String title, String price, int count}) {
+  Widget _roundedCard(
+      {required int each, required String price, required int count}) {
     return InkWell(
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
           Container(
-            height: 130.0,
-            width: 100.0,
+            height: unitHeightValue * 120.0,
+            width: unitWidthValue * 180.0,
+            margin: EdgeInsets.only(bottom: unitHeightValue * 15),
             decoration: BoxDecoration(
-              color: whiteColor,
+              color: greenColor,
               border: Border.all(
-                color: blackColor,
-                width: 3,
+                color: whiteColor,
+                width: unitWidthValue * 3,
               ),
-              borderRadius: BorderRadius.circular(27.0),
+              borderRadius: BorderRadius.circular(unitHeightValue * 8.0),
             ),
             child: Column(
               children: <Widget>[
                 SizedBox(
-                  height: 5.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Image.asset(
-                      "assets/bomb.png",
-                      height: 25.0,
-                      width: 25.0,
-                    ),
-                    SizedBox(
-                      width: 3.0,
-                    ),
-                    Image.asset(
-                      "assets/player2.png",
-                      height: 25.0,
-                      width: 25.0,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 5.0,
+                  height: unitHeightValue * 5.0,
                 ),
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
-                  decoration: new BoxDecoration(
-                    color: blackColor,
-                    border: Border.all(
-                      color: greenColor,
-                      width: 1.0,
-                    ),
-                    borderRadius:
-                        new BorderRadius.all(Radius.elliptical(100, 50)),
-                  ),
+                  padding: EdgeInsets.symmetric(
+                      vertical: unitHeightValue * 10.0,
+                      horizontal: unitWidthValue * 5.0),
                   child: Text(
-                    title,
+                    each.toString() + " OF EACH \n${each * 3} TOTAL",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: greenColor,
+                      color: blackColor,
+                      fontSize: unitHeightValue * 26,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 5.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Image.asset(
-                      "assets/clock.png",
-                      height: 23.0,
-                      width: 23.0,
-                    ),
-                    SizedBox(
-                      width: 3.0,
-                    ),
-                    Image.asset(
-                      "assets/red_heart.png",
-                      height: 30.0,
-                      width: 30.0,
-                    ),
-                  ],
+                  height: unitHeightValue * 5.0,
                 ),
               ],
             ),
           ),
           Container(
-            width: 95.0,
-            padding: EdgeInsets.all(5.0),
+            width: unitWidthValue * 95.0,
+            padding: EdgeInsets.all(unitHeightValue * 2.0),
             decoration: BoxDecoration(
-              color: greenColor,
+              color: whiteColor,
               border: Border.all(
                 color: blackColor,
-                width: 2.5,
+                width: unitWidthValue * 2.5,
               ),
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(unitHeightValue * 8.0),
             ),
             child: AutoSizeText(
               price,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+                  fontWeight: FontWeight.bold, fontSize: unitHeightValue * 24),
             ),
           ),
         ],
@@ -325,84 +291,84 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
   Widget noAdds() {
     return InkWell(
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(unitHeightValue * 12.0),
         child: Stack(
+          alignment: Alignment.bottomCenter,
           children: [
             Align(
               child: Container(
-                margin: EdgeInsets.only(top: 0.0),
-                height: 100.0,
+                margin: EdgeInsets.only(top: unitHeightValue * 14.0),
+                padding: EdgeInsets.only(top: unitHeightValue * 16),
+                height: unitHeightValue * 130.0,
+                width: unitWidthValue * double.infinity,
+                alignment: Alignment.topCenter,
                 decoration: BoxDecoration(
-                  color: blackColor,
+                  color: greenColor,
                   border: Border.all(
-                    color: whiteColor,
-                    width: 2.5,
+                    color: blackColor,
+                    width: unitWidthValue * 5,
                   ),
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(unitHeightValue * 16.0),
+                ),
+                child: Text(
+                  "ENJOY TRIVIA STAX AD FREE!",
+                  style: TextStyle(
+                      fontSize: unitHeightValue * 28,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-            Column(
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 10.0, bottom: 0.0),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 5.0, horizontal: 12.0),
-                    child: Text(
-                      "NO ADS!!",
-                      style: TextStyle(
-                        color: whiteColor,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 0.0, bottom: 8.0),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 5.0, horizontal: 12.0),
-                    child: Text(
-                      "Enjoy our game with ad free experience",
-                      style: TextStyle(
-                        color: whiteColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 4.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                      width: 122.0,
-                      padding: EdgeInsets.all(7.0),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      width: unitWidthValue * 200.0,
+                      padding: EdgeInsets.all(unitHeightValue * 7.0),
                       decoration: BoxDecoration(
                         color: whiteColor,
                         border: Border.all(
                           color: blackColor,
-                          width: 2,
+                          width: unitWidthValue * 4,
                         ),
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius:
+                            BorderRadius.circular(unitHeightValue * 8.0),
                       ),
                       child: AutoSizeText(
-                        "\$ 3.99 / month",
+                        "Only \$3.99 a month!",
                         textAlign: TextAlign.center,
                         style: TextStyle(
+                          fontSize: unitHeightValue * 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  Container(
+                    width: unitWidthValue * 100.0,
+                    padding: EdgeInsets.all(unitHeightValue * 7.0),
+                    decoration: BoxDecoration(
+                      color: whiteColor,
+                      border: Border.all(
+                        color: blackColor,
+                        width: unitWidthValue * 4,
+                      ),
+                      borderRadius:
+                          BorderRadius.circular(unitHeightValue * 8.0),
+                    ),
+                    child: AutoSizeText(
+                      "BUY",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: unitHeightValue * 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -413,24 +379,95 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
     );
   }
 
+  Widget powerUps() {
+    return InkWell(
+      child: Padding(
+          padding: EdgeInsets.all(unitHeightValue * 12.0),
+          child: Column(
+            children: [
+              Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "INCREASE YOUR CHANCES WITH\n POWER-UPS!!!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: unitHeightValue * 26,
+                        fontWeight: FontWeight.bold,
+                        color: whiteColor),
+                  )),
+              Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Align(
+                    child: InkWell(
+                      child: Container(
+                        margin: EdgeInsets.only(top: unitHeightValue * 14.0),
+                        padding: EdgeInsets.only(top: unitHeightValue * 16),
+                        height: unitHeightValue * 160.0,
+                        width: unitWidthValue * double.infinity,
+                        alignment: Alignment.topCenter,
+                        decoration: BoxDecoration(
+                          color: whiteColor,
+                          border: Border.all(
+                            color: blackColor,
+                            width: unitWidthValue * 5,
+                          ),
+                          borderRadius:
+                              BorderRadius.circular(unitHeightValue * 16.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            _detailButton(
+                                text: "50/50",
+                                image: "bomb.png",
+                                size: 70), //spinDetails!.theBomb!
+                            _detailButton(
+                                text: "Correct\n1,000 pts",
+                                image: "player2.png",
+                                bottom: true,
+                                fontSize: unitHeightValue * 28,
+                                size: 70), //spinDetails!.thePlayer!,
+                            _detailButton(
+                                text: "+Time",
+                                marginTop: unitHeightValue * 10,
+                                image: "clock.png",
+                                bottom: true,
+                                size: 60), //spinDetails!.theTime!,
+                          ],
+                        ),
+                      ),
+                      onTap: () => {showPurchaseMenu(context, 1)},
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          )),
+      onTap: () {
+        // showPurchaseMenu(context, 0);
+      },
+    );
+  }
+
   Widget _noAds() {
     return InkWell(
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.all(unitHeightValue * 12.0),
         child: Stack(
           children: [
             Align(
               child: Container(
-                margin: EdgeInsets.only(top: 11.0),
-                height: 102.0,
-                width: double.infinity,
+                margin: EdgeInsets.only(top: unitHeightValue * 11.0),
+                height: unitHeightValue * 102.0,
+                width: unitWidthValue * double.infinity,
                 decoration: BoxDecoration(
                   color: greenColor,
                   border: Border.all(
                     color: blackColor,
-                    width: 2,
+                    width: unitWidthValue * 2,
                   ),
-                  borderRadius: BorderRadius.circular(27.0),
+                  borderRadius: BorderRadius.circular(unitHeightValue * 27.0),
                 ),
               ),
             ),
@@ -438,14 +475,15 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(bottom: 10.0),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+                    margin: EdgeInsets.only(bottom: unitHeightValue * 10.0),
+                    padding: EdgeInsets.symmetric(
+                        vertical: unitHeightValue * 5.0,
+                        horizontal: unitWidthValue * 20.0),
                     decoration: new BoxDecoration(
                       color: whiteColor,
                       border: Border.all(
                         color: blackColor,
-                        width: 2.5,
+                        width: unitWidthValue * 2.5,
                       ),
                       borderRadius:
                           new BorderRadius.all(Radius.elliptical(100, 50)),
@@ -454,55 +492,57 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
                       "X 15",
                       style: TextStyle(
                         color: blackColor,
-                        fontSize: 15.0,
+                        fontSize: unitHeightValue * 15.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: 2.0,
+                    height: unitHeightValue * 2.0,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Image.asset(
                         "assets/bomb.png",
-                        height: 40.0,
-                        width: 40.0,
+                        height: unitHeightValue * 40.0,
+                        width: unitWidthValue * 40.0,
                       ),
                       Image.asset(
                         "assets/clock.png",
-                        height: 40.0,
-                        width: 40.0,
+                        height: unitHeightValue * 40.0,
+                        width: unitWidthValue * 40.0,
                       ),
                       Image.asset(
                         "assets/player2.png",
-                        height: 40.0,
-                        width: 40.0,
+                        height: unitHeightValue * 40.0,
+                        width: unitWidthValue * 40.0,
                       ),
                       Image.asset(
                         "assets/red_heart.png",
-                        height: 42.0,
-                        width: 42.0,
+                        height: unitHeightValue * 42.0,
+                        width: unitWidthValue * 42.0,
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 11.0,
+                    height: unitHeightValue * 11.0,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       Container(
                         padding: EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 10.0),
+                            vertical: unitHeightValue * 5.0,
+                            horizontal: unitWidthValue * 10.0),
                         decoration: BoxDecoration(
                           color: whiteColor,
                           border: Border.all(
                             color: blackColor,
-                            width: 2.5,
+                            width: unitWidthValue * 2.5,
                           ),
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius:
+                              BorderRadius.circular(unitHeightValue * 20.0),
                         ),
                         child: AutoSizeText(
                           "ELITE PACKAGE",
@@ -514,14 +554,16 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 10.0),
+                            vertical: unitHeightValue * 5.0,
+                            horizontal: unitWidthValue * 10.0),
                         decoration: BoxDecoration(
                           color: whiteColor,
                           border: Border.all(
                             color: blackColor,
-                            width: 2.5,
+                            width: unitWidthValue * 2.5,
                           ),
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius:
+                              BorderRadius.circular(unitHeightValue * 20.0),
                         ),
                         child: AutoSizeText(
                           "\$ 4.99",
@@ -569,24 +611,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
           title: Text('Product ID [${_notFoundIds.join(", ")}] not found',
               style: TextStyle(color: ThemeData.light().errorColor)),
           subtitle: Text(
-              'You have to add in-app purchase products in appstoreconnect.'),
-          trailing: FlatButton(
-            child: Text("TestBuy"),
-            color: Colors.green[800],
-            textColor: Colors.white,
-            onPressed: () {
-              PurchaseDetails purchaseDetails = new PurchaseDetails(
-                purchaseID: "",
-                productID: _kConsumableId,
-                verificationData: null,
-                transactionDate: "",
-                skPaymentTransaction: null,
-                billingClientPurchase: null,
-              );
-              whenPurchaseComplete(purchaseDetails);
-              refreshMainWidget();
-            },
-          )));
+              'You have to add in-app purchase products in appstoreconnect.')));
     }
 
     // This loading previous purchases code is just a demo. Please do not use this as it is.
@@ -601,18 +626,29 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
     }));
     productList.addAll(_selectedProducts.map(
       (ProductDetails productDetails) {
-        PurchaseDetails previousPurchase = purchases[productDetails.id];
+        PurchaseDetails? previousPurchase = purchases[productDetails.id];
         return ListTile(
             title: Text(
               productDetails.title,
+              style: TextStyle(
+                fontSize: unitHeightValue * 24,
+              ),
             ),
             subtitle: Text(
               productDetails.description,
+              style: TextStyle(
+                fontSize: unitHeightValue * 24,
+              ),
             ),
             trailing: previousPurchase != null
                 ? Icon(Icons.check)
                 : FlatButton(
-                    child: Text(productDetails.price),
+                    child: Text(
+                      productDetails.price,
+                      style: TextStyle(
+                        fontSize: unitHeightValue * 24,
+                      ),
+                    ),
                     color: Colors.green[800],
                     textColor: Colors.white,
                     onPressed: () {
@@ -634,7 +670,10 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
     ));
 
     return Card(
-        margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+        margin: EdgeInsets.only(
+            left: unitWidthValue * 10,
+            right: unitWidthValue * 10,
+            bottom: unitHeightValue * 20.0),
         child: Column(children: <Widget>[Divider()] + productList));
   }
 
@@ -658,7 +697,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
           await _connection.queryProductDetails(_kProductIds.toSet());
       if (productDetailResponse.error != null) {
         setState(() {
-          _queryProductError = productDetailResponse.error.message;
+          _queryProductError = productDetailResponse.error!.message;
           _isAvailable = isAvailable;
           _products = productDetailResponse.productDetails;
           _purchases = [];
@@ -667,7 +706,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
           _purchasePending = false;
           _loading = false;
         });
-        print(productDetailResponse.error.message);
+        print(productDetailResponse.error!.message);
         return;
       }
 
@@ -698,7 +737,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
           verifiedPurchases.add(purchase);
         }
       }
-      List<String> consumables = await ConsumableStore.load();
+      List<String?> consumables = await ConsumableStore.load();
       setState(() {
         _isAvailable = isAvailable;
         _products = productDetailResponse.productDetails;
@@ -780,11 +819,15 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
       );
 //      navigateToHomeScreen();
     } else if (purchaseDetails.productID == _kConsumableId_noads) {
+      await sendRewardWhenPurchaseComplete(
+        item: bomb,
+        count: "10",
+      );
       await Preferences.setString(
         Preferences.pfKConsumableIdNoads,
         purchaseDetails.productID,
       );
-      //      navigateToHomeScreen();
+//      navigateToHomeScreen();
     } else if (purchaseDetails.productID == _kConsumableId_powerup_one) {
       await sendRewardWhenPurchaseComplete(
         item: bomb,
@@ -864,7 +907,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
     // IMPORTANT!! Always verify a purchase purchase details before delivering the product.
     if (purchaseDetails.productID == _kConsumableId) {
       await ConsumableStore.save(purchaseDetails.purchaseID);
-      List<String> consumables = await ConsumableStore.load();
+      List<String?> consumables = await ConsumableStore.load();
       setState(() {
         _purchasePending = false;
         _consumables = consumables;
@@ -875,36 +918,15 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
         _purchasePending = false;
       });
     }
-
-    refreshMainWidget();
   }
 
-  void refreshMainWidget() {
-    Preferences.getString(Preferences.pfUserLogin).then((value) {
-      if (value != null) {
-        LoginSignUpModel model = LoginSignUpModel.fromJson(
-          json.decode(value),
-        );
-        LoginSpinDetails spinDetailsNew = model.userRecord.loginSpinDetails;
-        spinDetails.id = spinDetailsNew.id;
-        spinDetails.userId = spinDetailsNew.userId;
-        spinDetails.theBomb = spinDetailsNew.theBomb;
-        spinDetails.theHeart = spinDetailsNew.theHeart;
-        spinDetails.theTime = spinDetailsNew.theTime;
-        spinDetails.thePlayer = spinDetailsNew.thePlayer;
-        spinDetails.createdAt = spinDetailsNew.createdAt;
-        spinDetails.updatedAt = spinDetailsNew.updatedAt;
-      }
-    });
-  }
-
-  void handleError(IAPError error) {
+  void handleError(IAPError? error) {
     setState(() {
       _purchasePending = false;
     });
   }
 
-  void showPurchaseMenu(BuildContext context, int count) {
+  void showPurchaseMenu(BuildContext context, int? count) {
     showModalBottomSheet(
       isScrollControlled: true,
       elevation: 5.0,
@@ -915,17 +937,17 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
           decoration: new BoxDecoration(
             color: Colors.white,
             borderRadius: new BorderRadius.only(
-              topLeft: const Radius.circular(20.0),
-              topRight: const Radius.circular(20.0),
+              topLeft: Radius.circular(unitHeightValue * 20.0),
+              topRight: Radius.circular(unitHeightValue * 20.0),
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: EdgeInsets.all(unitHeightValue * 12.0),
             child: new Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildProductList(count)
+                _buildProductList(count!)
                 /*Row(
                   children: [
                     ClipOval(
@@ -938,26 +960,26 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: 10.0,
+                      width: unitWidthValue * 10.0,
                     ),
                     Text(
                       "Triviastax App Purchase",
                       style: TextStyle(
                         color: blackColor,
-                        fontSize: 18.0,
+                        fontSize: unitHeightValue * 18.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  padding: EdgeInsets.symmetric(vertical: unitHeightValue * 20.0),
                   child: Text(
                     "\$ 22.0",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.green,
-                      fontSize: 16.0,
+                      fontSize: unitHeightValue * 16.0,
                     ),
                   ),
                 ),
@@ -966,36 +988,36 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: greyColor,
-                    fontSize: 16.0,
+                    fontSize: unitHeightValue * 16.0,
                   ),
                 ),
                 SizedBox(
-                  height: 20.0,
+                  height: unitHeightValue * 20.0,
                 ),
                 Text(
                   "By tapping \"BUY\", you agree the App Terms & Condition.",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: greyColor,
-                    fontSize: 16.0,
+                    fontSize: unitHeightValue * 16.0,
                   ),
                 ),
                 SizedBox(
-                  height: 20.0,
+                  height: unitHeightValue * 20.0,
                 ),
                 Text(
                   "Google Play",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: greyColor,
-                    fontSize: 15.0,
+                    fontSize: unitHeightValue * 15.0,
                   ),
                 ),
                 SizedBox(
-                  height: 20.0,
+                  height: unitHeightValue * 20.0,
                 ),
                 Container(
-                  width: double.infinity,
+                  width: unitWidthValue * double.infinity,
                   child: RaisedButton(
                     child: Text(
                       "BUY",
@@ -1017,8 +1039,8 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
   }
 
   Future<void> sendRewardWhenPurchaseComplete(
-      {String item, String count}) async {
-    await sendSpinRewardController.sendSpinRewardAPI(item: item, count: count);
+      {String? item, String? count}) async {
+    // await sendSpinRewardController.sendSpinRewardAPI(item: item, count: count);
   }
 
   void navigateToHomeScreen() {
@@ -1028,5 +1050,50 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
           builder: (context) => HomeScreen(),
         ),
         (route) => false);
+  }
+
+  Widget _detailButton(
+      {String? image,
+      required String text,
+      required double size,
+      double? fontSize,
+      bool? bottom,
+      double? marginTop,
+      void onTap()?}) {
+    size = unitHeightValue * size;
+    if (fontSize == null) fontSize = 28.0;
+    return InkWell(
+      child: Column(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+              margin: EdgeInsets.only(
+                  top: unitHeightValue * (marginTop == null ? 0 : marginTop)),
+              child: Image.asset(
+                "assets/$image",
+                height: size,
+                width: size,
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          Container(
+              margin: EdgeInsets.only(
+                  top: unitHeightValue * (fontSize == 28.0 ? 10 : 0)),
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: unitHeightValue * fontSize,
+                    fontWeight: FontWeight.bold),
+              ))
+        ],
+      ),
+      // onTap: () {
+      //   onTap!();
+      // },
+    );
   }
 }

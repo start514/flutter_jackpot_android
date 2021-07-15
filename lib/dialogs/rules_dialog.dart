@@ -5,7 +5,7 @@ import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/view/give_aways/giveaways_details_model.dart';
 
 class RulesDialog extends StatefulWidget {
-  final GiveAWaysDetailsModelRecord details;
+  final GiveAWaysDetailsModelRecord? details;
 
   RulesDialog({this.details});
 
@@ -27,7 +27,7 @@ class _RulesDialogState extends State<RulesDialog> {
         child: Center(
           child: SingleChildScrollView(
             child: Html(
-              data: "${widget.details.rules}",
+              data: "${widget.details!.rules}",
               style: {
                 "html": Style(
                   textAlign: TextAlign.center,

@@ -5,7 +5,7 @@ import 'package:flutterjackpot/utils/common/common_toast.dart';
 import 'package:flutterjackpot/utils/url_utils.dart';
 
 class WinnerScoreController extends BaseModel {
-  Future<WinnerScore> getWinnerScoreAPI() async {
+  Future<WinnerScore?> getWinnerScoreAPI() async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     try {

@@ -1,114 +1,41 @@
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutterjackpot/utils/common_utils.dart';
-import 'package:applovin/applovin.dart';
+// import 'package:appodeal_flutter/appodeal_flutter.dart';
+import 'package:unity_ads_plugin/ad/unity_banner_ad.dart';
+import 'package:unity_ads_plugin/unity_ads.dart';
+import 'package:flutterjackpot/main.dart';
 
 import 'common/shared_preferences.dart';
 
 class AdMobClass {
-  static BannerAd myBanner;
-
-  static void displayBannerAds(double anchorOffset) {
-    try {
-      Preferences.getString(Preferences.pfKConsumableIdNoads).then(
-        (value) {
-          if (value == null) {
-            MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-              keywords: <String>[
-                'dmv',
-                'driving licence',
-                'dmv practice test',
-                'practice permit test',
-                'driving test',
-                'permit',
-                'dmv driving test',
-                'drivers license test',
-                'dmv test',
-                'dmv permit test',
-              ],
-              contentUrl: 'https://equitysoft.in',
-              childDirected: false,
-              testDevices: <String>[
-                test_device_id1,
-                test_device_id2,
-                test_device_id3,
-                test_device_id4,
-                test_device_id5,
-                test_device_id6,
-                test_device_id7,
-              ],
-            );
-            myBanner = BannerAd(
-              adUnitId: "ca-app-pub-4114721748955868/8381206291",
-              size: AdSize.banner,
-              targetingInfo: targetingInfo,
-              listener: (MobileAdEvent event) {},
-            );
-
-            myBanner
-              ..load()
-              ..show(
-                anchorOffset: anchorOffset,
-                anchorType: AnchorType.top,
-              );
-
-            myBanner.listener = (MobileAdEvent event) {
-              switch (event) {
-                case MobileAdEvent.loaded:
-                  print("An ad has loaded successfully in memory.");
-                  break;
-                case MobileAdEvent.failedToLoad:
-                  print("The ad failed to load into memory.");
-                  break;
-                case MobileAdEvent.clicked:
-                  print("The opened ad was clicked on.");
-                  break;
-                case MobileAdEvent.impression:
-                  print(
-                      "The user is still looking at the ad. A new ad came up.");
-                  break;
-                case MobileAdEvent.opened:
-                  print("The Ad is now open.");
-                  break;
-                case MobileAdEvent.leftApplication:
-                  print("You've left the app after clicking the Ad.");
-                  break;
-                case MobileAdEvent.closed:
-                  print("You've closed the Ad and returned to the app.");
-                  break;
-                default:
-                  print("There's a 'new' MobileAdEvent?!");
-              }
-            };
-          } else {}
-        },
-      );
-    } catch (er) {
-      print(er);
-    }
-  }
-
-  static Future<void> hideBannerAd() async {
-    await myBanner.dispose();
-    myBanner = null;
-  }
-
   static void showVideoAdd(
-      {@required void afterVideoEnd(),
-      @required bool isSpin,
-      @required bool isInterstitial}) {
+      {required void afterVideoEnd(), required bool isSpin}) async {
     try {
       Preferences.getString(Preferences.pfKConsumableIdNoads).then(
         (value) {
           if (value == null || isSpin) {
-            AppLovin.requestInterstitial((AppLovinAdListener event) {
-              print(event);
-              if (event == AppLovinAdListener.adReceived) {
-                AppLovin.showInterstitial(interstitial: isInterstitial);
-              } else if (event == AppLovinAdListener.videoPlaybackEnded) {
-                afterVideoEnd();
-              }
-            }, interstitial: isInterstitial);
+            UnityAds.showVideoAd(
+              placementId: 'QUIZSTART',
+              listener: (state, args) {
+                if (state == UnityAdState.complete) {
+                  afterVideoEnd();
+                  print('User watched a video. User should get a reward!');
+                } else if (state == UnityAdState.skipped) {
+                  print('User cancel video.');
+                }
+              },
+            );
+            // Appodeal.setInterstitialCallback((event) {
+            // 	print('Interstitial ad triggered the event $event');
+            // 		if (event == "onInterstitialClosed" || event == "onInterstitialFailedToLoad") {
+
+            // 		} else if(event == "onInterstitialLoaded") {
+            // 		print("=====Before show");
+            // 		Appodeal.show(AdType.INTERSTITIAL);
+            // 	}
+            // });
+            // Appodeal.cache(AdType.INTERSTITIAL);
+
           } else {
             afterVideoEnd();
           }
@@ -117,61 +44,47 @@ class AdMobClass {
     } catch (er) {
       print(er);
     }
+    await getState();
   }
 
-  static MobileAdTargetingInfo _getMobileAdTargetingInfo() {
-    return MobileAdTargetingInfo(
-      keywords: <String>['flutterio', 'beautiful apps'],
-      contentUrl: 'https://flutter.io',
-      childDirected: false,
-      testDevices: <String>[
-        test_device_id1,
-        test_device_id2,
-        test_device_id3,
-        test_device_id4,
-        test_device_id5,
-        test_device_id6,
-        test_device_id7,
-      ],
-    );
-  }
+  static void showRewardAdd(
+      {required void afterVideoEnd(), required bool isSpin}) async {
+    try {
+      Preferences.getString(Preferences.pfKConsumableIdNoads).then(
+        (value) {
+          if (value == null || isSpin) {
+            UnityAds.showVideoAd(
+              placementId: 'QUIZEND',
+              listener: (state, args) {
+                if (state == UnityAdState.complete) {
+                  afterVideoEnd();
+                  print('User watched a video. User should get a reward!');
+                } else if (state == UnityAdState.skipped) {
+                  print('User cancel video.');
+                  afterVideoEnd();
+                }
+              },
+            );
 
-//  static void displayFullScreenAds(String fulladId) {
-//    MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-//      keywords: <String>[
-//        'dmv',
-//        'driving licence',
-//        'dmv practice test',
-//        'practice permit test',
-//        'driving test',
-//        'permit',
-//        'dmv driving test',
-//        'drivers license test',
-//        'dmv test',
-//        'dmv permit test',
-//      ],
-//      contentUrl: 'https://equitysoft.in',
-//      childDirected: false,
-//      testDevices: <String>[
-//        test_device_id1,
-//        test_device_id2,
-//        test_device_id3,
-//        test_device_id4,
-//        test_device_id5
-//      ],
-//    );
-//
-//    InterstitialAd myInterstitial = InterstitialAd(
-//      adUnitId: fulladId,
-//      targetingInfo: targetingInfo,
-//      listener: (MobileAdEvent event) {},
-//    );
-//
-//    myInterstitial
-//      ..load()
-//      ..show(
-//        anchorType: AnchorType.bottom,
-//        anchorOffset: 0.0,
-//      );
-//  }
+        		// Appodeal.setRewardCallback((event) {
+          //   	print('Reward ad triggered the event $event');
+          // 		if (event == "onRewardedVideoClosed" || event == "onRewardedVideoFinished") {
+          //         afterVideoEnd();
+          // 		} else if(event == "onRewardedVideoLoaded") {
+          //   		print("=====Before show");
+          //   		Appodeal.show(AdType.REWARD);
+          //   	}
+          //   });
+          //   Appodeal.cache(AdType.REWARD);
+
+          } else {
+            afterVideoEnd();
+          }
+        },
+      );
+    } catch (er) {
+      print(er);
+    }
+    await getState();
+  }
 }

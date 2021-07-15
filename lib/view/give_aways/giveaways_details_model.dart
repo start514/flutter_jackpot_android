@@ -17,9 +17,9 @@ class GiveAWaysDetailsModel {
     this.giveADetailsModelRecord,
   });
 
-  int status;
-  String message;
-  List<GiveAWaysDetailsModelRecord> giveADetailsModelRecord;
+  int? status;
+  String? message;
+  List<GiveAWaysDetailsModelRecord>? giveADetailsModelRecord;
 
   factory GiveAWaysDetailsModel.fromJson(Map<String, dynamic> json) =>
       GiveAWaysDetailsModel(
@@ -35,7 +35,7 @@ class GiveAWaysDetailsModel {
         "message": message == null ? null : message,
         "records": giveADetailsModelRecord == null
             ? null
-            : List<dynamic>.from(giveADetailsModelRecord.map((x) => x.toJson())),
+            : List<dynamic>.from(giveADetailsModelRecord!.map((x) => x.toJson())),
       };
 }
 
@@ -54,17 +54,17 @@ class GiveAWaysDetailsModelRecord {
     this.task,
   });
 
-  String id;
-  String name;
-  String photo;
-  String photoThumb;
-  String itemsTotal;
-  String itemsAvailable;
-  DateTime startDate;
-  DateTime endDate;
-  String isFreeEntry;
-  String rules;
-  List<Task> task;
+  String? id;
+  String? name;
+  String? photo;
+  String? photoThumb;
+  String? itemsTotal;
+  String? itemsAvailable;
+  DateTime? startDate;
+  DateTime? endDate;
+  String? isFreeEntry;
+  String? rules;
+  List<Task>? task;
 
   factory GiveAWaysDetailsModelRecord.fromJson(Map<String, dynamic> json) => GiveAWaysDetailsModelRecord(
         id: json["id"] == null ? null : json["id"],
@@ -93,13 +93,13 @@ class GiveAWaysDetailsModelRecord {
         "photo_thumb": photoThumb == null ? null : photoThumb,
         "items_total": itemsTotal == null ? null : itemsTotal,
         "items_available": itemsAvailable == null ? null : itemsAvailable,
-        "start_date": startDate == null ? null : startDate.toIso8601String(),
-        "end_date": endDate == null ? null : endDate.toIso8601String(),
+        "start_date": startDate == null ? null : startDate!.toIso8601String(),
+        "end_date": endDate == null ? null : endDate!.toIso8601String(),
         "isFreeEntry": isFreeEntry == null ? null : isFreeEntry,
         "rules": rules == null ? null : rules,
         "task": task == null
             ? null
-            : List<dynamic>.from(task.map((x) => x.toJson())),
+            : List<dynamic>.from(task!.map((x) => x.toJson())),
       };
 }
 
@@ -112,11 +112,11 @@ class Task {
     this.name,
   });
 
-  String id;
+  String? id;
   dynamic url;
-  String entry;
-  String media;
-  String name;
+  String? entry;
+  String? media;
+  String? name;
 
   factory Task.fromJson(Map<String, dynamic> json) => Task(
         id: json["id"] == null ? null : json["id"],

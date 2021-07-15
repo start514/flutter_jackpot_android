@@ -46,6 +46,10 @@ const String UrlGetTop100Ranker = "$BaseUrl/getTop100Ranker";
 
 const String UrlAddSpinPrice = "$BaseUrl/addSpinPrice";
 
+const String UrlAddFreebie = "$BaseUrl/addFreebie";
+
+const String UrlGetState = "$BaseUrl/getState";
+
 const String UrlGetWinnersImages = "$BaseUrl/getImages";
 
 const String UrlfreeEntryGiveaway = "$BaseUrl/freeEntryGiveaway";

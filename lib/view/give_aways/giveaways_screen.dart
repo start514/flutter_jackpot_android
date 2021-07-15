@@ -25,9 +25,11 @@ class _GiveawaysScreenState extends State<GiveawaysScreen> {
 
   bool _isLoading = true;
 
-  List<GiveAWaysRecord> giveAWays = new List();
+  List<GiveAWaysRecord>? giveAWays = [];
 
-  List<Categories> categories = new List();
+  List<Categories>? categories = [];
+  double unitHeightValue = 1;
+  double unitWidthValue = 1;
 
   @override
   void initState() {
@@ -37,6 +39,8 @@ class _GiveawaysScreenState extends State<GiveawaysScreen> {
 
   @override
   Widget build(BuildContext context) {
+    unitHeightValue = MediaQuery.of(context).size.height * 0.001;
+     unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
     return Stack(
       children: [
         bgImage(context),
@@ -48,7 +52,7 @@ class _GiveawaysScreenState extends State<GiveawaysScreen> {
                     radius: 15.0,
                   ),
                 )
-              : _bodyWidget(giveAWays),
+              : _bodyWidget(giveAWays!),
         ),
       ],
     );
@@ -72,79 +76,56 @@ class _GiveawaysScreenState extends State<GiveawaysScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    sizedBoxAddMob(90.0),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: blackColor,
-                        border: Border.all(
-                          color: whiteColor,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: Text(
-                        "Giveaways",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 30.0,
-                          color: greenColor,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
+                    sizedBoxAddMob(42.0),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        InkWell(
-                          child: Container(
-                            width: 100.0,
-                            padding: EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color: blackColor,
-                              border: Border.all(
-                                color: whiteColor,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(30.0),
+                        SizedBox(
+                          height: unitHeightValue * 45.0,
+                            width: unitWidthValue * 100,
+                          child: RaisedButton(
+                            child: Icon(
+                              Icons.arrow_back_outlined,
+                              color: greenColor,
+                              size: unitHeightValue * 24.0,
+                              semanticLabel:
+                                  'Text to announce in accessibility modes',
                             ),
-                            child: Text(
-                              "Filter",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: whiteColor,
-                              ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            color: blackColor,
+                            textColor: blackColor,
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(color: greenColor, width: unitWidthValue * 2.0),
+                              borderRadius: BorderRadius.circular(29.5),
                             ),
                           ),
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  GetCategoriesDialog(categories),
-                            ).then(
-                              (categoryID) {
-                                getGiveAWays(categoryID: categoryID);
-                              },
-                            );
-                          },
                         ),
                         SizedBox(
-                          width: 8.0,
+                          width: unitWidthValue * 10,
                         ),
-                        Container(
-                          height: 45.0,
-                          width: 45.0,
-                          alignment: Alignment.center,
-                          child: Card(
-                            child: IconButton(
-                              icon: Icon(Icons.info),
-                              onPressed: () {},
+                        Expanded(
+                            child: Container(
+                          // width: unitWidthValue * double.infinity,
+                          padding: EdgeInsets.fromLTRB( unitWidthValue * 8.0, unitHeightValue * 2.0, unitWidthValue * 8.0, unitHeightValue * 2.0),
+                          decoration: BoxDecoration(
+                            color: blackColor,
+                            border: Border.all(
+                              color: greenColor,
+                              width: unitWidthValue * 2,
                             ),
+                            borderRadius: BorderRadius.circular(unitHeightValue*15.0),
                           ),
-                        )
+                          child: Text(
+                            "GIVEAWAYS",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: unitHeightValue * 32.0,
+                                color: whiteColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ))
                       ],
                     ),
                     Center(
@@ -167,22 +148,22 @@ class _GiveawaysScreenState extends State<GiveawaysScreen> {
       itemBuilder: (BuildContext context, int position) {
         GiveAWaysRecord giveAWaysRecord = giveAWays[position];
         return Container(
-          padding: EdgeInsets.all(5.0),
-          margin: EdgeInsets.only(bottom: 17.0),
+          padding: EdgeInsets.all(unitHeightValue * 8.0),
+          margin: EdgeInsets.only(bottom: unitHeightValue * 8.0),
           child: InkWell(
             child: Stack(
               children: [
                 Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(0.0),
-                  margin: EdgeInsets.symmetric(vertical: 10.0),
+                  margin: EdgeInsets.symmetric(vertical: unitHeightValue * 5.0),
                   decoration: BoxDecoration(
                     color: whiteColor,
                     border: Border.all(
                       color: blackColor,
-                      width: 1.5,
+                      width: unitWidthValue * 1.5,
                     ),
-                    borderRadius: BorderRadius.circular(29.5),
+                    borderRadius: BorderRadius.circular(unitHeightValue*10),
                   ),
                   child: Container(
                     margin: EdgeInsets.all(15.0),
@@ -191,7 +172,7 @@ class _GiveawaysScreenState extends State<GiveawaysScreen> {
                       image: DecorationImage(
                         image: NetworkImage(
                           UrlImageGiveAWaysPrefixUrl +
-                              giveAWaysRecord.photoThumb,
+                              giveAWaysRecord.photoThumb!,
                         ),
                       ),
                     ),
@@ -200,20 +181,30 @@ class _GiveawaysScreenState extends State<GiveawaysScreen> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    width: 130.0,
-                    padding: EdgeInsets.all(5.0),
+                    width: unitWidthValue * double.infinity,
+                    height: unitHeightValue * 40,
+                    margin: EdgeInsets.fromLTRB( unitWidthValue * 1, unitHeightValue * 0, unitWidthValue * 1, unitHeightValue * 0),
+                    padding: EdgeInsets.all(unitHeightValue * 5.0),
                     decoration: BoxDecoration(
                       color: blackColor,
                       border: Border.all(
-                        color: whiteColor,
-                        width: 2,
+                        color: greenColor,
+                        width: unitWidthValue * 2,
                       ),
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(6.0),
                     ),
-                    child: AutoSizeText(
-                      giveAWaysRecord.name,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: greenColor, fontSize: 15.0),
+                    child: Center(
+                      child: AutoSizeText(
+                        giveAWaysRecord.name!.toUpperCase(),
+                        textAlign: TextAlign.center,
+                        minFontSize: 8,
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: whiteColor,
+                            fontSize: unitHeightValue * 24.0,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
                     ),
                   ),
                 ),

@@ -16,12 +16,13 @@ class LoginSignUpController extends BaseModel {
         "email": email,
         "password": password,
       };
+      print("LoginUrl: " + UrlLogin + " " + body.toString());
       dynamic response = await net.postWithDio(url: UrlLogin, body: body);
 
       if (response["status"] == 1) {
         LoginSignUpModel model = LoginSignUpModel.fromJson(response);
         userRecord = model.userRecord;
-        spinDetails = model.userRecord.loginSpinDetails;
+        spinDetails = model.userRecord!.loginSpinDetails;
 
         await Preferences.setString(
           Preferences.pfUserLogin,
@@ -57,9 +58,10 @@ class LoginSignUpController extends BaseModel {
       dynamic response = await net.postWithDio(url: UrlSignUP, body: body);
 
       if (response["status"] == 1) {
+        print(response);
         LoginSignUpModel model = LoginSignUpModel.fromJson(response);
         userRecord = model.userRecord;
-        spinDetails = model.userRecord.loginSpinDetails;
+        spinDetails = model.userRecord!.loginSpinDetails;
 
         await Preferences.setString(
           Preferences.pfUserLogin,

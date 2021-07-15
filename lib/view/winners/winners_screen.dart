@@ -22,9 +22,11 @@ class _WinnersState extends State<WinnersScreen> {
 
   bool _isTrivia = true;
 
-  GetWinnersImagesModel winnersImagesModel;
+  GetWinnersImagesModel? winnersImagesModel;
 
-  List<WinnersImages> winners = new List();
+  List<WinnersImages>? winners = [];
+  double unitHeightValue = 1;
+  double unitWidthValue = 1;
 
   @override
   void initState() {
@@ -34,6 +36,8 @@ class _WinnersState extends State<WinnersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    unitHeightValue = MediaQuery.of(context).size.height * 0.001;
+     unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
     return Stack(
       children: [
         bgImage(context),
@@ -58,59 +62,80 @@ class _WinnersState extends State<WinnersScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            sizedBoxAddMob(90.0),
-            Container(
-              padding: EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: blackColor,
-                border: Border.all(
-                  color: whiteColor,
-                  width: 2,
+            sizedBoxAddMob(unitHeightValue * 42.0),
+            Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+              SizedBox(
+                height: unitHeightValue * 45.0,
+                width: unitWidthValue * 100,
+                child: RaisedButton(
+                  child: Icon(
+                    Icons.arrow_back_outlined,
+                    color: greenColor,
+                    size: unitHeightValue * 24.0,
+                    semanticLabel:
+                        'Text to announce in accessibility modes',
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  color: blackColor,
+                  textColor: blackColor,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: greenColor, width: unitWidthValue * 2.0),
+                    borderRadius: BorderRadius.circular( unitHeightValue * 29.5),
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(15.0),
               ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 3.0, horizontal: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Winners",
-                      style: TextStyle(
-                        fontSize: 30.0,
-                        color: greenColor,
-                      ),
+              SizedBox(
+                width: unitWidthValue * 10,
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: unitHeightValue * 2, horizontal: unitWidthValue * 8),
+                  decoration: BoxDecoration(
+                    color: blackColor,
+                    border: Border.all(
+                      color: greenColor,
+                      width: unitWidthValue * 2,
                     ),
-                  ],
+                    borderRadius: BorderRadius.circular(unitHeightValue * 15.0),
+                  ),
+                  child: Text(
+                    "WINNERS",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: unitHeightValue * 32.0,
+                        color: whiteColor,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-            ),
+              )
+            ]),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
-              child: layoutBuilderDot(whiteColor),
+                  EdgeInsets.symmetric(vertical: unitHeightValue * 10.0, horizontal: unitWidthValue * 12.0),
+              // child: layoutBuilderDot(whiteColor),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 InkWell(
                   child: Container(
-                    width: 130.0,
+                    width: unitWidthValue * 180.0,
                     padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                     decoration: BoxDecoration(
                       color: whiteColor,
                       border: Border.all(
                         color: blackColor,
-                        width: 2,
+                        width: unitWidthValue * 2,
                       ),
-                      borderRadius: BorderRadius.circular(29.5),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      "Trivia",
+                      "TRIVIA",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: unitHeightValue * 24,
                         color: blackColor,
                         fontWeight: FontWeight.bold,
                       ),
@@ -124,21 +149,21 @@ class _WinnersState extends State<WinnersScreen> {
                 ),
                 InkWell(
                   child: Container(
-                    width: 130.0,
+                    width: unitWidthValue * 180.0,
                     padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                     decoration: BoxDecoration(
                       color: whiteColor,
                       border: Border.all(
                         color: blackColor,
-                        width: 2,
+                        width: unitWidthValue * 2,
                       ),
-                      borderRadius: BorderRadius.circular(29.5),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      "Giveaways",
+                      "GIVEAWAYS",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: unitHeightValue * 24,
                         color: blackColor,
                         fontWeight: FontWeight.bold,
                       ),
@@ -153,28 +178,30 @@ class _WinnersState extends State<WinnersScreen> {
               ],
             ),
             SizedBox(
-              height: 10.0,
+              height: unitHeightValue * 10.0,
             ),
             Container(
-              width: MediaQuery.of(context).size.width - 50,
-              height: MediaQuery.of(context).size.height - 215,
+              width: MediaQuery.of(context).size.width - unitWidthValue * 50,
+              height: MediaQuery.of(context).size.height - unitHeightValue * 215,
               decoration: BoxDecoration(
                 color: whiteColor,
                 image: DecorationImage(
                     image: _isTrivia
                         ? NetworkImage(
-                            winners[0].filename != null
-                                ? UrlWinnersImagePrefixUrl + winners[0].filename
+                            winners![0].filename != null
+                                ? UrlWinnersImagePrefixUrl +
+                                    winners![0].filename!
                                 : "",
                           )
                         : NetworkImage(
-                            winners[1].filename != null
-                                ? UrlWinnersImagePrefixUrl + winners[1].filename
+                            winners![1].filename != null
+                                ? UrlWinnersImagePrefixUrl +
+                                    winners![1].filename!
                                 : "",
                           )),
                 border: Border.all(
                   color: blackColor,
-                  width: 4,
+                  width: unitWidthValue * 4,
                 ),
                 borderRadius: BorderRadius.circular(32.0),
               ),
@@ -188,7 +215,7 @@ class _WinnersState extends State<WinnersScreen> {
   Future<void> getWinnersImagesRecord() async {
     winnersImagesModel = await winnerImagesController.getWinnerImagesAPI();
     setState(() {
-      winners = winnersImagesModel.winnersImages;
+      winners = winnersImagesModel!.winnersImages;
       _isLoading = false;
     });
   }

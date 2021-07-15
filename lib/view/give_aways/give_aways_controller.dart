@@ -6,7 +6,7 @@ import 'package:flutterjackpot/view/give_aways/give_aways_model_class.dart';
 import 'package:flutterjackpot/view/give_aways/giveaways_details_model.dart';
 
 class GiveAWaysController extends BaseModel {
-  Future<List<GiveAWaysRecord>> getAWays(categoryID) async {
+  Future<List<GiveAWaysRecord>?> getAWays(categoryID) async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     try {
@@ -34,13 +34,13 @@ class GiveAWaysController extends BaseModel {
 
 //==============================================================================
 
-  Future<List<GiveAWaysDetailsModelRecord>> getGiveAWaysDetails(
-      {GiveAWaysRecord giveAWaysRecord}) async {
+  Future<List<GiveAWaysDetailsModelRecord>?> getGiveAWaysDetails(
+      {required GiveAWaysRecord giveAWaysRecord}) async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     try {
       Map<String, dynamic> body = {
-        "user_id": userRecord.userID,
+        "user_id": userRecord!.userID,
         "giveaways_id": giveAWaysRecord.id,
       };
 
@@ -65,13 +65,13 @@ class GiveAWaysController extends BaseModel {
 
 //==============================================================================
 
-  Future<bool> submitfreeEntryGiveaway({String giveaway_id}) async {
+  Future<bool?> submitfreeEntryGiveaway({String? giveaway_id}) async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     try {
-      Map<String, String> body = {
+      Map<String, String?> body = {
         "giveaway_id": giveaway_id,
-        "user_id": userRecord.userID,
+        "user_id": userRecord!.userID,
       };
 
       dynamic response =

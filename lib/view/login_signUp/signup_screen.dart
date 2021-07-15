@@ -7,52 +7,57 @@ import 'package:flutterjackpot/utils/common/layout_dot_builder.dart';
 import 'package:flutterjackpot/view/home/home_screen.dart';
 import 'package:flutterjackpot/view/login_signUp/login_signup_controller.dart';
 import 'package:provider/provider.dart';
+import 'package:flutterjackpot/utils/image_utils.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
-
+ 
 class _SignUpScreenState extends State<SignUpScreen> {
   LoginSignUpController loginSignUpController = new LoginSignUpController();
 
   TextEditingController nameTextEditingController = new TextEditingController();
+  TextEditingController usernameTextEditingController = new TextEditingController();
   TextEditingController emailTextEditingController =
       new TextEditingController();
   TextEditingController passwordTextEditingController =
       new TextEditingController();
   TextEditingController confirmPasswordTextEditingController =
       new TextEditingController();
+  double unitHeightValue = 1;
+  double unitWidthValue = 1;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ChangeNotifierProvider<LoginSignUpController>(
-        create: (BuildContext context) {
-          return loginSignUpController = new LoginSignUpController();
-        },
-        child: new Consumer<LoginSignUpController>(
-          builder: (BuildContext context, LoginSignUpController controller,
-              Widget child) {
-            if (loginSignUpController == null)
-              loginSignUpController = controller;
+    unitHeightValue = MediaQuery.of(context).size.height * 0.001;
+     unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
+    return 
+        ChangeNotifierProvider<LoginSignUpController>(
+            create: (BuildContext context) {
+              return loginSignUpController = new LoginSignUpController();
+            },
+            child: new Consumer<LoginSignUpController>(
+              builder: (BuildContext context, LoginSignUpController controller,
+                  Widget? child) {
+                if (loginSignUpController == null)
+                  loginSignUpController = controller;
 
-            switch (controller.getStatus) {
-              case Status.LOADING:
-                return controller.getLoader;
-              case Status.SUCCESS:
-                return HomeScreen();
-              case Status.FAILED:
+                switch (controller.getStatus) {
+                  case Status.LOADING:
+                    return controller.getLoader;
+                  case Status.SUCCESS:
+                    return HomeScreen();
+                  case Status.FAILED:
+                    return _signUpBodyWidget();
+                    break;
+                  case Status.IDLE:
+                    break;
+                }
                 return _signUpBodyWidget();
-                break;
-              case Status.IDLE:
-                break;
-            }
-            return _signUpBodyWidget();
-          },
-        ),
-      ),
-    );
+              },
+            ),
+          );
   }
 
   Widget _signUpBodyWidget() {
@@ -63,108 +68,58 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
-                height: 30.0,
-              ),
-              Text(
-                "Trivia \$tax",
-                style: TextStyle(
-                  color: blackColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30.0,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 20.0, horizontal: 30.0),
-                child: layoutBuilderDot(blackColor),
-              ),
-              Text(
-                "Five  Diamonds Media Group",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: blackColor,
-                ),
-              ),
-              SizedBox(
-                height: 25.0,
-              ),
               Container(
-                width: MediaQuery.of(context).size.width - 10.0,
-                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
+                 padding: EdgeInsets.only(top: unitHeightValue* 20, bottom: unitHeightValue * 10, left: unitWidthValue * 10, right: unitWidthValue * 10),
+                 margin: EdgeInsets.only(left: unitWidthValue * 30, right: unitWidthValue * 30),
                 decoration: BoxDecoration(
-                  color: greenColor,
-                  border: Border.all(
-                    color: blackColor,
-                    width: 2,
-                  ),
+                  color: whiteColor.withOpacity(0.6),
+               
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Trivia",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: blackColor,
-                        fontWeight: FontWeight.bold,
-                      ),
+                child: Column(
+                  children: [
+                    LineTextField(
+                      hintText: "Name",
+                      controller: nameTextEditingController,
                     ),
-                    Text(
-                      " Jackpots ",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 25.0,
-                        color: blackColor,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    LineTextField(
+                      hintText: "Username",
+                      controller: usernameTextEditingController,
                     ),
-                    Text(
-                      "Prizes",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: blackColor,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    LineTextField(
+                      hintText: "Password",
+                      controller: passwordTextEditingController,
+                      obscureText: true,
                     ),
-                  ],
-                ),
+                    LineTextField(
+                      hintText: "Confirm Password",
+                      controller: confirmPasswordTextEditingController,
+                      obscureText: true,
+                    ),
+                    LineTextField(
+                      hintText: "E-Mail",
+                      controller: emailTextEditingController,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                  ]
+                )
               ),
+              
               SizedBox(
-                height: 30.0,
-              ),
-              RoundedTextField(
-                hintText: "Name",
-                controller: nameTextEditingController,
-              ),
-              RoundedTextField(
-                hintText: "E-Mail",
-                controller: emailTextEditingController,
-                keyboardType: TextInputType.emailAddress,
-              ),
-              RoundedTextField(
-                hintText: "Password",
-                controller: passwordTextEditingController,
-                obscureText: true,
-              ),
-              RoundedTextField(
-                hintText: "Confirm Password",
-                controller: confirmPasswordTextEditingController,
-                obscureText: true,
-              ),
-              SizedBox(
-                height: 10.0,
+                height: unitHeightValue * 10.0,
               ),
               Container(
-                height: 50.0,
-                width: 120.0,
+                height: unitHeightValue * 50.0,
+                width: unitWidthValue * 320.0,
                 child: RaisedButton(
                   child: Text(
-                    "SIGN UP",
+                    "Create my Account",
                     textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: unitHeightValue * 24.0,
+                      color: blackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   onPressed: () {
                     if (nameTextEditingController.text.isEmpty) {
@@ -184,7 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                     _signUp();
                   },
-                  color: blackColor,
+                  color: greenColor,
                   textColor: whiteColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25.0),

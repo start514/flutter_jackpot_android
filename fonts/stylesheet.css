@@ -1,0 +1,24 @@
+@font-face {
+    font-family: 'DIN Condensed';
+    src: url('DINCondensed-Light.eot');
+    src: local('DIN Condensed Light'), local('DINCondensed-Light'),
+        url('DINCondensed-Light.eot?#iefix') format('embedded-opentype'),
+        url('DINCondensed-Light.woff2') format('woff2'),
+        url('DINCondensed-Light.woff') format('woff'),
+        url('DINCondensed-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'DIN Condensed';
+    src: url('DINCondensed-Regular.eot');
+    src: local('DIN Condensed'), local('DINCondensed-Regular'),
+        url('DINCondensed-Regular.eot?#iefix') format('embedded-opentype'),
+        url('DINCondensed-Regular.woff2') format('woff2'),
+        url('DINCondensed-Regular.woff') format('woff'),
+        url('DINCondensed-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+

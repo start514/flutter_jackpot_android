@@ -15,7 +15,7 @@ class Preferences {
     return prefs.setString(key, data);
   }
 
-  static Future<String> getString(String key) async {
+  static Future<String?> getString(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(key);
   }

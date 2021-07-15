@@ -11,9 +11,9 @@ String jackpotTriviaCategoriesToJson(JackpotTriviaCategories data) =>
     json.encode(data.toJson());
 
 class JackpotTriviaCategories {
-  int status;
-  String message;
-  List<Categories> categories;
+  int? status;
+  String? message;
+  List<Categories>? categories;
 
   JackpotTriviaCategories({
     this.status,
@@ -36,13 +36,13 @@ class JackpotTriviaCategories {
         "message": message == null ? null : message,
         "records": categories == null
             ? null
-            : List<dynamic>.from(categories.map((x) => x.toJson())),
+            : List<dynamic>.from(categories!.map((x) => x.toJson())),
       };
 }
 
 class Categories {
-  String id;
-  String name;
+  String? id;
+  String? name;
 
   Categories({
     this.id,

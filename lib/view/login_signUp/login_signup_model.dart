@@ -11,9 +11,9 @@ String loginSignUpModelToJson(LoginSignUpModel data) =>
     json.encode(data.toJson());
 
 class LoginSignUpModel {
-  int status;
-  String message;
-  UserRecord userRecord;
+  int? status;
+  String? message;
+  UserRecord? userRecord;
 
   LoginSignUpModel({
     this.status,
@@ -21,30 +21,32 @@ class LoginSignUpModel {
     this.userRecord,
   });
 
-  factory LoginSignUpModel.fromJson(Map<String, dynamic> json) =>
-      LoginSignUpModel(
-        status: json["status"] == null ? null : json["status"],
-        message: json["message"] == null ? null : json["message"],
-        userRecord:
-        json["record"] == null ? null : UserRecord.fromJson(json["record"]),
-      );
+  factory LoginSignUpModel.fromJson(Map<String, dynamic> json) {
+    return LoginSignUpModel(
+      status: json["status"] == null ? null : json["status"],
+      message: json["message"] == null ? null : json["message"],
+      userRecord:
+          json["record"] == null ? null : UserRecord.fromJson(json["record"]),
+    );
+  }
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "status": status == null ? null : status,
         "message": message == null ? null : message,
-        "record": userRecord == null ? null : userRecord.toJson(),
+        "record": userRecord == null ? null : userRecord!.toJson(),
       };
 }
 
 class UserRecord {
-  String userID;
-  String name;
-  String email;
-  String apiKey;
-  String token;
-  String status;
-  LoginSpinDetails loginSpinDetails;
+  String? userID;
+  String? name;
+  String? email;
+  String? apiKey;
+  String? token;
+  String? status;
+  String? totalPoints;
+  LoginSpinDetails? loginSpinDetails;
+  FreebiesUsed? freebiesUsed;
 
   UserRecord({
     this.userID,
@@ -53,33 +55,53 @@ class UserRecord {
     this.apiKey,
     this.token,
     this.status,
+    this.totalPoints,
     this.loginSpinDetails,
+    this.freebiesUsed,
   });
 
-  factory UserRecord.fromJson(Map<String, dynamic> json) =>
-      UserRecord(
+  factory UserRecord.fromJson(Map<String, dynamic> json) => UserRecord(
         userID: json["id"] == null ? null : json["id"],
         name: json["name"] == null ? null : json["name"],
         email: json["email"] == null ? null : json["email"],
         apiKey: json["api_key"] == null ? null : json["api_key"],
         token: json["token"] == null ? null : json["token"],
         status: json["status"] == null ? null : json["status"],
+        totalPoints: json["total_points"] == null ? null : json["total_points"],
         loginSpinDetails: json["spin_details"] == null
             ? null
             : LoginSpinDetails.fromJson(json["spin_details"]),
+        freebiesUsed: json["freebies_used"] == null
+            ? null
+            : FreebiesUsed.fromJson(json["freebies_used"]),
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "id": userID == null ? null : userID,
         "name": name == null ? null : name,
         "email": email == null ? null : email,
         "api_key": apiKey == null ? null : apiKey,
         "token": token == null ? null : token,
         "status": status == null ? null : status,
-        "spin_details": loginSpinDetails == null ? null : loginSpinDetails
-            .toJson(),
+        "totalPoints": totalPoints == null ? null : totalPoints,
+        "spin_details":
+            loginSpinDetails == null ? null : loginSpinDetails!.toJson(),
       };
+}
+
+class FreebiesUsed {
+  FreebiesUsed({this.theBomb, this.theHeart, this.theTime, this.thePlayer});
+
+  String? theBomb;
+  String? theHeart;
+  String? theTime;
+  String? thePlayer;
+
+  factory FreebiesUsed.fromJson(Map<String, dynamic> json) => FreebiesUsed(
+      theBomb: json["type_1"] == null ? null : json["type_1"],
+      theHeart: json["type_2"] == null ? null : json["type_2"],
+      theTime: json["type_3"] == null ? null : json["type_3"],
+      thePlayer: json["type_4"] == null ? null : json["type_4"]);
 }
 
 class LoginSpinDetails {
@@ -94,14 +116,14 @@ class LoginSpinDetails {
     this.updatedAt,
   });
 
-  String id;
-  String userId;
-  String theBomb;
-  String theHeart;
-  String theTime;
-  String thePlayer;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String? id;
+  String? userId;
+  String? theBomb;
+  String? theHeart;
+  String? theTime;
+  String? thePlayer;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   factory LoginSpinDetails.fromJson(Map<String, dynamic> json) =>
       LoginSpinDetails(
@@ -119,15 +141,14 @@ class LoginSpinDetails {
             : DateTime.parse(json["updated_at"]),
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "id": id == null ? null : id,
         "user_id": userId == null ? null : userId,
         "type_1": theBomb == null ? null : theBomb,
         "type_2": theHeart == null ? null : theHeart,
         "type_3": theTime == null ? null : theTime,
         "type_4": thePlayer == null ? null : thePlayer,
-        "created_at": createdAt == null ? null : createdAt.toIso8601String(),
-        "updated_at": updatedAt == null ? null : updatedAt.toIso8601String(),
+        "created_at": createdAt == null ? null : createdAt!.toIso8601String(),
+        "updated_at": updatedAt == null ? null : updatedAt!.toIso8601String(),
       };
 }

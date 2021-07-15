@@ -7,7 +7,7 @@ import '../main.dart';
 /* ---------- check login validation api  -------------- */
 class LoginWithSocialRepository {
   static Future<bool> loginWithSocial(
-      {String name, String emailId, String token, bool isFbSignUp}) async {
+      {String? name, String? emailId, String? token, required bool isFbSignUp}) async {
     print('Login with social details func. call');
 
     Map<String, dynamic> body = {};
@@ -30,7 +30,7 @@ class LoginWithSocialRepository {
     if (result["status"] == 1) {
       LoginSignUpModel model = LoginSignUpModel.fromJson(result);
       userRecord = model.userRecord;
-      spinDetails = model.userRecord.loginSpinDetails;
+      spinDetails = model.userRecord!.loginSpinDetails;
 
       await Preferences.setString(
         Preferences.pfUserLogin,

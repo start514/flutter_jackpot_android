@@ -3,8 +3,8 @@ import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/view/give_aways/giveaways_details_model.dart';
 
 class EarnedDialog extends StatefulWidget {
-  final GiveAWaysDetailsModelRecord details;
-  final bool isEntry;
+  final GiveAWaysDetailsModelRecord? details;
+  final bool? isEntry;
 
   EarnedDialog({this.details, this.isEntry});
 
@@ -78,9 +78,9 @@ class _EarnedDialogState extends State<EarnedDialog> {
                     borderRadius: BorderRadius.circular(36.0),
                   ),
                   child: Text(
-                    widget.isEntry
+                    widget.isEntry!
                         ? "1 ENTRIES"
-                        : "${widget.details.task[0].entry} ENTRIES",
+                        : "${widget.details!.task![0].entry} ENTRIES",
                     style: TextStyle(
                       fontSize: 16,
                       color: blackColor,

@@ -9,9 +9,9 @@ GetQuiz getQuizFromJson(String str) => GetQuiz.fromJson(json.decode(str));
 String getQuizToJson(GetQuiz data) => json.encode(data.toJson());
 
 class GetQuiz {
-  int status;
-  String message;
-  List<Quiz> quiz;
+  int? status;
+  String? message;
+  List<Quiz>? quiz;
 
   GetQuiz({
     this.status,
@@ -32,16 +32,16 @@ class GetQuiz {
         "message": message == null ? null : message,
         "records": quiz == null
             ? null
-            : List<dynamic>.from(quiz.map((x) => x.toJson())),
+            : List<dynamic>.from(quiz!.map((x) => x.toJson())),
       };
 }
 
 class Quiz {
-  String id;
-  String title;
-  String photoThumb;
-  String amount;
-  String end_date;
+  String? id;
+  String? title;
+  String? photoThumb;
+  String? amount;
+  String? end_date;
 
   Quiz({
     this.id,

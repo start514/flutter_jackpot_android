@@ -17,9 +17,9 @@ class GetWinnersImagesModel {
     this.winnersImages,
   });
 
-  int status;
-  String message;
-  List<WinnersImages> winnersImages;
+  int? status;
+  String? message;
+  List<WinnersImages>? winnersImages;
 
   factory GetWinnersImagesModel.fromJson(Map<String, dynamic> json) =>
       GetWinnersImagesModel(
@@ -36,7 +36,7 @@ class GetWinnersImagesModel {
         "message": message == null ? null : message,
         "records": winnersImages == null
             ? null
-            : List<dynamic>.from(winnersImages.map((x) => x.toJson())),
+            : List<dynamic>.from(winnersImages!.map((x) => x.toJson())),
       };
 }
 
@@ -49,11 +49,11 @@ class WinnersImages {
     this.updatedAt,
   });
 
-  String id;
-  String imgType;
-  String filename;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String? id;
+  String? imgType;
+  String? filename;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   factory WinnersImages.fromJson(Map<String, dynamic> json) => WinnersImages(
         id: json["id"] == null ? null : json["id"],
@@ -71,7 +71,7 @@ class WinnersImages {
         "id": id == null ? null : id,
         "img_type": imgType == null ? null : imgType,
         "filename": filename == null ? null : filename,
-        "created_at": createdAt == null ? null : createdAt.toIso8601String(),
-        "updated_at": updatedAt == null ? null : updatedAt.toIso8601String(),
+        "created_at": createdAt == null ? null : createdAt!.toIso8601String(),
+        "updated_at": updatedAt == null ? null : updatedAt!.toIso8601String(),
       };
 }

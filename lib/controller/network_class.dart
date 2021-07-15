@@ -6,9 +6,9 @@ class Network {
   static Dio dio = new Dio();
 
   Future<dynamic> postWithDio(
-      {String url,
-      Map<String, dynamic> body,
-      Map<String, dynamic> addHeaders}) {
+      {required String url,
+      required Map<String, dynamic> body,
+      Map<String, dynamic>? addHeaders}) {
     print(" POST URL          ==================  : $url");
     print(" POST BODY         ==================  : $body");
 
@@ -24,7 +24,7 @@ class Network {
     )
         .then(
       (Response response) {
-        int code = response.statusCode;
+        int code = response.statusCode!;
         print("RESPONSE : $code...${response.data}");
 
         if (code < 200 || code > 400) {
@@ -35,7 +35,7 @@ class Network {
     );
   }
 
-  Future<dynamic> getWithDio({String url, Map body, Map addHeaders}) {
+  Future<dynamic> getWithDio({required String url, Map? body, Map? addHeaders}) {
     print(" GET URL      ==================  : $url");
 
     if (body != null) {
@@ -47,10 +47,10 @@ class Network {
     }
 
     return dio
-        .get(url, queryParameters: body, options: Options(headers: addHeaders))
+        .get(url, queryParameters: body as Map<String, dynamic>?, options: Options(headers: addHeaders as Map<String, dynamic>?))
         .then(
       (Response response) {
-        int code = response.statusCode;
+        int code = response.statusCode!;
         print("RESPONSE : $code...${response.data}");
 
         if (code < 200 || code > 400) {

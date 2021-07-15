@@ -20,14 +20,14 @@ class SubmitQuiz {
     this.correctQuestions,
   });
 
-  int status;
-  String rank;
+  int? status;
+  String? rank;
   dynamic points;
 
-  int totalScore;
-  String quizScore;
-  String quizBonus;
-  int correctQuestions;
+  int? totalScore;
+  String? quizScore;
+  String? quizBonus;
+  int? correctQuestions;
 
   factory SubmitQuiz.fromJson(Map<String, dynamic> json) => SubmitQuiz(
         status: json["status"] == null ? null : json["status"],

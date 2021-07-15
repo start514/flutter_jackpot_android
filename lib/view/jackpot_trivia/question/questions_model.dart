@@ -11,9 +11,9 @@ String questionModelClassToJson(QuestionModelClass data) =>
     json.encode(data.toJson());
 
 class QuestionModelClass {
-  int status;
-  String message;
-  List<Record> records;
+  int? status;
+  String? message;
+  List<Record>? records;
 
   QuestionModelClass({
     this.status,
@@ -35,19 +35,19 @@ class QuestionModelClass {
         "message": message == null ? null : message,
         "records": records == null
             ? null
-            : List<dynamic>.from(records.map((x) => x.toJson())),
+            : List<dynamic>.from(records!.map((x) => x.toJson())),
       };
 }
 
 class Record {
-  String id;
-  String question;
-  List<Option> options;
+  String? id;
+  String? question;
+  List<Option>? options;
   bool isEnable = true;
   bool nextButton = false;
   bool finalSelectAnswerIsTrue = false;
-  int points;
-  int bonus;
+  int? points;
+  int? bonus;
 
   Record({
     this.id,
@@ -68,12 +68,12 @@ class Record {
         "question": question == null ? null : question,
         "options": options == null
             ? null
-            : List<dynamic>.from(options.map((x) => x.toJson())),
+            : List<dynamic>.from(options!.map((x) => x.toJson())),
       };
 
   Map<String, dynamic> toSubmit() {
-    Option option;
-    options.forEach((element) {
+    late Option option;
+    options!.forEach((element) {
       if (element.isSelected) {
         option = element;
       }
@@ -88,9 +88,9 @@ class Record {
 }
 
 class Option {
-  String id;
-  String options;
-  String isAnswer;
+  String? id;
+  String? options;
+  String? isAnswer;
   bool isSelected = false;
 
   Option({

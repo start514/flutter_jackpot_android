@@ -9,7 +9,8 @@ import 'package:flutterjackpot/view/jackpot_trivia/question/submit_quiz_model.da
 import 'package:intl/intl.dart';
 
 class SubmitQuizController extends BaseModel {
-  Future<SubmitQuiz> submitQuiz(List<Record> list, Quiz quiz, int bonus) async {
+  Future<SubmitQuiz?> submitQuiz(
+      List<Record> list, Quiz quiz, int bonus) async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     DateTime now = DateTime.now();
@@ -18,7 +19,7 @@ class SubmitQuizController extends BaseModel {
     print(" DATETIME ======= $formattedDate");
 
     try {
-      final List<Record> records = new List();
+      final List<Record> records = [];
       list.forEach((element) {
         if (element.finalSelectAnswerIsTrue) {
           records.add(element);
@@ -29,9 +30,9 @@ class SubmitQuizController extends BaseModel {
         List<dynamic>.from(records.map((x) => x.toSubmit())),
       );
 
-      Map<String, String> body = {
+      Map<String, String?> body = {
         "quiz_id": quiz.id,
-        "user_id": userRecord.userID,
+        "user_id": userRecord!.userID,
         "date_time": formattedDate,
         "bonus": bonus.toString(),
         "records": value,

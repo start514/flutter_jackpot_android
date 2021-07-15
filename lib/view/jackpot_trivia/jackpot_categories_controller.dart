@@ -5,7 +5,7 @@ import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_categories_model.dart';
 
 class JackpotCategoriesAndQuizController extends BaseModel {
-  Future<List<Categories>> getCategories() async {
+  Future<List<Categories>?> getCategories() async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     try {
@@ -30,7 +30,7 @@ class JackpotCategoriesAndQuizController extends BaseModel {
 
 //==============================================================================
 
-  Future<List<Quiz>> getQuiz({String categoryID}) async {
+  Future<List<Quiz>?> getQuiz({String? categoryID}) async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     try {

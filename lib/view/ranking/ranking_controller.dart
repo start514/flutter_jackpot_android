@@ -5,7 +5,7 @@ import 'package:flutterjackpot/utils/url_utils.dart';
 import 'package:flutterjackpot/view/ranking/ranking_model.dart';
 
 class TopRankerController extends BaseModel {
-  Future<List<TopRankerRecord>> topRankerAPI() async {
+  Future<List<TopRankerRecord>?> topRankerAPI() async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     try {

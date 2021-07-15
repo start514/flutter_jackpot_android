@@ -19,9 +19,9 @@ class LeaderBordModel {
     this.leaderBordRecord,
   });
 
-  int status;
-  String message;
-  List<LeaderBordRecord> leaderBordRecord;
+  int? status;
+  String? message;
+  List<LeaderBordRecord>? leaderBordRecord;
 
   factory LeaderBordModel.fromJson(Map<String, dynamic> json) =>
       LeaderBordModel(
@@ -37,7 +37,7 @@ class LeaderBordModel {
         "message": message == null ? null : message,
         "records": leaderBordRecord == null
             ? null
-            : List<dynamic>.from(leaderBordRecord.map((x) => x.toJson())),
+            : List<dynamic>.from(leaderBordRecord!.map((x) => x.toJson())),
       };
 }
 
@@ -50,13 +50,13 @@ class LeaderBordRecord {
     this.userDetail,
   });
 
-  String userId;
-  String quizId;
-  String dateTime;
-  String score;
-  UserDetail userDetail;
-  int rank;
-  Color color;
+  String? userId;
+  String? quizId;
+  String? dateTime;
+  String? score;
+  UserDetail? userDetail;
+  int? rank;
+  Color? color;
 
   factory LeaderBordRecord.fromJson(Map<String, dynamic> json) => LeaderBordRecord(
         userId: json["user_id"] == null ? null : json["user_id"],
@@ -73,7 +73,7 @@ class LeaderBordRecord {
         "quiz_id": quizId == null ? null : quizId,
         "date_time": dateTime == null ? null : dateTime,
         "score": score == null ? null : score,
-        "user_detail": userDetail == null ? null : userDetail.toJson(),
+        "user_detail": userDetail == null ? null : userDetail!.toJson(),
       };
 }
 
@@ -87,12 +87,12 @@ class UserDetail {
     this.status,
   });
 
-  String id;
-  String name;
-  String email;
-  String apiKey;
-  String token;
-  String status;
+  String? id;
+  String? name;
+  String? email;
+  String? apiKey;
+  String? token;
+  String? status;
 
   factory UserDetail.fromJson(Map<String, dynamic> json) => UserDetail(
         id: json["id"] == null ? null : json["id"],

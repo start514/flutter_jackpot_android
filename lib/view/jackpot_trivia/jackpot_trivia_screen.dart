@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterjackpot/dialogs/get_categories_dialogs.dart';
+import 'package:flutterjackpot/dialogs/game_rules_dialogs.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/common_sizebox_addmob.dart';
 import 'package:flutterjackpot/utils/image_utils.dart';
@@ -22,14 +23,16 @@ class _JackPotTriviaScreenState extends State<JackPotTriviaScreen> {
 
   final searchController = new TextEditingController();
 
-  List<Categories> categories;
-  List<Quiz> quiz;
-  final List<Quiz> searchQuiz = new List();
+  List<Categories>? categories;
+  List<Quiz>? quiz;
+  List<Quiz> searchQuiz = [];
 
-  String searchWord;
+  String? searchWord;
   bool isSearch = false;
 
   bool _isLoading = true;
+  double unitHeightValue = 1;
+  double unitWidthValue = 1;
 
   @override
   void initState() {
@@ -51,6 +54,8 @@ class _JackPotTriviaScreenState extends State<JackPotTriviaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    unitHeightValue = MediaQuery.of(context).size.height * 0.001;
+     unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
     return Stack(
       children: [
         bgImage(context),
@@ -62,13 +67,13 @@ class _JackPotTriviaScreenState extends State<JackPotTriviaScreen> {
                     radius: 15.0,
                   ),
                 )
-              : _bodyWidget(quiz, categories),
+              : _bodyWidget(quiz, categories!),
         ),
       ],
     );
   }
 
-  Widget _bodyWidget(List<Quiz> quiz, List<Categories> categories) {
+  Widget _bodyWidget(List<Quiz>? quiz, List<Categories> categories) {
     return categories.length == 0
         ? Center(
             child: Text(
@@ -82,120 +87,92 @@ class _JackPotTriviaScreenState extends State<JackPotTriviaScreen> {
         : SingleChildScrollView(
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: EdgeInsets.all( unitHeightValue * 12.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    sizedBoxAddMob(90.0),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: blackColor,
-                        border: Border.all(
-                          color: greenColor,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      child: Text(
-                        "Jackpot Trivia",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30.0,
-                          color: greenColor,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
+                    sizedBoxAddMob(unitHeightValue * 42.0),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        InkWell(
-                          child: Container(
-                            width: 100.0,
-                            padding: EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color: blackColor,
-                              border: Border.all(
-                                color: whiteColor,
-                                width: 2,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            height: unitHeightValue * 45.0,
+                            width: unitWidthValue * 100,
+                            child: RaisedButton(
+                              child: Icon(
+                                Icons.arrow_back_outlined,
+                                color: greenColor,
+                                size: unitHeightValue * 24.0,
+                                semanticLabel:
+                                    'Text to announce in accessibility modes',
                               ),
-                              borderRadius: BorderRadius.circular(29.5),
-                            ),
-                            child: Text(
-                              "Filter",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: greyColor,
-                              ),
-                            ),
-                          ),
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  GetCategoriesDialog(categories),
-                            ).then(
-                              (categoryID) {
-                                getQuiz(categoryID: categoryID);
+                              onPressed: () {
+                                Navigator.of(context).pop();
                               },
-                            );
-                          },
-                        ),
-                        Container(
-                          width: 120.0,
-                          height: 35.0,
-                          padding: EdgeInsets.only(
-                              left: 0.0, right: 0.0, top: 0.0, bottom: 0.0),
-                          decoration: BoxDecoration(
-                            color: blackColor,
-                            border: Border.all(
-                              color: whiteColor,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(29.5),
-                          ),
-                          child: TextFormField(
-                            controller: searchController,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: whiteColor,
-                            ),
-                            decoration: new InputDecoration(
-                              hintText: "Search",
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                color: greyColor,
+                              color: blackColor,
+                              textColor: blackColor,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(color: greenColor, width: unitWidthValue * 2.0),
+                                borderRadius: BorderRadius.circular(29.5),
                               ),
                             ),
                           ),
-                        ),
-                        Container(
-                          height: 45.0,
-                          width: 45.0,
-                          alignment: Alignment.center,
-                          child: Card(
-                            child: IconButton(
-                              icon: Icon(Icons.info),
-                              onPressed: () {},
+                          SizedBox(
+                            width: unitWidthValue * 5,
+                          ),
+                          Expanded(
+                            child: Container(
+                              // width: unitWidthValue * double.infinity,
+                              padding: EdgeInsets.all(unitHeightValue * 8.0),
+                              decoration: BoxDecoration(
+                                color: blackColor,
+                                border: Border.all(
+                                  color: greenColor,
+                                  width: unitWidthValue * 2,
+                                ),
+                                borderRadius: BorderRadius.circular(unitHeightValue*15.0),
+                              ),
+                              child: Text(
+                                "JACKPOT TRIVIA",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: unitHeightValue * 26.0,
+                                    color: whiteColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 12.0,
-                    ),
-                    Divider(
-                      height: 2.0,
-                      thickness: 2.0,
-                      color: whiteColor,
-                    ),
+                          SizedBox(
+                            width: unitWidthValue * 5,
+                          ),
+                          SizedBox(
+                            height: unitHeightValue * 45.0,
+                            width: unitWidthValue * 100,
+                            child: RaisedButton(
+                              child: Text(
+                                "RULES",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: whiteColor,
+                                    fontSize: unitHeightValue * 20),
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      GameRulesDialog(categories),
+                                );
+                              },
+                              padding: EdgeInsets.all(0),
+                              color: blackColor,
+                              textColor: blackColor,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(color: greenColor, width: unitWidthValue * 2.0),
+                                borderRadius: BorderRadius.circular(unitHeightValue*10),
+                              ),
+                            ),
+                          ),
+                        ]),
                     _gridView(),
                   ],
                 ),
@@ -205,13 +182,13 @@ class _JackPotTriviaScreenState extends State<JackPotTriviaScreen> {
   }
 
   Widget _gridView() {
-    if (quiz.length == 0) {
+    if (quiz!.length == 0) {
       return Padding(
-        padding: const EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.only(top: unitHeightValue * 20.0),
         child: Text(
           "No Record Yet",
           style: TextStyle(
-            fontSize: 17.0,
+            fontSize: unitHeightValue * 17.0,
             color: whiteColor,
             fontWeight: FontWeight.bold,
           ),
@@ -219,11 +196,11 @@ class _JackPotTriviaScreenState extends State<JackPotTriviaScreen> {
       );
     } else if (searchWord != null && searchQuiz.length == 0) {
       return Padding(
-        padding: const EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.only(top: unitHeightValue * 20.0),
         child: Text(
           "No Quiz Matched Your Search",
           style: TextStyle(
-            fontSize: 17.0,
+            fontSize: unitHeightValue * 17.0,
             color: whiteColor,
             fontWeight: FontWeight.bold,
           ),
@@ -239,32 +216,33 @@ class _JackPotTriviaScreenState extends State<JackPotTriviaScreen> {
       itemBuilder: (BuildContext context, int position) {
         Quiz _quiz = searchQuiz[position];
         return Container(
-          padding: EdgeInsets.all(5.0),
+          padding: EdgeInsets.all(unitHeightValue * 5.0),
           child: InkWell(
             child: Stack(
               children: [
                 Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(0.0),
-                  margin: EdgeInsets.symmetric(vertical: 10.0),
+                  margin: EdgeInsets.symmetric(vertical: unitHeightValue * 10.0),
                   decoration: BoxDecoration(
                     color: whiteColor,
                     border: Border.all(
                       color: blackColor,
-                      width: 1.5,
+                      width: unitWidthValue * 1.5,
                     ),
-                    borderRadius: BorderRadius.circular(29.5),
+                    borderRadius: BorderRadius.circular(unitHeightValue * 29.5),
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(27.0),
+                      borderRadius: BorderRadius.circular(unitHeightValue * 16.0),
                       border: Border.all(
-                        color: blackColor,
-                        width: 1.5,
+                        color: whiteColor,
+                        width: unitWidthValue * 1.5,
                       ),
                       image: DecorationImage(
                         image: NetworkImage(
-                          UrlQuizImageJackpotTriviaPrefixUrl + _quiz.photoThumb,
+                          UrlQuizImageJackpotTriviaPrefixUrl +
+                              _quiz.photoThumb!,
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -272,24 +250,25 @@ class _JackPotTriviaScreenState extends State<JackPotTriviaScreen> {
                   ),
                 ),
                 Align(
-                  alignment: Alignment.topCenter,
+                  alignment: Alignment.topLeft,
                   child: Container(
-                    width: 130.0,
-                    padding: EdgeInsets.all(5.0),
+                    width: unitWidthValue * 60.0,
+                    margin: EdgeInsets.fromLTRB(unitWidthValue * 10, unitHeightValue * 20, 0, 0),
+                    padding: EdgeInsets.all(unitHeightValue * 2.0),
                     decoration: BoxDecoration(
-                      color: whiteColor,
+                      color: blackColor,
                       border: Border.all(
-                        color: blackColor,
-                        width: 2,
+                        color: greenColor,
+                        width: unitWidthValue * 2,
                       ),
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(4.0),
                     ),
                     child: AutoSizeText(
-                      _quiz.title,
+                      "\$${_quiz.amount}",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: blackColor,
-                        fontSize: 15.0,
+                        color: greenColor,
+                        fontSize: unitHeightValue * 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -298,23 +277,26 @@ class _JackPotTriviaScreenState extends State<JackPotTriviaScreen> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    width: 130.0,
-                    padding: EdgeInsets.all(5.0),
+                    width: unitWidthValue * double.infinity,
+                    padding: EdgeInsets.all(unitHeightValue * 2),
                     decoration: BoxDecoration(
                       color: blackColor,
                       border: Border.all(
-                        color: whiteColor,
-                        width: 2,
+                        color: greenColor,
+                        width: unitWidthValue * 2,
                       ),
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(unitHeightValue * 6.0),
                     ),
                     child: AutoSizeText(
-                      "\$ ${_quiz.amount}",
+                      _quiz.title!.toUpperCase(),
                       textAlign: TextAlign.center,
+                      minFontSize: 8,
+                      maxLines: 1,
                       style: TextStyle(
-                          color: greenColor,
-                          fontSize: 17.5,
-                          fontWeight: FontWeight.bold),
+                        color: whiteColor,
+                        fontSize: unitHeightValue * 24,
+                        fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
                 ),
@@ -369,12 +351,12 @@ class _JackPotTriviaScreenState extends State<JackPotTriviaScreen> {
   void buildSearchList() {
     searchQuiz.clear();
     if (searchWord == null || searchWord == "") {
-      searchQuiz.addAll(quiz);
+      searchQuiz.addAll(quiz!);
     } else {
-      for (int i = 0; i < quiz.length; i++) {
-        Quiz _class = quiz.elementAt(i);
-        String s = _class.title.toLowerCase();
-        if (s.contains(searchWord.toLowerCase())) {
+      for (int i = 0; i < quiz!.length; i++) {
+        Quiz _class = quiz!.elementAt(i);
+        String s = _class.title!.toLowerCase();
+        if (s.contains(searchWord!.toLowerCase())) {
           searchQuiz.add(_class);
         }
       }

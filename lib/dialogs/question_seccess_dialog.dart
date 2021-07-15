@@ -9,9 +9,9 @@ import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/question/submit_quiz_model.dart';
 
 class QuestionSuccessDialog extends StatefulWidget {
-  final Quiz quiz;
-  final int correctAnswer;
-  final SubmitQuiz submitQuiz;
+  final Quiz? quiz;
+  final int? correctAnswer;
+  final SubmitQuiz? submitQuiz;
 
   QuestionSuccessDialog({this.quiz, this.correctAnswer, this.submitQuiz});
 
@@ -20,8 +20,10 @@ class QuestionSuccessDialog extends StatefulWidget {
 }
 
 class _QuestionSuccessDialogState extends State<QuestionSuccessDialog> {
-  SubmitQuiz quizResponse = new SubmitQuiz();
+  SubmitQuiz? quizResponse = new SubmitQuiz();
   int score = 0;
+  double unitHeightValue = 1;
+  double unitWidthValue = 1;
 
   @override
   void initState() {
@@ -29,212 +31,142 @@ class _QuestionSuccessDialogState extends State<QuestionSuccessDialog> {
 
     setState(() {
       quizResponse = widget.submitQuiz;
-      score =
-          int.parse(quizResponse.quizScore) + int.parse(quizResponse.quizBonus);
+      score = int.parse(quizResponse!.quizScore!) +
+          int.parse(quizResponse!.quizBonus!);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    unitHeightValue = MediaQuery.of(context).size.height * 0.001;
+     unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
     return Dialog(
-      backgroundColor: whiteColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
+      insetPadding: EdgeInsets.all(0),
       child: Container(
-        height: 502.0,
+        height: unitHeightValue * double.infinity,
+        width: unitWidthValue * double.infinity,
         margin: EdgeInsets.all(0.0),
+        decoration: BoxDecoration(
+          image: new DecorationImage(
+            image: new AssetImage('assets/background.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                SizedBox(
+                  height: unitHeightValue * 42,
+                ),
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
+                  // width: unitWidthValue * double.infinity,
+                  padding: EdgeInsets.fromLTRB(unitWidthValue * 32.0, unitHeightValue * 8.0, unitHeightValue * 32.0, unitWidthValue *8.0),
                   decoration: BoxDecoration(
                     color: blackColor,
                     border: Border.all(
-                      color: whiteColor,
-                      width: 2,
+                      color: greenColor,
+                      width: unitWidthValue * 2,
                     ),
-                    borderRadius: BorderRadius.circular(12.0),
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
                   child: Text(
-                    widget.quiz.title,
+                    "QUIZ RESULTS",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 20.0,
+                        fontSize: unitHeightValue * 32.0,
+                        color: greenColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  height: unitHeightValue * 10,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5.0),
+                  child: Text(
+                    widget.quiz!.title!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: unitHeightValue * 60.0,
                       color: whiteColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 10.0,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width - 10.0,
-                  padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
-                  decoration: BoxDecoration(
-                    color: whiteColor,
-                    border: Border.all(
-                      color: blackColor,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        "Congratulations!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 27.0,
-                          color: blackColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        "Quiz Completed.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 19.0,
-                          color: blackColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 2.0),
-                        child: layoutBuilderDot(blackColor),
-                      ),
-                      Text(
-                        "Watch this short ad while we calculate your result",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10.0,
+                  height: unitHeightValue * 10.0,
                 ),
                 Container(
                   padding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                      EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
                   decoration: BoxDecoration(
-                    color: greenColor,
+                    color: blackColor,
                     border: Border.all(
-                      color: blackColor,
-                      width: 2.0,
+                      color: whiteColor,
+                      width: unitWidthValue * 2.0,
                     ),
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   child: Text(
                     //score
-                    "Score - ${score.toString()}",
+                    "SCORE - ${score.toString()}",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 20.0,
-                      color: blackColor,
+                      fontSize: unitHeightValue * 40.0,
+                      color: greenColor,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 10.0,
+                  height: unitHeightValue * 20.0,
                 ),
                 Container(
+                  alignment: Alignment.center,
                   padding:
                       EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
-                  decoration: BoxDecoration(
-                    color: blackColor,
-                    border: Border.all(
-                      color: whiteColor,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        _scoreBordRow(
-                          name: "Correct Answers",
-                          value: widget.correctAnswer != 0
-                              ? "${widget.correctAnswer} out of 10"
-                              : "0 out of 10",
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        _scoreBordRow(
-                          name: "Quiz Score",
-                          value: quizResponse.quizScore != null
-                              ? quizResponse.quizScore
-                              : "0",
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        _scoreBordRow(
-                          name: "Quiz Bonus",
-                          value: quizResponse.quizBonus != null
-                              ? "+${quizResponse.quizBonus}"
-                              : "0",
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        _scoreBordRow(
-                          name: "My Quiz Rank",
-                          value: quizResponse.rank != null
-                              ? quizResponse.rank
-                              : "0",
-                        ),
                         Row(
-                          children: <Widget>[],
-                        ),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            _roundedButtons(
-                              title: "Done",
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => JackPotTriviaScreen(),
-                                  ),
-                                );
-                              },
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _scoreBordRow(
+                              name: "QUIZ RANK",
+                              value: quizResponse!.rank != null
+                                  ? quizResponse!.rank!
+                                  : "0",
                             ),
-                            _roundedButtons(
-                              title: "Play Again!",
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        JackpotTriviaDetailsScreen(
-                                      quiz: widget.quiz,
-                                    ),
-                                  ),
-                                );
-                              },
+                            _scoreBordRow(
+                              name: "CORRECT",
+                              value: widget.correctAnswer != 0
+                                  ? "${widget.correctAnswer}/10"
+                                  : "0/10",
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: unitHeightValue * 10.0,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _scoreBordRow(
+                              name: "QUIZ SCORE",
+                              value: quizResponse!.quizScore != null
+                                  ? quizResponse!.quizScore!
+                                  : "0",
+                            ),
+                            _scoreBordRow(
+                              name: "QUIZ BONUS",
+                              value: quizResponse!.quizBonus != null
+                                  ? "+${quizResponse!.quizBonus}"
+                                  : "0",
                             ),
                           ],
                         ),
@@ -242,6 +174,59 @@ class _QuestionSuccessDialogState extends State<QuestionSuccessDialog> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: unitHeightValue * 20.0,
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 18, right: 18),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      _roundedButtons(
+                        title: "DONE!",
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => JackPotTriviaScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _roundedButtons(
+                        title: "PLAY AGAIN!",
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => JackpotTriviaDetailsScreen(
+                                quiz: widget.quiz,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: unitHeightValue * 20.0,
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 8, right: 8),
+                  child: Text(
+                    //score
+                    "Try using some Power-ups to increase\nyour chances of winning a Jackpot!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: unitHeightValue * 22.0,
+                      color: whiteColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -250,75 +235,72 @@ class _QuestionSuccessDialogState extends State<QuestionSuccessDialog> {
     );
   }
 
-  Widget _scoreBordRow({String name, String value}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        AutoSizeText(
-          name,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: greenColor,
-            fontWeight: FontWeight.bold,
-            decoration: TextDecoration.underline,
+  Widget _scoreBordRow({required String name, required String value}) {
+    return Container(
+        width: unitWidthValue * 180,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            AutoSizeText(
+              name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: whiteColor, fontWeight: FontWeight.bold, fontSize: unitHeightValue * 30),
+            ),
+            Container(
+              width: unitWidthValue * 180.0,
+              height: unitHeightValue * 120,
+              alignment: Alignment.center,
+              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
+              decoration: BoxDecoration(
+                color: blackColor,
+                border: Border.all(
+                  color: whiteColor,
+                  width: unitWidthValue * 1.5,
+                ),
+                borderRadius: BorderRadius.circular(29.5),
+              ),
+              child: AutoSizeText(
+                value,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: greenColor,
+                  fontSize: unitHeightValue * 48,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+
+  Widget _roundedButtons({required String title, Color? color, void onTap()?}) {
+    return InkWell(
+      child: Container(
+        width: unitWidthValue * 180,
+        height: unitHeightValue * 80,
+        alignment: Alignment.center,
+        padding: EdgeInsets.only(top: 10, bottom: 10),
+        decoration: BoxDecoration(
+          color: color != null ? color : greenColor,
+          border: Border.all(
+            color: whiteColor,
+            width: unitWidthValue * 2,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(20.0),
           ),
         ),
-        Container(
-          width: 85.0,
-          padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
-          decoration: BoxDecoration(
-            color: whiteColor,
-            border: Border.all(
-              color: greenColor,
-              width: 1.5,
-            ),
-            borderRadius: BorderRadius.circular(29.5),
-          ),
+        child: Container(
+          alignment: Alignment.center,
           child: AutoSizeText(
-            value,
+            title,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: blackColor,
+              fontSize: unitHeightValue * (title == "DONE!" ? 32 : 26.0),
               fontWeight: FontWeight.bold,
             ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _roundedButtons({String title, Color color, void onTap()}) {
-    return InkWell(
-      child: Container(
-        padding: EdgeInsets.all(5.0),
-        decoration: BoxDecoration(
-          color: color != null ? color : whiteColor,
-          border: Border.all(
-            color: greenColor,
-            width: 2,
-          ),
-          borderRadius: BorderRadius.all(
-            Radius.circular(15.0),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0),
-                child: AutoSizeText(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: blackColor,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
           ),
         ),
       ),

@@ -6,7 +6,7 @@ import '../../main.dart';
 import 'winners_model.dart';
 
 class WinnerImagesController extends BaseModel {
-  Future<GetWinnersImagesModel> getWinnerImagesAPI() async {
+  Future<GetWinnersImagesModel?> getWinnerImagesAPI() async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     try {

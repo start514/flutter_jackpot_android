@@ -17,9 +17,9 @@ class GiveAWaysModel {
     this.giveAWaysRecord,
   });
 
-  int status;
-  String message;
-  List<GiveAWaysRecord> giveAWaysRecord;
+  int? status;
+  String? message;
+  List<GiveAWaysRecord>? giveAWaysRecord;
 
   factory GiveAWaysModel.fromJson(Map<String, dynamic> json) =>
       GiveAWaysModel(
@@ -35,7 +35,7 @@ class GiveAWaysModel {
         "message": message == null ? null : message,
         "records": giveAWaysRecord == null
             ? null
-            : List<dynamic>.from(giveAWaysRecord.map((x) => x.toJson())),
+            : List<dynamic>.from(giveAWaysRecord!.map((x) => x.toJson())),
       };
 }
 
@@ -46,9 +46,9 @@ class GiveAWaysRecord {
     this.photoThumb,
   });
 
-  String id;
-  String name;
-  String photoThumb;
+  String? id;
+  String? name;
+  String? photoThumb;
 
   factory GiveAWaysRecord.fromJson(Map<String, dynamic> json) => GiveAWaysRecord(
         id: json["id"] == null ? null : json["id"],

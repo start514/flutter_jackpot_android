@@ -6,11 +6,11 @@ enum Status { LOADING, SUCCESS, FAILED, IDLE }
 
 class BaseModel extends ChangeNotifier {
   Status _status = Status.IDLE;
-  String _message;
-  String _searchText;
-  bool _isSearch;
+  String? _message;
+  String? _searchText;
+  bool? _isSearch;
 
-  Status get getStatus => _status ?? Status.IDLE;
+  Status get getStatus => _status;
 
   String get getMessage => _message ?? "";
 
@@ -41,7 +41,7 @@ class BaseModel extends ChangeNotifier {
     );
   }
 
-  void onNotify({Status status, String message}) {
+  void onNotify({Status? status, String? message}) {
     if (status != null) {
       this._status = status;
     }
@@ -57,24 +57,24 @@ String handleError(error) {
   if (error is DioError) {
     DioError dioError = error;
     switch (dioError.type) {
-      case DioErrorType.CANCEL:
+      case DioErrorType.cancel:
         errorDescription = "Request to API server was cancelled";
         break;
-      case DioErrorType.CONNECT_TIMEOUT:
+      case DioErrorType.connectTimeout:
         errorDescription = "Connection timeout with API server";
         break;
-      case DioErrorType.DEFAULT:
+      case DioErrorType.other:
         errorDescription =
             "Connection to API server failed due to internet connection";
         break;
-      case DioErrorType.RECEIVE_TIMEOUT:
+      case DioErrorType.receiveTimeout:
         errorDescription = "Receive timeout in connection with API server";
         break;
-      case DioErrorType.RESPONSE:
+      case DioErrorType.response:
         errorDescription =
-            "Received invalid status code: ${dioError.response.statusCode}";
+            "Received invalid status code: ${dioError.response!.statusCode}";
         break;
-      case DioErrorType.SEND_TIMEOUT:
+      case DioErrorType.sendTimeout:
         errorDescription = "Send timeout in connection with API server";
         break;
     }

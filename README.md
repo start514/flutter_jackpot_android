@@ -1,6 +1,22 @@
-# Jackpot Quiz Game with appodeal integrated
-## How to build
-### 1. Run `flutter doctor` to see if android development environment is set properly.
-Follow the instructions in the verbose output.
-### 2. Run `flutter devices` to see if any android device or emulator is connected properly.
-### 3. After device is connected, run `flutter run` to build and run on device.
+# flutter_jackpot_android
+
+A new Flutter project.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+
+
+### Flutter version
+
+android: 2.2.0
+ios: 2.0.6

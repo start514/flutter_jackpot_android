@@ -16,9 +16,9 @@ class WinnerScore {
     this.winnerScore,
   });
 
-  int s;
-  String m;
-  String winnerScore;
+  int? s;
+  String? m;
+  String? winnerScore;
 
   factory WinnerScore.fromJson(Map<String, dynamic> json) => WinnerScore(
         s: json["s"] == null ? null : json["s"],

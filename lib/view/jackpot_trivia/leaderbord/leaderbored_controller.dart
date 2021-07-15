@@ -5,11 +5,11 @@ import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/leaderbord/leaderbord_model.dart';
 
 class GetLeaderBordController extends BaseModel {
-  Future<List<LeaderBordRecord>> getLeaderBordAPI(Quiz quiz) async {
+  Future<List<LeaderBordRecord>?> getLeaderBordAPI(Quiz quiz) async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     try {
-      Map<String, String> body = {
+      Map<String, String?> body = {
         "quiz_id": quiz.id,
       };
 

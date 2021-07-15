@@ -10,11 +10,11 @@ import 'package:flutterjackpot/view/jackpot_trivia/question/questions_model.dart
 import 'package:flutterjackpot/view/login_signUp/login_signup_model.dart';
 
 class QuestionsController extends BaseModel {
-  Future<List<Record>> getQuestionAPI(Quiz quiz) async {
+  Future<List<Record>?> getQuestionAPI(Quiz quiz) async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     try {
-      Map<String, String> body = {
+      Map<String, String?> body = {
         "quiz_id": quiz.id,
       };
 
@@ -39,14 +39,14 @@ class QuestionsController extends BaseModel {
 
 //==============================================================================
 
-  Future<bool> submitQuestionGadgets({String item, String count}) async {
+  Future<bool?> submitQuestionGadgets({String? item, String? count}) async {
     onNotify(status: Status.LOADING, message: "Loading");
 
     try {
-      Map<String, String> body = {
+      Map<String, String?> body = {
         "price_type": item,
         "count": count,
-        "user_id": userRecord.userID,
+        "user_id": userRecord!.userID,
       };
 
       dynamic response =
@@ -55,7 +55,7 @@ class QuestionsController extends BaseModel {
       if (response["status"] == 1) {
         LoginSignUpModel model = LoginSignUpModel.fromJson(response);
         userRecord = model.userRecord;
-        spinDetails = model.userRecord.loginSpinDetails;
+        spinDetails = model.userRecord!.loginSpinDetails;
 
         await Preferences.setString(
           Preferences.pfUserLogin,
