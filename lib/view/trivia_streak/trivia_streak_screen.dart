@@ -30,26 +30,13 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   String? searchWord;
   bool isSearch = false;
 
-  bool _isLoading = true;
+  bool _isLoading = false;
   double unitHeightValue = 1;
   double unitWidthValue = 1;
 
   @override
   void initState() {
     super.initState();
-    searchController.addListener(() {
-      setState(() {
-        searchWord = searchController.text;
-        buildSearchList();
-      });
-    });
-    getQuiz();
-  }
-
-  @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
   }
 
   @override
@@ -67,13 +54,13 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                     radius: 15.0,
                   ),
                 )
-              : _bodyWidget(quiz, categories!),
+              : _bodyWidget(),
         ),
       ],
     );
   }
 
-  Widget _bodyWidget(List<Quiz>? quiz, List<Categories> categories) {
+  Widget _bodyWidget() {
     return SingleChildScrollView(
       child: Center(
         child: Padding(
@@ -149,11 +136,11 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                               fontSize: unitHeightValue * 20),
                         ),
                         onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                GameRulesDialog(categories),
-                          );
+                          // showDialog(
+                          //   context: context,
+                          //   builder: (BuildContext context) =>
+                          //       GameRulesDialog(),
+                          // );
                         },
                         padding: EdgeInsets.all(0),
                         color: blackColor,
@@ -173,6 +160,8 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
               _leadersView(),
               SizedBox(height: 30),
               _myStreakView(),
+              SizedBox(height: 30),
+              _footerView(),
             ],
           ),
         ),
@@ -185,7 +174,8 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
       Container(
         child: Text("ENDS 8/31/21",
             style: TextStyle(
-                fontSize: unitHeightValue * 28,
+                fontSize: unitHeightValue * 23,
+                fontWeight: FontWeight.bold,
                 color: Colors.black,
                 decoration: TextDecoration.underline)),
         decoration: BoxDecoration(
@@ -194,11 +184,14 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
             color: Colors.white),
         padding: EdgeInsets.all(unitWidthValue * 6),
       ),
-      Text("CONTEST LEADERS",
-          style: TextStyle(
-              color: greenColor,
-              fontSize: unitWidthValue * 28,
-              fontWeight: FontWeight.bold))
+      Text(
+        "CONTEST LEADERS    ",
+        style: TextStyle(
+          color: greenColor,
+          fontSize: unitWidthValue * 28,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     ], mainAxisAlignment: MainAxisAlignment.spaceBetween);
   }
 
@@ -214,8 +207,8 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                     Border.all(width: unitWidthValue * 3, color: greenColor),
                 borderRadius: BorderRadius.circular(unitWidthValue * 20),
                 color: Colors.white),
-            margin: EdgeInsets.only(top: unitWidthValue * 18),
-            padding: EdgeInsets.only(top: unitWidthValue * 30),
+            margin: EdgeInsets.only(top: unitWidthValue * 30),
+            padding: EdgeInsets.only(top: unitWidthValue * 40),
             child: Column(
               children: [
                 Row(
@@ -290,7 +283,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                     )
                   ],
                 ),
-                SizedBox(height: unitWidthValue * 10),
+                SizedBox(height: unitWidthValue * 30),
                 Stack(
                   children: [
                     Container(
@@ -298,7 +291,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                         "PLAY NOW!",
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: unitHeightValue * 30,
+                          fontSize: unitHeightValue * 60,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -312,7 +305,40 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                         color: greenColor,
                       ),
                       padding: EdgeInsets.fromLTRB(
-                          unitWidthValue * 100, 0, unitWidthValue * 30, 0),
+                          unitWidthValue * 90, 0, unitWidthValue * 20, 0),
+                    ),
+                    Container(
+                      child: Stack(
+                        children: [
+                          Image.asset(
+                            "assets/red_heart.png",
+                          ),
+                          Container(
+                            child: Text(
+                              "5",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: unitWidthValue * 30,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            width: unitWidthValue * 78,
+                            height: unitHeightValue * 78,
+                            padding: EdgeInsets.only(top: unitHeightValue * 13),
+                          ),
+                        ],
+                      ),
+                      width: unitWidthValue * 78,
+                      height: unitHeightValue * 78,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(unitWidthValue * 15),
+                        border: Border.all(
+                          color: Colors.black,
+                          width: unitWidthValue * 3,
+                        ),
+                        color: Colors.white,
+                      ),
                     )
                   ],
                 )
@@ -328,7 +354,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                 child: Text(
                   "MY STREAK",
                   style: TextStyle(
-                    fontSize: unitWidthValue * 30,
+                    fontSize: unitWidthValue * 45,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -347,6 +373,62 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                 ),
               ),
             ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _footerView() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          child: Row(
+            children: [
+              Image.asset("assets/red_heart.png"),
+              Text("IN 1:22",
+                  style: TextStyle(
+                      fontSize: unitWidthValue * 18,
+                      fontWeight: FontWeight.bold)),
+            ],
+          ),
+          height: unitHeightValue * 60,
+          padding: EdgeInsets.all(unitWidthValue * 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black, width: unitWidthValue * 3),
+            borderRadius: BorderRadius.circular(unitWidthValue * 15),
+          ),
+        ),
+        SizedBox(width: unitWidthValue * 15),
+        Container(
+          child: Text(
+            "LEADERBOARD",
+            style: TextStyle(
+                fontSize: unitWidthValue * 18, fontWeight: FontWeight.bold),
+          ),
+          height: unitHeightValue * 60,
+          padding: EdgeInsets.all(unitWidthValue * 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black, width: unitWidthValue * 3),
+            borderRadius: BorderRadius.circular(unitWidthValue * 15),
+          ),
+        ),
+        SizedBox(width: unitWidthValue * 15),
+        Container(
+          child: Text(
+            "WINNERS",
+            style: TextStyle(
+                fontSize: unitWidthValue * 18, fontWeight: FontWeight.bold),
+          ),
+          height: unitHeightValue * 60,
+          padding: EdgeInsets.all(unitWidthValue * 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black, width: unitWidthValue * 3),
+            borderRadius: BorderRadius.circular(unitWidthValue * 15),
           ),
         ),
       ],
@@ -436,190 +518,5 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
         _leaderView("3RD", 25, 9, "John Dieck"),
       ],
     );
-  }
-
-  Widget _gridView() {
-    if (quiz!.length == 0) {
-      return Padding(
-        padding: EdgeInsets.only(top: unitHeightValue * 20.0),
-        child: Text(
-          "No Record Yet",
-          style: TextStyle(
-            fontSize: unitHeightValue * 17.0,
-            color: whiteColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    } else if (searchWord != null && searchQuiz.length == 0) {
-      return Padding(
-        padding: EdgeInsets.only(top: unitHeightValue * 20.0),
-        child: Text(
-          "No Quiz Matched Your Search",
-          style: TextStyle(
-            fontSize: unitHeightValue * 17.0,
-            color: whiteColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    }
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: MediaQuery.of(context).size.width / 2),
-      itemCount: searchQuiz.length,
-      itemBuilder: (BuildContext context, int position) {
-        Quiz _quiz = searchQuiz[position];
-        return Container(
-          padding: EdgeInsets.all(unitHeightValue * 5.0),
-          child: InkWell(
-            child: Stack(
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(0.0),
-                  margin:
-                      EdgeInsets.symmetric(vertical: unitHeightValue * 10.0),
-                  decoration: BoxDecoration(
-                    color: whiteColor,
-                    border: Border.all(
-                      color: blackColor,
-                      width: unitWidthValue * 1.5,
-                    ),
-                    borderRadius: BorderRadius.circular(unitHeightValue * 29.5),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(unitHeightValue * 16.0),
-                      border: Border.all(
-                        color: whiteColor,
-                        width: unitWidthValue * 1.5,
-                      ),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          UrlQuizImageJackpotTriviaPrefixUrl +
-                              _quiz.photoThumb!,
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    width: unitWidthValue * 60.0,
-                    margin: EdgeInsets.fromLTRB(
-                        unitWidthValue * 10, unitHeightValue * 20, 0, 0),
-                    padding: EdgeInsets.all(unitHeightValue * 2.0),
-                    decoration: BoxDecoration(
-                      color: blackColor,
-                      border: Border.all(
-                        color: greenColor,
-                        width: unitWidthValue * 2,
-                      ),
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: AutoSizeText(
-                      "\$${_quiz.amount}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: greenColor,
-                        fontSize: unitHeightValue * 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: unitWidthValue * double.infinity,
-                    padding: EdgeInsets.all(unitHeightValue * 2),
-                    decoration: BoxDecoration(
-                      color: blackColor,
-                      border: Border.all(
-                        color: greenColor,
-                        width: unitWidthValue * 2,
-                      ),
-                      borderRadius:
-                          BorderRadius.circular(unitHeightValue * 6.0),
-                    ),
-                    child: AutoSizeText(
-                      _quiz.title!.toUpperCase(),
-                      textAlign: TextAlign.center,
-                      minFontSize: 8,
-                      maxLines: 1,
-                      style: TextStyle(
-                          color: whiteColor,
-                          fontSize: unitHeightValue * 24,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => JackpotTriviaDetailsScreen(
-                    quiz: _quiz,
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  void getQuiz({categoryID}) {
-    setState(() {
-      _isLoading = true;
-    });
-    jackpotCategoriesController.getQuiz(categoryID: categoryID).then(
-      (value) {
-        setState(
-          () {
-            quiz = value;
-            buildSearchList();
-            getCategories();
-          },
-        );
-      },
-    );
-  }
-
-  void getCategories() {
-    jackpotCategoriesController.getCategories().then(
-      (value) {
-        setState(
-          () {
-            _isLoading = false;
-            categories = value;
-          },
-        );
-      },
-    );
-  }
-
-  void buildSearchList() {
-    searchQuiz.clear();
-    if (searchWord == null || searchWord == "") {
-      searchQuiz.addAll(quiz!);
-    } else {
-      for (int i = 0; i < quiz!.length; i++) {
-        Quiz _class = quiz!.elementAt(i);
-        String s = _class.title!.toLowerCase();
-        if (s.contains(searchWord!.toLowerCase())) {
-          searchQuiz.add(_class);
-        }
-      }
-    }
   }
 }
