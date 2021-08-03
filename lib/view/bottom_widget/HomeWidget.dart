@@ -12,6 +12,7 @@ import 'package:flutterjackpot/utils/common/shared_preferences.dart';
 import 'package:flutterjackpot/view/bottom_widget/winner_score_controller.dart';
 import 'package:flutterjackpot/view/give_aways/giveaways_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_screen.dart';
+import 'package:flutterjackpot/view/trivia_streak/trivia_streak_screen.dart';
 import 'package:flutterjackpot/view/login_signUp/login_with_fb_google_screen.dart';
 import 'package:flutterjackpot/view/power_ups_screen.dart';
 import 'package:flutterjackpot/view/ranking/ranking_screen.dart';
@@ -74,7 +75,11 @@ class _HomeWidgetState extends State<HomeWidget> {
   Widget _bodyWidget(WinnerScore winnerScore) {
     return Center(
       child: SingleChildScrollView(
-        padding: EdgeInsets.only(left: unitWidthValue * 12, top: 0, right: unitWidthValue * 12, bottom: unitHeightValue * 5),
+        padding: EdgeInsets.only(
+            left: unitWidthValue * 12,
+            top: 0,
+            right: unitWidthValue * 12,
+            bottom: unitHeightValue * 5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -100,10 +105,10 @@ class _HomeWidgetState extends State<HomeWidget> {
                         children: <Widget>[
                           Container(
                               child: Image.asset(
-                                "assets/money.png",
-                                height: unitHeightValue * 32.0,
-                                width: unitWidthValue * 80.0,
-                              )),
+                            "assets/money.png",
+                            height: unitHeightValue * 32.0,
+                            width: unitWidthValue * 80.0,
+                          )),
                           Text(
                             "STAX",
                             style: TextStyle(
@@ -290,7 +295,16 @@ class _HomeWidgetState extends State<HomeWidget> {
             ),
 
             _roundedRowContainer(
-                title: "TRIVIA STREAK", onTap: () {}, comingSoon: true),
+                title: "TRIVIA STREAK",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TriviaStreakScreen(),
+                    ),
+                  ).then(onGoBack);
+                },
+                comingSoon: true),
             SizedBox(
               height: unitHeightValue * 30.0,
             ),
@@ -412,8 +426,11 @@ class _HomeWidgetState extends State<HomeWidget> {
               borderRadius: BorderRadius.circular(unitHeightValue * 27.0),
             ),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(unitWidthValue * 8, unitHeightValue * 10,
-                    unitWidthValue * 8, unitHeightValue * 6),
+              padding: EdgeInsets.fromLTRB(
+                  unitWidthValue * 8,
+                  unitHeightValue * 10,
+                  unitWidthValue * 8,
+                  unitHeightValue * 6),
               child: Column(
                 children: <Widget>[
                   Text(
