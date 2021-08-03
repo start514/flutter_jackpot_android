@@ -178,12 +178,9 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
             ),
 
             SizedBox(
-              height: unitHeightValue * 20.0,
-            ),
-            noAdds(),
-            SizedBox(
               height: unitHeightValue * 10.0,
             ),
+            noAdds(),
             powerUps(),
             SizedBox(
               height: unitHeightValue * 20.0,
@@ -402,8 +399,8 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
                     child: InkWell(
                       child: Container(
                         margin: EdgeInsets.only(top: unitHeightValue * 14.0),
-                        padding: EdgeInsets.only(top: unitHeightValue * 16),
-                        height: unitHeightValue * 160.0,
+                        padding: EdgeInsets.only(top: unitHeightValue * 16, bottom: unitHeightValue * 16),
+                        // height: unitHeightValue * 160.0,
                         width: unitWidthValue * double.infinity,
                         alignment: Alignment.topCenter,
                         decoration: BoxDecoration(
@@ -426,7 +423,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
                                 text: "Correct\n1,000 pts",
                                 image: "player2.png",
                                 bottom: true,
-                                fontSize: unitHeightValue * 28,
+                                fontSize: 20,
                                 size: 70), //spinDetails!.thePlayer!,
                             _detailButton(
                                 text: "+Time",
