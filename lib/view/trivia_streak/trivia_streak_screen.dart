@@ -1,16 +1,12 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterjackpot/dialogs/get_categories_dialogs.dart';
-import 'package:flutterjackpot/dialogs/game_rules_dialogs.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/common_sizebox_addmob.dart';
 import 'package:flutterjackpot/utils/image_utils.dart';
-import 'package:flutterjackpot/utils/url_utils.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_categories_controller.dart';
-import 'package:flutterjackpot/view/jackpot_trivia/jackpot_triva_details_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_categories_model.dart';
+import 'package:flutterjackpot/view/trivia_streak/trivia_streak_category_screen.dart';
 
 class TriviaStreakScreen extends StatefulWidget {
   @override
@@ -284,64 +280,75 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                   ],
                 ),
                 SizedBox(height: unitWidthValue * 30),
-                Stack(
-                  children: [
-                    Container(
-                      child: Text(
-                        "PLAY NOW!",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: unitHeightValue * 60,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(unitWidthValue * 15),
-                        border: Border.all(
-                          color: Colors.black,
-                          width: unitWidthValue * 3,
-                        ),
-                        color: greenColor,
-                      ),
-                      padding: EdgeInsets.fromLTRB(
-                          unitWidthValue * 90, 0, unitWidthValue * 20, 0),
-                    ),
-                    Container(
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            "assets/red_heart.png",
-                          ),
-                          Container(
-                            child: Text(
-                              "5",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: unitWidthValue * 30,
-                              ),
-                              textAlign: TextAlign.center,
+                InkWell(
+                    child: Stack(
+                      children: [
+                        Container(
+                          child: Text(
+                            "PLAY NOW!",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: unitHeightValue * 60,
+                              fontWeight: FontWeight.bold,
                             ),
-                            width: unitWidthValue * 78,
-                            height: unitHeightValue * 78,
-                            padding: EdgeInsets.only(top: unitHeightValue * 13),
                           ),
-                        ],
-                      ),
-                      width: unitWidthValue * 78,
-                      height: unitHeightValue * 78,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(unitWidthValue * 15),
-                        border: Border.all(
-                          color: Colors.black,
-                          width: unitWidthValue * 3,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(unitWidthValue * 15),
+                            border: Border.all(
+                              color: Colors.black,
+                              width: unitWidthValue * 3,
+                            ),
+                            color: greenColor,
+                          ),
+                          padding: EdgeInsets.fromLTRB(
+                              unitWidthValue * 90, 0, unitWidthValue * 20, 0),
                         ),
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
-                )
+                        Container(
+                          child: Stack(
+                            children: [
+                              Image.asset(
+                                "assets/flat_heart.png",
+                              ),
+                              Container(
+                                child: Text(
+                                  "5",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: unitWidthValue * 30,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                width: unitWidthValue * 78,
+                                height: unitHeightValue * 78,
+                                padding:
+                                    EdgeInsets.only(top: unitHeightValue * 13),
+                              ),
+                            ],
+                            alignment: Alignment.center,
+                          ),
+                          width: unitWidthValue * 78,
+                          height: unitHeightValue * 78,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(unitWidthValue * 15),
+                            border: Border.all(
+                              color: Colors.black,
+                              width: unitWidthValue * 3,
+                            ),
+                            color: Colors.white,
+                          ),
+                        )
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TriviaStreakCategoryScreen(),
+                        ),
+                      );
+                    })
               ],
             ),
           ),
