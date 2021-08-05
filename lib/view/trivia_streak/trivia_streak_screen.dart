@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterjackpot/main.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/common_sizebox_addmob.dart';
 import 'package:flutterjackpot/utils/image_utils.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_categories_controller.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_categories_model.dart';
+import 'package:flutterjackpot/view/trivia_streak/get_streak_model.dart';
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_category_screen.dart';
+import 'package:flutterjackpot/view/trivia_streak/trivia_streak_controller.dart';
+import 'package:intl/intl.dart';
 
 class TriviaStreakScreen extends StatefulWidget {
   @override
@@ -14,8 +18,8 @@ class TriviaStreakScreen extends StatefulWidget {
 }
 
 class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
-  JackpotCategoriesAndQuizController jackpotCategoriesController =
-      new JackpotCategoriesAndQuizController();
+  TriviaStreakController triviaStreakController =
+      new TriviaStreakController();
 
   final searchController = new TextEditingController();
 
@@ -26,13 +30,27 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   String? searchWord;
   bool isSearch = false;
 
-  bool _isLoading = false;
+  bool _isLoading = true;
   double unitHeightValue = 1;
   double unitWidthValue = 1;
+  String endDate = "";
+  List<StreakEntry>? top3;
+  int score = 0;
+  int score_max = 0;
 
   @override
   void initState() {
     super.initState();
+    triviaStreakController.getStreak(userID: userRecord?.userID).then((value) {
+      setState(() {
+        if(value == null) return;
+        _isLoading = false;
+        endDate = DateFormat("MM/dd/yy").format(value.endDate!);
+        top3 = value.top3;
+        score = value.score!;
+        score_max = value.score_max!;
+      });
+    });
   }
 
   @override
@@ -168,7 +186,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   Widget _titleView() {
     return Row(children: [
       Container(
-        child: Text("ENDS 8/31/21",
+        child: Text("ENDS $endDate",
             style: TextStyle(
                 fontSize: unitHeightValue * 23,
                 fontWeight: FontWeight.bold,
@@ -215,7 +233,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                         Container(
                           child: Center(
                             child: Text(
-                              "8",
+                              "$score",
                               style: TextStyle(
                                 color: greenColor,
                                 fontWeight: FontWeight.bold,
@@ -249,7 +267,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                         Container(
                           child: Center(
                             child: Text(
-                              "13",
+                              "$score_max",
                               style: TextStyle(
                                 color: greenColor,
                                 fontWeight: FontWeight.bold,
@@ -516,14 +534,21 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   }
 
   Widget _leadersView() {
+    List<Widget> widgets = List.empty(growable: true);
+    int rank = 0;
+    for(StreakEntry leader in top3??[]) {
+      rank++;
+      print("Rank: $rank");
+      String rankstr = "";
+      int price = 0;
+      if(rank == 1) { rankstr = "1ST"; price = 100;}
+      else if(rank == 2) { rankstr = "2ND"; price = 50;}
+      else if(rank == 3) { rankstr = "3RD"; price = 25;}
+      widgets.add(_leaderView(rankstr, price, leader.score??0, leader.name??""));
+      widgets.add(SizedBox(height: 10));
+    }
     return Column(
-      children: [
-        _leaderView("1ST", 100, 19, "R Natanalov"),
-        SizedBox(height: 10),
-        _leaderView("2ND", 50, 13, "Bvron Linnet"),
-        SizedBox(height: 10),
-        _leaderView("3RD", 25, 9, "John Dieck"),
-      ],
+      children: widgets,
     );
   }
 }
