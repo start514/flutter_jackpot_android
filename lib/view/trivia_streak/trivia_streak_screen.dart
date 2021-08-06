@@ -209,7 +209,9 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
             width: unitWidthValue * 80,
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Colors.black, width: unitWidthValue * seperatorHeight),
+                bottom: BorderSide(
+                    color: Colors.black,
+                    width: unitWidthValue * seperatorHeight),
               ),
             ),
           ),
@@ -227,7 +229,9 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
             width: unitWidthValue * 270,
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Colors.black, width: unitWidthValue * seperatorHeight),
+                bottom: BorderSide(
+                    color: Colors.black,
+                    width: unitWidthValue * seperatorHeight),
               ),
             ),
           ),
@@ -245,7 +249,9 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
             width: unitWidthValue * 105,
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: Colors.black, width: unitWidthValue * seperatorHeight),
+                bottom: BorderSide(
+                    color: Colors.black,
+                    width: unitWidthValue * seperatorHeight),
               ),
             ),
           ),
@@ -516,13 +522,17 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                       ],
                     ),
                     onTap: () async {
-                      consumeLife();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TriviaStreakCategoryScreen(),
-                        ),
-                      );
+                      bool ret = await consumeLife();
+                      if (ret) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TriviaStreakCategoryScreen(),
+                          ),
+                        );
+                      } else {
+                        print("No life!");
+                      }
                     })
               ],
             ),
@@ -761,22 +771,21 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
     return DateFormat("IN mm:ss").format(new DateTime(2000, 1, 1, 0, min, sec));
   }
 
-  void consumeLife() async {
+  Future<bool> consumeLife() async {
     int currentLife = calcLife();
     if (currentLife == 0) {
-      print("No Life to Consume!");
-      return;
+      return false;
     }
     currentLife--;
     await Preferences.setString(
         Preferences.pfKConsumableIdLife, currentLife.toString());
     await Preferences.setString(
         Preferences.pfKLastLifeConsumeDate, DateTime.now().toIso8601String());
-    print("Life consumed! New Life: $currentLife");
     setState(() {
       life = currentLife;
       lastConsumeDate = DateTime.now();
     });
+    return true;
   }
 
   void onTimerTick(Timer timer) {

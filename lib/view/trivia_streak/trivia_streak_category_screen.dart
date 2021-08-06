@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -7,12 +9,16 @@ import 'package:flutterjackpot/dialogs/get_categories_dialogs.dart';
 import 'package:flutterjackpot/dialogs/game_rules_dialogs.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/common_sizebox_addmob.dart';
+import 'package:flutterjackpot/utils/common/shared_preferences.dart';
 import 'package:flutterjackpot/utils/image_utils.dart';
 import 'package:flutterjackpot/utils/url_utils.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_categories_controller.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_triva_details_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_categories_model.dart';
+import 'package:intl/intl.dart';
+
+const int CATEGORY_RESET_DURATION = 120;
 
 class TriviaStreakCategoryScreen extends StatefulWidget {
   @override
@@ -29,6 +35,8 @@ class _TriviaStreakCategoryScreenState
 
   List<Categories>? categories;
   List<Quiz>? quiz;
+  List<int> categoryIndices = List.empty(growable: true);
+  DateTime? categoryTime;
 
   String? searchWord;
   bool isSearch = false;
@@ -37,10 +45,21 @@ class _TriviaStreakCategoryScreenState
   double unitHeightValue = 1;
   double unitWidthValue = 1;
 
+  late Timer _timer;
+
   @override
   void initState() {
     super.initState();
+    _timer = new Timer.periodic(Duration(milliseconds: 500), (timer) {
+      loadCategoryIndices();
+    });
     getQuiz();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -335,6 +354,12 @@ class _TriviaStreakCategoryScreenState
   }
 
   Widget _categoryResetTimerView() {
+    Duration diff = DateTime.now().difference(categoryTime ?? DateTime.now());
+    int remain = CATEGORY_RESET_DURATION - diff.inSeconds;
+    int min = (remain / 60).floor();
+    int sec = remain % 60;
+    String timer =
+        DateFormat("mm:ss").format(new DateTime(2000, 1, 1, 0, min, sec));
     return Row(
       children: [
         Container(
@@ -343,7 +368,7 @@ class _TriviaStreakCategoryScreenState
             color: Colors.white),
         Container(
           child: Text(
-            "CATEGORIES RESET IN 59:26",
+            "CATEGORIES RESET IN $timer",
             style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -369,14 +394,16 @@ class _TriviaStreakCategoryScreenState
   }
 
   Widget _gridView() {
+    if (categoryIndices.length < 6) return Container();
+    if (quiz == null) return Container();
     return GridView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: MediaQuery.of(context).size.width / 3),
-      itemCount: min(6, quiz?.length ?? 0),
+      itemCount: 6,
       itemBuilder: (BuildContext context, int position) {
-        Quiz _quiz = quiz![position];
+        Quiz _quiz = quiz![categoryIndices[position]];
         return Container(
           padding: EdgeInsets.all(unitHeightValue * 5.0),
           child: InkWell(
@@ -438,13 +465,14 @@ class _TriviaStreakCategoryScreenState
                                 ),
                                 padding: EdgeInsets.symmetric(
                                     horizontal: unitWidthValue * 5),
-                                transform:
-                                    Matrix4.translationValues(0.0, -5.0 * unitWidthValue, 0.0),
+                                transform: Matrix4.translationValues(
+                                    0.0, -5.0 * unitWidthValue, 0.0),
                               )
                             ],
                             alignment: Alignment.center,
                           ),
-                          transform: Matrix4.translationValues(-15.0 * unitWidthValue, 0.0, 0.0),
+                          transform: Matrix4.translationValues(
+                              -15.0 * unitWidthValue, 0.0, 0.0),
                         ),
                       )
                     : Container(),
@@ -497,26 +525,56 @@ class _TriviaStreakCategoryScreenState
     });
     jackpotCategoriesController.getQuiz(categoryID: categoryID).then(
       (value) {
-        setState(
-          () {
-            quiz = value;
-            getCategories();
-          },
-        );
+        quiz = value;
+        loadCategoryIndices();
       },
     );
   }
 
-  void getCategories() {
-    jackpotCategoriesController.getCategories().then(
-      (value) {
-        setState(
-          () {
-            _isLoading = false;
-            categories = value;
-          },
-        );
-      },
-    );
+  void loadCategoryIndices() {
+    Preferences.getString(Preferences.pfKStreakCategories).then((value) {
+      Preferences.getString(Preferences.pfKStreakCategoriesTime)
+          .then((timevalue) {
+        if (timevalue != null && timevalue != "") {
+          categoryTime = DateTime.parse(timevalue);
+        } else {
+          categoryTime = DateTime.now();
+        }
+        Duration diff = DateTime.now().difference(categoryTime!);
+        if (value != null &&
+            value != "" &&
+            diff.inSeconds < CATEGORY_RESET_DURATION) {
+          dynamic categories = json.decode(value);
+          if (categories.length == 0)
+            reselectIndices();
+          else {
+            categoryIndices.clear();
+            for (int category in categories) {
+              categoryIndices.add(category);
+            }
+            setState(() {
+              _isLoading = false;
+            });
+          }
+        } else {
+          reselectIndices();
+        }
+      });
+    });
+  }
+
+  void reselectIndices() async {
+    int quizCount = quiz?.length ?? 0;
+    var selectedList = List<int>.generate(quizCount, (i) => i)..shuffle();
+    selectedList = selectedList.take(6).toList();
+    categoryIndices = selectedList;
+    categoryTime = DateTime.now();
+    await Preferences.setString(
+        Preferences.pfKStreakCategories, json.encode(categoryIndices));
+    await Preferences.setString(
+        Preferences.pfKStreakCategoriesTime, categoryTime!.toIso8601String());
+    setState(() {
+      _isLoading = false;
+    });
   }
 }

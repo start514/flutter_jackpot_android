@@ -11,6 +11,8 @@ class Preferences {
       "kConsumableIdPowerUpThree";
   static final String pfKConsumableIdLife = "KConsumableIdLife";
   static final String pfKLastLifeConsumeDate = "KLastLifeConsumeDate";
+  static final String pfKStreakCategories = "KStreakCategories";
+  static final String pfKStreakCategoriesTime = "KStreakCategoriesTime";
 
   static Future<bool> setString(String key, String data) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
