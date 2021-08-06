@@ -14,7 +14,7 @@ class GetStreak {
   List<StreakEntry>? top3;
   DateTime? endDate;
   int? score;
-  int? score_max;
+  int? scoreMax;
 
   GetStreak({
     this.status,
@@ -22,7 +22,7 @@ class GetStreak {
     this.top3,
     this.endDate,
     this.score,
-    this.score_max,
+    this.scoreMax,
   });
 
   factory GetStreak.fromJson(Map<String, dynamic> json) => GetStreak(
@@ -34,7 +34,7 @@ class GetStreak {
             ? null
             : List<StreakEntry>.from(json["top3"].map((x) => StreakEntry.fromJson(x))),
         score: json["score"] == null ? null : int.parse(json["score"]),
-        score_max: json["score_max"] == null ? null : int.parse(json["score_max"]),
+        scoreMax: json["score_max"] == null ? null : int.parse(json["score_max"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -45,7 +45,7 @@ class GetStreak {
             ? null
             : List<dynamic>.from(top3!.map((x) => x.toJson())),
         "score": score == null ? null : score,
-        "score_max": score_max == null ? null : score_max,
+        "score_max": scoreMax == null ? null : scoreMax,
       };
 }
 

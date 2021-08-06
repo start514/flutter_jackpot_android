@@ -9,6 +9,8 @@ class Preferences {
   static final String pfkConsumableIdPowerUpTwo = "kConsumableIdPowerUpTwo";
   static final String pfkConsumableIdPowerUpThree =
       "kConsumableIdPowerUpThree";
+  static final String pfKConsumableIdLife = "KConsumableIdLife";
+  static final String pfKLastLifeConsumeDate = "KLastLifeConsumeDate";
 
   static Future<bool> setString(String key, String data) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
