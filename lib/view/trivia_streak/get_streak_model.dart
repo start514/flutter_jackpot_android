@@ -11,7 +11,7 @@ String getStreakToJson(GetStreak data) => json.encode(data.toJson());
 class GetStreak {
   int? status;
   String? message;
-  List<StreakEntry>? top3;
+  List<StreakEntry>? leaders;
   DateTime? endDate;
   int? score;
   int? scoreMax;
@@ -19,7 +19,7 @@ class GetStreak {
   GetStreak({
     this.status,
     this.message,
-    this.top3,
+    this.leaders,
     this.endDate,
     this.score,
     this.scoreMax,
@@ -30,9 +30,9 @@ class GetStreak {
         message: json["message"] == null ? null : json["message"],
         endDate:
             json["end_date"] == null ? null : DateTime.parse(json["end_date"]),
-        top3: json["top3"] == null
+        leaders: json["leaders"] == null
             ? null
-            : List<StreakEntry>.from(json["top3"].map((x) => StreakEntry.fromJson(x))),
+            : List<StreakEntry>.from(json["leaders"].map((x) => StreakEntry.fromJson(x))),
         score: json["score"] == null ? null : int.parse(json["score"]),
         scoreMax: json["score_max"] == null ? null : int.parse(json["score_max"]),
       );
@@ -41,9 +41,9 @@ class GetStreak {
         "status": status == null ? null : status,
         "message": message == null ? null : message,
         "end_date": endDate == null ? null : endDate!.toIso8601String(),
-        "top3": top3 == null
+        "leaders": leaders == null
             ? null
-            : List<dynamic>.from(top3!.map((x) => x.toJson())),
+            : List<dynamic>.from(leaders!.map((x) => x.toJson())),
         "score": score == null ? null : score,
         "score_max": scoreMax == null ? null : scoreMax,
       };

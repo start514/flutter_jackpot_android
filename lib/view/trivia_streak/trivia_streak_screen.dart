@@ -15,7 +15,9 @@ import 'package:flutterjackpot/view/trivia_streak/get_streak_model.dart';
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_category_screen.dart';
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_controller.dart';
 import 'package:intl/intl.dart';
+
 const LIFE_GENERATION_PERIOD = 120;
+
 class TriviaStreakScreen extends StatefulWidget {
   @override
   _TriviaStreakScreenState createState() => _TriviaStreakScreenState();
@@ -37,12 +39,14 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   double unitHeightValue = 1;
   double unitWidthValue = 1;
   String endDate = "";
-  List<StreakEntry>? top3;
+  List<StreakEntry>? leaders;
   int score = 0;
   int scoreMax = 0;
   int life = 5;
   DateTime? lastConsumeDate;
   late Timer _timer;
+  bool isLeaderBoardShown = false;
+  bool isWinnerBoardShown = false;
 
   @override
   void initState() {
@@ -53,7 +57,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
         if (value == null) return;
         _isLoading = false;
         endDate = DateFormat("MM/dd/yy").format(value.endDate!);
-        top3 = value.top3;
+        leaders = value.leaders;
         score = value.score!;
         scoreMax = value.scoreMax!;
       });
@@ -108,102 +112,230 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
           padding: EdgeInsets.all(unitHeightValue * 12.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              sizedBoxAddMob(unitHeightValue * 42.0),
-              Row(mainAxisAlignment: MainAxisAlignment.start, children: <
-                  Widget>[
-                SizedBox(
-                  height: unitHeightValue * 45.0,
-                  width: unitWidthValue * 100,
-                  child: RaisedButton(
-                    child: Icon(
-                      Icons.arrow_back_outlined,
-                      color: greenColor,
-                      size: unitHeightValue * 24.0,
-                      semanticLabel: 'Text to announce in accessibility modes',
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    color: blackColor,
-                    textColor: blackColor,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                          color: greenColor, width: unitWidthValue * 2.0),
-                      borderRadius: BorderRadius.circular(29.5),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: unitWidthValue * 5,
-                ),
-                Expanded(
-                  child: Container(
-                    // width: unitWidthValue * double.infinity,
-                    padding: EdgeInsets.all(unitHeightValue * 8.0),
-                    decoration: BoxDecoration(
-                      color: blackColor,
-                      border: Border.all(
-                        color: greenColor,
-                        width: unitWidthValue * 2,
-                      ),
-                      borderRadius:
-                          BorderRadius.circular(unitHeightValue * 15.0),
-                    ),
-                    child: Text(
-                      "TRIVIA STREAK",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: unitHeightValue * 26.0,
-                          color: whiteColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: unitWidthValue * 5,
-                ),
-                SizedBox(
-                  height: unitHeightValue * 45.0,
-                  width: unitWidthValue * 100,
-                  child: RaisedButton(
-                    child: Text(
-                      "RULES",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: whiteColor,
-                          fontSize: unitHeightValue * 20),
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => StreakRulesDialog(),
-                      );
-                    },
-                    padding: EdgeInsets.all(0),
-                    color: blackColor,
-                    textColor: blackColor,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(
-                          color: greenColor, width: unitWidthValue * 2.0),
-                      borderRadius: BorderRadius.circular(unitHeightValue * 10),
-                    ),
-                  ),
-                ),
-              ]),
-              SizedBox(height: 30),
-              _titleView(),
-              SizedBox(height: 30),
-              _leadersView(),
-              SizedBox(height: 30),
-              _myStreakView(),
-              SizedBox(height: 30),
-              _footerView(),
-            ],
+            children: isLeaderBoardShown
+                ? <Widget>[
+                    sizedBoxAddMob(unitHeightValue * 42.0),
+                    _navigationView(),
+                    SizedBox(height: 30),
+                    _titleView(),
+                    SizedBox(height: 20),
+                    _leaderBoardView(),
+                    SizedBox(height: 23),
+                    _footerView(),
+                  ]
+                : (isWinnerBoardShown
+                    ? <Widget>[
+                        sizedBoxAddMob(unitHeightValue * 42.0),
+                        _navigationView(),
+                        SizedBox(height: 30),
+                        _titleView(),
+                        _winnerView(),
+                        _footerView(),
+                      ]
+                    : <Widget>[
+                        sizedBoxAddMob(unitHeightValue * 42.0),
+                        _navigationView(),
+                        SizedBox(height: 30),
+                        _titleView(),
+                        SizedBox(height: 30),
+                        _leadersView(),
+                        SizedBox(height: 30),
+                        _myStreakView(),
+                        SizedBox(height: 30),
+                        _footerView(),
+                      ]),
           ),
         ),
       ),
     );
+  }
+
+  Widget _leaderBoardView() {
+    List<Widget> widgets = List.empty(growable: true);
+    int rank = 0;
+    for (StreakEntry leader in leaders ?? []) {
+      rank++;
+      int _score = leader.score!;
+      widgets.add(_leaderBoardItemView("$rank", leader.name ?? "", "$_score"));
+      widgets.add(SizedBox(height: 5));
+    }
+    // int minItemCount = 10;
+    // if ((leaders ?? []).length < minItemCount) {
+    //   int more = minItemCount - (leaders ?? []).length;
+    //   for (int i = 0; i < more; i++) {
+    //     widgets.add(_leaderBoardItemView("", "", ""));
+    //     widgets.add(SizedBox(height: 5));
+    //   }
+    // }
+    return Container(
+      child: Column(
+        children: [
+          _leaderBoardItemView("RANK", "USERNAME", "STREAK"),
+          SizedBox(height: 5),
+          Container(
+            child: SingleChildScrollView(
+              child: Column(
+                children: widgets,
+              ),
+            ),
+            height: unitHeightValue * 600,
+          )
+        ],
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(unitWidthValue * 20),
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _leaderBoardItemView(String rank, String name, String score) {
+    int fontSize = 25;
+    int seperatorHeight = 4;
+    return Container(
+      child: Row(
+        children: [
+          Container(
+            child: Text(
+              "$rank",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: unitWidthValue * fontSize,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            padding: EdgeInsets.symmetric(vertical: unitHeightValue * 10),
+            width: unitWidthValue * 80,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.black, width: unitWidthValue * seperatorHeight),
+              ),
+            ),
+          ),
+          Container(
+            child: Text(
+              "$name",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: unitWidthValue * fontSize,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            padding: EdgeInsets.symmetric(vertical: unitHeightValue * 10),
+            width: unitWidthValue * 270,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.black, width: unitWidthValue * seperatorHeight),
+              ),
+            ),
+          ),
+          Container(
+            child: Text(
+              "$score",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: unitWidthValue * fontSize,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            padding: EdgeInsets.symmetric(vertical: unitHeightValue * 10),
+            width: unitWidthValue * 105,
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.black, width: unitWidthValue * seperatorHeight),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _winnerView() {
+    return Container(height: unitHeightValue * 717);
+  }
+
+  Widget _navigationView() {
+    return Row(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+      SizedBox(
+        height: unitHeightValue * 45.0,
+        width: unitWidthValue * 100,
+        child: RaisedButton(
+          child: Icon(
+            Icons.arrow_back_outlined,
+            color: greenColor,
+            size: unitHeightValue * 24.0,
+            semanticLabel: 'Text to announce in accessibility modes',
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          color: blackColor,
+          textColor: blackColor,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: greenColor, width: unitWidthValue * 2.0),
+            borderRadius: BorderRadius.circular(29.5),
+          ),
+        ),
+      ),
+      SizedBox(
+        width: unitWidthValue * 5,
+      ),
+      Expanded(
+        child: Container(
+          // width: unitWidthValue * double.infinity,
+          padding: EdgeInsets.all(unitHeightValue * 8.0),
+          decoration: BoxDecoration(
+            color: blackColor,
+            border: Border.all(
+              color: greenColor,
+              width: unitWidthValue * 2,
+            ),
+            borderRadius: BorderRadius.circular(unitHeightValue * 15.0),
+          ),
+          child: Text(
+            "TRIVIA STREAK",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: unitHeightValue * 26.0,
+                color: whiteColor,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+      SizedBox(
+        width: unitWidthValue * 5,
+      ),
+      SizedBox(
+        height: unitHeightValue * 45.0,
+        width: unitWidthValue * 100,
+        child: RaisedButton(
+          child: Text(
+            "RULES",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: whiteColor,
+                fontSize: unitHeightValue * 20),
+          ),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) => StreakRulesDialog(),
+            );
+          },
+          padding: EdgeInsets.all(0),
+          color: blackColor,
+          textColor: blackColor,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: greenColor, width: unitWidthValue * 2.0),
+            borderRadius: BorderRadius.circular(unitHeightValue * 10),
+          ),
+        ),
+      ),
+    ]);
   }
 
   Widget _titleView() {
@@ -383,7 +515,8 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                         )
                       ],
                     ),
-                    onTap: () {
+                    onTap: () async {
+                      consumeLife();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -468,22 +601,44 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
               borderRadius: BorderRadius.circular(unitWidthValue * 15),
             ),
           ),
-          onTap: consumeLife,
+          onTap: () {
+            setState(() {
+              if (isLeaderBoardShown) {
+                isLeaderBoardShown = false;
+                isWinnerBoardShown = false;
+              } else {
+                isLeaderBoardShown = true;
+                isWinnerBoardShown = false;
+              }
+            });
+          },
         ),
         SizedBox(width: unitWidthValue * 15),
-        Container(
-          child: Text(
-            "WINNERS",
-            style: TextStyle(
-                fontSize: unitWidthValue * 18, fontWeight: FontWeight.bold),
+        InkWell(
+          child: Container(
+            child: Text(
+              "WINNERS",
+              style: TextStyle(
+                  fontSize: unitWidthValue * 18, fontWeight: FontWeight.bold),
+            ),
+            height: unitHeightValue * 60,
+            padding: EdgeInsets.all(unitWidthValue * 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border:
+                  Border.all(color: Colors.black, width: unitWidthValue * 3),
+              borderRadius: BorderRadius.circular(unitWidthValue * 15),
+            ),
           ),
-          height: unitHeightValue * 60,
-          padding: EdgeInsets.all(unitWidthValue * 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.black, width: unitWidthValue * 3),
-            borderRadius: BorderRadius.circular(unitWidthValue * 15),
-          ),
+          onTap: () {
+            if (isWinnerBoardShown) {
+              isLeaderBoardShown = false;
+              isWinnerBoardShown = false;
+            } else {
+              isLeaderBoardShown = false;
+              isWinnerBoardShown = true;
+            }
+          },
         ),
       ],
     );
@@ -565,8 +720,9 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   Widget _leadersView() {
     List<Widget> widgets = List.empty(growable: true);
     int rank = 0;
-    for (StreakEntry leader in top3 ?? []) {
+    for (StreakEntry leader in leaders ?? []) {
       rank++;
+      if (rank > 3) break;
       String rankstr = "";
       int price = 0;
       if (rank == 1) {
@@ -589,14 +745,14 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   }
 
   int calcLife() {
-    if(lastConsumeDate == null) return life;
+    if (lastConsumeDate == null) return life;
     Duration diff = DateTime.now().difference(lastConsumeDate!);
     int generatedLife = (diff.inSeconds / LIFE_GENERATION_PERIOD).floor();
     return min(life + generatedLife, 5);
   }
 
   String calcWaitTimer() {
-    if(lastConsumeDate == null || calcLife() == 5) return "FULL";
+    if (lastConsumeDate == null || calcLife() == 5) return "FULL";
     Duration diff = DateTime.now().difference(lastConsumeDate!);
     int wait = diff.inSeconds % LIFE_GENERATION_PERIOD;
     wait = LIFE_GENERATION_PERIOD - wait;
@@ -604,15 +760,18 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
     int sec = wait % 60;
     return DateFormat("IN mm:ss").format(new DateTime(2000, 1, 1, 0, min, sec));
   }
+
   void consumeLife() async {
     int currentLife = calcLife();
-    if(currentLife == 0) {
+    if (currentLife == 0) {
       print("No Life to Consume!");
       return;
     }
-    currentLife --;
-    await Preferences.setString(Preferences.pfKConsumableIdLife, currentLife.toString());
-    await Preferences.setString(Preferences.pfKLastLifeConsumeDate, DateTime.now().toIso8601String());
+    currentLife--;
+    await Preferences.setString(
+        Preferences.pfKConsumableIdLife, currentLife.toString());
+    await Preferences.setString(
+        Preferences.pfKLastLifeConsumeDate, DateTime.now().toIso8601String());
     print("Life consumed! New Life: $currentLife");
     setState(() {
       life = currentLife;
