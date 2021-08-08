@@ -16,7 +16,9 @@ import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_categories_controller.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_triva_details_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_categories_model.dart';
+import 'package:flutterjackpot/view/jackpot_trivia/question/questions_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:video_player/video_player.dart';
 
 const int CATEGORY_RESET_DURATION = 120;
 
@@ -46,6 +48,10 @@ class _TriviaStreakCategoryScreenState
   double unitWidthValue = 1;
 
   late Timer _timer;
+  bool _playVideo = false;
+  late VideoPlayerController _controller;
+  late Future<void> _initializeVideoPlayerFuture;
+  Quiz? selectedQuiz;
 
   @override
   void initState() {
@@ -54,11 +60,26 @@ class _TriviaStreakCategoryScreenState
       loadCategoryIndices();
     });
     getQuiz();
+    _controller = VideoPlayerController.asset(
+      'assets/videos/count.mp4',
+    );
+
+    // Initialize the controller and store the Future for later use.
+    _initializeVideoPlayerFuture = _controller.initialize();
+
+    // Use the controller to loop the video.
+    _controller.setLooping(false);
+    _controller.seekTo(Duration());
+    _initializeVideoPlayerFuture.then((value) {
+      _controller.removeListener(onCountDownEnd);
+      _controller.addListener(onCountDownEnd);
+    });
   }
 
   @override
   void dispose() {
     _timer.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -79,6 +100,29 @@ class _TriviaStreakCategoryScreenState
                 )
               : _bodyWidget(),
         ),
+        _playVideo
+            ? Align(
+                alignment: Alignment.center,
+                child: FutureBuilder(
+                  future: _initializeVideoPlayerFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      // If the VideoPlayerController has finished initialization, use
+                      // the data it provides to limit the aspect ratio of the video.
+                      return AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        // Use the VideoPlayer widget to display the video.
+                        child: VideoPlayer(_controller),
+                      );
+                    } else {
+                      // If the VideoPlayerController is still initializing, show a
+                      // loading spinner.
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+              )
+            : Container()
       ],
     );
   }
@@ -504,14 +548,12 @@ class _TriviaStreakCategoryScreenState
               ],
             ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => JackpotTriviaDetailsScreen(
-                    quiz: _quiz,
-                  ),
-                ),
-              );
+              _controller.play();
+              setState(() {
+                _isLoading = true;
+                _playVideo = true;
+                selectedQuiz = _quiz;
+              });
             },
           ),
         );
@@ -527,6 +569,9 @@ class _TriviaStreakCategoryScreenState
       (value) {
         quiz = value;
         loadCategoryIndices();
+        setState(() {
+          _isLoading = false;
+        });
       },
     );
   }
@@ -552,9 +597,6 @@ class _TriviaStreakCategoryScreenState
             for (int category in categories) {
               categoryIndices.add(category);
             }
-            setState(() {
-              _isLoading = false;
-            });
           }
         } else {
           reselectIndices();
@@ -573,8 +615,23 @@ class _TriviaStreakCategoryScreenState
         Preferences.pfKStreakCategories, json.encode(categoryIndices));
     await Preferences.setString(
         Preferences.pfKStreakCategoriesTime, categoryTime!.toIso8601String());
-    setState(() {
-      _isLoading = false;
-    });
+  }
+
+  void onCountDownEnd() {
+    if (_controller.value.duration == _controller.value.position &&
+        this._playVideo) {
+      this._playVideo = false;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QuestionsScreen(selectedQuiz!),
+        ),
+      ).then((value) {
+        setState(() {
+          _isLoading = false;
+          _controller.seekTo(Duration());
+        });
+      });
+    }
   }
 }
