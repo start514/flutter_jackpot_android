@@ -7,15 +7,14 @@ import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_triva_details_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/question/submit_quiz_model.dart';
+import 'package:flutterjackpot/view/trivia_streak/submit_streak_model.dart';
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_category_screen.dart';
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_screen.dart';
 
 class StreakSuccessDialog extends StatefulWidget {
-  final int? score;
-  final int? originalScore;
-  final int? rank;
+  final SubmitStreakResponse? result;
 
-  StreakSuccessDialog({this.score, this.rank, this.originalScore});
+  StreakSuccessDialog({this.result});
 
   @override
   _StreakSuccessDialogState createState() => _StreakSuccessDialogState();
@@ -30,7 +29,7 @@ class _StreakSuccessDialogState extends State<StreakSuccessDialog> {
   void initState() {
     super.initState();
     setState(() {
-      isFailed = widget.score == 0;
+      isFailed = widget.result!.score == 0;
     });
   }
 
@@ -66,7 +65,7 @@ class _StreakSuccessDialogState extends State<StreakSuccessDialog> {
                         : Align(
                             child: Container(
                               child: AutoSizeText(
-                                "RANKING - ${widget.rank}",
+                                "RANKING - ${widget.result!.rank}",
                                 style: TextStyle(
                                   fontSize: unitWidthValue * 40,
                                   fontWeight: FontWeight.bold,
@@ -134,7 +133,7 @@ class _StreakSuccessDialogState extends State<StreakSuccessDialog> {
                           SizedBox(height: unitHeightValue * 10),
                           Container(
                             child: AutoSizeText(
-                              "${widget.score}",
+                              "${widget.result!.score}",
                               style: TextStyle(
                                 color: isFailed ? Colors.red : greenColor,
                                 fontSize: unitWidthValue * 80,
@@ -183,7 +182,7 @@ class _StreakSuccessDialogState extends State<StreakSuccessDialog> {
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             TriviaStreakCategoryScreen(
-                                          score: widget.originalScore,
+                                          score: widget.result!.originalScore,
                                           // quiz: widget.quiz,
                                         ),
                                       ),

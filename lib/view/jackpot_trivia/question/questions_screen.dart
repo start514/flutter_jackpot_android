@@ -19,6 +19,8 @@ import 'package:flutterjackpot/view/jackpot_trivia/question/questions_controller
 import 'package:flutterjackpot/view/jackpot_trivia/question/questions_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/question/submit_quiz_controller.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/question/submit_quiz_model.dart';
+import 'package:flutterjackpot/view/trivia_streak/submit_streak_model.dart';
+import 'package:flutterjackpot/view/trivia_streak/trivia_streak_controller.dart';
 
 class QuestionsScreen extends StatefulWidget {
   final Quiz quiz;
@@ -35,6 +37,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   QuestionsController questionsController = new QuestionsController();
 
   SubmitQuizController submitQuizController = new SubmitQuizController();
+  TriviaStreakController triviaStreakController = new TriviaStreakController();
 
   int currentIndex = 0;
 
@@ -58,6 +61,8 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   double unitWidthValue = 1;
 
   SubmitQuiz? submitQuizResponse = new SubmitQuiz();
+
+  SubmitStreakResponse? submitStreakResponse = new SubmitStreakResponse();
 
   @override
   void initState() {
@@ -570,9 +575,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) => StreakSuccessDialog(
-                    score: 12,
-                    rank: 64,
-                    originalScore: widget.originalScore,
+                    result: submitStreakResponse,
                   ),
                 ).then((value) {
                   setState(() {
@@ -633,28 +636,26 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               setState(() {
                 _isLoading = true;
               });
-              if (widget.isStreak) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
-                    ),
-                    (route) => false);
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => StreakSuccessDialog(
-                    score: 12,
-                    rank: 64,
-                    originalScore: widget.originalScore,
-                  ),
-                ).then((value) {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                });
-              } else {
-                submitQuiz().then(
-                  (value) {
+              submitQuiz().then(
+                (value) {
+                  if (widget.isStreak) {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(),
+                        ),
+                        (route) => false);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => StreakSuccessDialog(
+                        result: submitStreakResponse,
+                      ),
+                    ).then((value) {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    });
+                  } else {
                     getBonus();
                     AdMobClass.showRewardAdd(
                       isSpin: false,
@@ -680,9 +681,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                         });
                       },
                     );
-                  },
-                );
-              }
+                  }
+                },
+              );
             } else {
               setState(
                 () {
@@ -720,13 +721,15 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
       new FocusNode(),
     );
 
-    SubmitQuiz? quiz =
-        await submitQuizController.submitQuiz(record, widget.quiz, bonus);
-    setState(
-      () {
-        submitQuizResponse = quiz;
-      },
-    );
+    if (widget.isStreak) {
+      SubmitStreakResponse? streakResponse = await triviaStreakController
+          .submitStreak(userID: userRecord!.userID, score: correctAnswer);
+      submitStreakResponse = streakResponse;
+    } else {
+      SubmitQuiz? quiz =
+          await submitQuizController.submitQuiz(record, widget.quiz, bonus);
+      submitQuizResponse = quiz;
+    }
   }
 
   Future<void> useGadgets({String? item, String? count}) async {

@@ -26,6 +26,8 @@ const String UrlGetQuestionAnswer = "$BaseUrl/getQuestionAnswer";
 
 const String UrlGetStreak = "$BaseUrl/getStreak";
 
+const String UrlSubmitStreak = "$BaseUrl/submitStreak";
+
 const String UrlGetCategories = "$BaseUrl/getCategories";
 
 const String UrlGetQuiz = "$BaseUrl/getQuiz";
