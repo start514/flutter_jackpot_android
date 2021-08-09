@@ -56,4 +56,27 @@ class TriviaStreakController extends BaseModel {
     }
     return null;
   }
+
+  Future<void> continueStreak(String? userID, int originalScore) async {
+    onNotify(status: Status.LOADING, message: "Loading");
+
+    try {
+      Map<String, dynamic> body = {
+        "user_id": userID != null ? userID : "0",
+        "score": originalScore,
+      };
+      dynamic response =
+          await net.getWithDio(url: UrlContinueStreak, body: body);
+
+      if (response['status'] == 1) {
+        onNotify(status: Status.SUCCESS, message: response['message']);
+        return;
+      } else {
+        onNotify(status: Status.FAILED, message: response['message']);
+      }
+    } catch (error, gg) {
+      print("CATCH ERROR : $error $gg");
+      onNotify(status: Status.FAILED, message: handleError(error));
+    }
+  }
 }

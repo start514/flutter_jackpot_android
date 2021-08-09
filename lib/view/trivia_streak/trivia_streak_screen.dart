@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterjackpot/dialogs/streak_rules_dialogs.dart';
@@ -196,7 +197,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
       child: Row(
         children: [
           Container(
-            child: Text(
+            child: AutoSizeText(
               "$rank",
               style: TextStyle(
                 color: Colors.black,
@@ -207,6 +208,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
             ),
             padding: EdgeInsets.symmetric(vertical: unitHeightValue * 10),
             width: unitWidthValue * 80,
+            height: unitHeightValue * 60,
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
@@ -216,7 +218,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
             ),
           ),
           Container(
-            child: Text(
+            child: AutoSizeText(
               "$name",
               style: TextStyle(
                 color: Colors.black,
@@ -227,6 +229,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
             ),
             padding: EdgeInsets.symmetric(vertical: unitHeightValue * 10),
             width: unitWidthValue * 270,
+            height: unitHeightValue * 60,
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
@@ -236,7 +239,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
             ),
           ),
           Container(
-            child: Text(
+            child: AutoSizeText(
               "$score",
               style: TextStyle(
                 color: Colors.black,
@@ -247,6 +250,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
             ),
             padding: EdgeInsets.symmetric(vertical: unitHeightValue * 10),
             width: unitWidthValue * 105,
+            height: unitHeightValue * 60,
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
@@ -524,13 +528,13 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                     onTap: () async {
                       bool ret = await consumeLife();
                       if (ret) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              TriviaStreakCategoryScreen(score: score),
-                        ),
-                      );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                TriviaStreakCategoryScreen(score: score),
+                          ),
+                        );
                       } else {
                         print("No life!");
                       }
@@ -678,13 +682,14 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
         padding: EdgeInsets.fromLTRB(unitWidthValue * 15, unitWidthValue * 5,
             unitWidthValue * 15, unitWidthValue * 5),
         width: unitWidthValue * 150,
+        height: unitHeightValue * 50,
       ),
       Container(
           height: unitHeightValue * 3,
           width: unitWidthValue * 20,
           color: Colors.white),
       Container(
-        child: Text(
+        child: AutoSizeText(
           "$streak",
           style: TextStyle(
               color: Colors.white,
@@ -701,13 +706,14 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
         padding: EdgeInsets.fromLTRB(unitWidthValue * 15, unitWidthValue * 5,
             unitWidthValue * 15, unitWidthValue * 5),
         width: unitWidthValue * 75,
+        height: unitHeightValue * 50,
       ),
       Container(
           height: unitHeightValue * 3,
           width: unitWidthValue * 20,
           color: Colors.white),
       Container(
-        child: Text(
+        child: AutoSizeText(
           "$name",
           style: TextStyle(
               color: Colors.white,
@@ -724,6 +730,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
         padding: EdgeInsets.fromLTRB(unitWidthValue * 15, unitWidthValue * 5,
             unitWidthValue * 15, unitWidthValue * 5),
         width: unitWidthValue * 180,
+        height: unitHeightValue * 50,
       ),
     ]);
   }

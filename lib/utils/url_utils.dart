@@ -28,6 +28,8 @@ const String UrlGetStreak = "$BaseUrl/getStreak";
 
 const String UrlSubmitStreak = "$BaseUrl/submitStreak";
 
+const String UrlContinueStreak = "$BaseUrl/continueStreak";
+
 const String UrlGetCategories = "$BaseUrl/getCategories";
 
 const String UrlGetQuiz = "$BaseUrl/getQuiz";

@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterjackpot/main.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/layout_dot_builder.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
@@ -9,6 +10,7 @@ import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/question/submit_quiz_model.dart';
 import 'package:flutterjackpot/view/trivia_streak/submit_streak_model.dart';
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_category_screen.dart';
+import 'package:flutterjackpot/view/trivia_streak/trivia_streak_controller.dart';
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_screen.dart';
 
 class StreakSuccessDialog extends StatefulWidget {
@@ -24,6 +26,7 @@ class _StreakSuccessDialogState extends State<StreakSuccessDialog> {
   double unitHeightValue = 1;
   double unitWidthValue = 1;
   late bool isFailed;
+  TriviaStreakController api = TriviaStreakController();
 
   @override
   void initState() {
@@ -201,106 +204,109 @@ class _StreakSuccessDialogState extends State<StreakSuccessDialog> {
                   height: unitHeightValue * 20.0,
                 ),
                 isFailed
-                    ? Container(
-                        child: Stack(
-                          children: [
-                            Align(
-                              child: Container(
-                                child: AutoSizeText(
-                                  "ERASES THE WRONG ANSWER AND CONTINUES YOUR STREAK!",
-                                  style: TextStyle(
-                                    fontSize: unitWidthValue * 40,
-                                    fontWeight: FontWeight.bold,
+                    ? InkWell(
+                        child: Container(
+                          child: Stack(
+                            children: [
+                              Align(
+                                child: Container(
+                                  child: AutoSizeText(
+                                    "ERASES THE WRONG ANSWER AND CONTINUES YOUR STREAK!",
+                                    style: TextStyle(
+                                      fontSize: unitWidthValue * 40,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                width: unitWidthValue * 420,
-                                height: unitHeightValue * 100,
-                                padding: EdgeInsets.fromLTRB(
-                                  unitWidthValue * 5,
-                                  unitWidthValue * 10,
-                                  unitWidthValue * 5,
-                                  0,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: greenColor,
-                                      width: unitWidthValue * 4),
-                                  borderRadius: BorderRadius.circular(
-                                      unitWidthValue * 12),
+                                  width: unitWidthValue * 420,
+                                  height: unitHeightValue * 100,
+                                  padding: EdgeInsets.fromLTRB(
+                                    unitWidthValue * 5,
+                                    unitWidthValue * 10,
+                                    unitWidthValue * 5,
+                                    0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color: greenColor,
+                                        width: unitWidthValue * 4),
+                                    borderRadius: BorderRadius.circular(
+                                        unitWidthValue * 12),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Align(
-                              child: Container(
-                                child: AutoSizeText(
-                                  "~ CONTINUE YOUR STREAK ~",
-                                  style: TextStyle(
-                                    fontSize: unitWidthValue * 40,
-                                    fontWeight: FontWeight.bold,
+                              Align(
+                                child: Container(
+                                  child: AutoSizeText(
+                                    "~ CONTINUE YOUR STREAK ~",
+                                    style: TextStyle(
+                                      fontSize: unitWidthValue * 40,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                width: unitWidthValue * 350,
-                                height: unitHeightValue * 50,
-                                padding: EdgeInsets.fromLTRB(
-                                  unitWidthValue * 5,
-                                  unitWidthValue * 5,
-                                  unitWidthValue * 5,
-                                  0,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: greenColor,
-                                  border: Border.all(
-                                      color: Colors.black,
-                                      width: unitWidthValue * 3),
-                                  borderRadius: BorderRadius.circular(
-                                      unitWidthValue * 12),
-                                ),
-                                transform: Matrix4.translationValues(
-                                    0, -unitHeightValue * 40, 0),
-                              ),
-                            ),
-                            Align(
-                              child: Container(
-                                child: AutoSizeText(
-                                  "ONLY \$0.99 CENTS",
-                                  style: TextStyle(
-                                    fontSize: unitWidthValue * 40,
-                                    fontWeight: FontWeight.bold,
+                                  width: unitWidthValue * 350,
+                                  height: unitHeightValue * 50,
+                                  padding: EdgeInsets.fromLTRB(
+                                    unitWidthValue * 5,
+                                    unitWidthValue * 5,
+                                    unitWidthValue * 5,
+                                    0,
                                   ),
-                                  textAlign: TextAlign.center,
+                                  decoration: BoxDecoration(
+                                    color: greenColor,
+                                    border: Border.all(
+                                        color: Colors.black,
+                                        width: unitWidthValue * 3),
+                                    borderRadius: BorderRadius.circular(
+                                        unitWidthValue * 12),
+                                  ),
+                                  transform: Matrix4.translationValues(
+                                      0, -unitHeightValue * 40, 0),
                                 ),
-                                width: unitWidthValue * 250,
-                                height: unitHeightValue * 50,
-                                padding: EdgeInsets.fromLTRB(
-                                  unitWidthValue * 5,
-                                  unitWidthValue * 5,
-                                  unitWidthValue * 5,
-                                  0,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: greenColor,
-                                  border: Border.all(
-                                      color: Colors.black,
-                                      width: unitWidthValue * 3),
-                                  borderRadius: BorderRadius.circular(
-                                      unitWidthValue * 12),
-                                ),
-                                transform: Matrix4.translationValues(
-                                    0, unitHeightValue * 90, 0),
                               ),
-                            ),
-                          ],
+                              Align(
+                                child: Container(
+                                  child: AutoSizeText(
+                                    "ONLY \$0.99 CENTS",
+                                    style: TextStyle(
+                                      fontSize: unitWidthValue * 40,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  width: unitWidthValue * 250,
+                                  height: unitHeightValue * 50,
+                                  padding: EdgeInsets.fromLTRB(
+                                    unitWidthValue * 5,
+                                    unitWidthValue * 5,
+                                    unitWidthValue * 5,
+                                    0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: greenColor,
+                                    border: Border.all(
+                                        color: Colors.black,
+                                        width: unitWidthValue * 3),
+                                    borderRadius: BorderRadius.circular(
+                                        unitWidthValue * 12),
+                                  ),
+                                  transform: Matrix4.translationValues(
+                                      0, unitHeightValue * 90, 0),
+                                ),
+                              ),
+                            ],
+                          ),
+                          margin: EdgeInsets.fromLTRB(
+                              0,
+                              isFailed
+                                  ? unitHeightValue * 60
+                                  : unitHeightValue * 30,
+                              0,
+                              unitHeightValue * 70),
                         ),
-                        margin: EdgeInsets.fromLTRB(
-                            0,
-                            isFailed
-                                ? unitHeightValue * 60
-                                : unitHeightValue * 30,
-                            0,
-                            unitHeightValue * 70),
+                        onTap: onContinueStreak,
                       )
                     : Container(),
                 Container(
@@ -380,7 +386,7 @@ class _StreakSuccessDialogState extends State<StreakSuccessDialog> {
                               ),
                             ),
                             Image.asset(
-                              "assets/money.png",
+                              "assets/money_white.jpeg",
                               width: unitWidthValue * 350,
                             ),
                           ],
@@ -427,5 +433,19 @@ class _StreakSuccessDialogState extends State<StreakSuccessDialog> {
       ),
       onTap: onTap,
     );
+  }
+
+  void onContinueStreak() {
+    api
+        .continueStreak(userRecord!.userID, widget.result!.originalScore!)
+        .then((value) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TriviaStreakScreen(),
+        ),
+      );
+    });
   }
 }
