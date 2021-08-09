@@ -17,7 +17,7 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:video_player/video_player.dart';
 
-class JackpotTriviaDetailsScreen extends StatefulWidget { 
+class JackpotTriviaDetailsScreen extends StatefulWidget {
   final Quiz? quiz;
 
   JackpotTriviaDetailsScreen({this.quiz});
@@ -59,16 +59,18 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
     });
     _initializeVideoPlayerFuture.then((value) => {
           _controller.addListener(() {
-            if (_controller.value.duration == _controller.value.position) {
+            if (_controller.value.duration == _controller.value.position &&
+                this._playVideo) {
               this._playVideo = false;
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => QuestionsScreen(widget.quiz!),
+                  builder: (context) => QuestionsScreen(widget.quiz!, false, 0),
                 ),
               ).then((value) {
                 setState(() {
                   _isLoading = false;
+                  _controller.seekTo(Duration());
                 });
               });
             }
@@ -87,7 +89,7 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     unitHeightValue = MediaQuery.of(context).size.height * 0.001;
-     unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
+    unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
     return Stack(
       children: [
         bgImage(context),
@@ -159,8 +161,10 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                         color: blackColor,
                         textColor: blackColor,
                         shape: RoundedRectangleBorder(
-                          side: BorderSide(color: greenColor, width: unitWidthValue * 2.0),
-                          borderRadius: BorderRadius.circular( unitHeightValue * 29.5),
+                          side: BorderSide(
+                              color: greenColor, width: unitWidthValue * 2.0),
+                          borderRadius:
+                              BorderRadius.circular(unitHeightValue * 29.5),
                         ),
                       ),
                     ),
@@ -177,7 +181,8 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                             color: greenColor,
                             width: unitWidthValue * 2,
                           ),
-                          borderRadius: BorderRadius.circular( unitHeightValue * 15.0),
+                          borderRadius:
+                              BorderRadius.circular(unitHeightValue * 15.0),
                         ),
                         child: AutoSizeText(
                           (quiz.title ?? "").toUpperCase(),
@@ -187,8 +192,7 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                           style: TextStyle(
                               fontSize: unitHeightValue * 26.0,
                               color: whiteColor,
-                              fontWeight: FontWeight.bold
-                          ),
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -198,7 +202,6 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                     SizedBox(
                       height: unitHeightValue * 45.0,
                       width: unitWidthValue * 100,
-
                       child: RaisedButton(
                         child: Text(
                           "RULES",
@@ -218,8 +221,10 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                         color: blackColor,
                         textColor: blackColor,
                         shape: RoundedRectangleBorder(
-                          side: BorderSide(color: greenColor, width: unitWidthValue * 2.0),
-                          borderRadius: BorderRadius.circular( unitHeightValue * 10),
+                          side: BorderSide(
+                              color: greenColor, width: unitWidthValue * 2.0),
+                          borderRadius:
+                              BorderRadius.circular(unitHeightValue * 10),
                         ),
                       ),
                     ),
@@ -237,18 +242,21 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                         width: unitHeightValue * 200.0,
                         alignment: Alignment.center,
                         padding: EdgeInsets.all(0.0),
-                        margin: EdgeInsets.symmetric(vertical: unitHeightValue * 10.0),
+                        margin: EdgeInsets.symmetric(
+                            vertical: unitHeightValue * 10.0),
                         decoration: BoxDecoration(
                           color: whiteColor,
                           border: Border.all(
                             color: blackColor,
                             width: unitWidthValue * 1.5,
                           ),
-                          borderRadius: BorderRadius.circular( unitHeightValue * 10.5),
+                          borderRadius:
+                              BorderRadius.circular(unitHeightValue * 10.5),
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular( unitHeightValue * 10.0),
+                            borderRadius:
+                                BorderRadius.circular(unitHeightValue * 10.0),
                             border: Border.all(
                               color: whiteColor,
                               width: unitWidthValue * 1.5,
@@ -267,7 +275,8 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                         alignment: Alignment.topLeft,
                         child: Container(
                           width: unitHeightValue * 60.0,
-                          margin: EdgeInsets.fromLTRB(unitWidthValue * 10, unitHeightValue * 20, 0, 0),
+                          margin: EdgeInsets.fromLTRB(
+                              unitWidthValue * 10, unitHeightValue * 20, 0, 0),
                           padding: EdgeInsets.all(unitHeightValue * 2.0),
                           decoration: BoxDecoration(
                             color: blackColor,
@@ -275,7 +284,8 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                               color: greenColor,
                               width: unitWidthValue * 2,
                             ),
-                            borderRadius: BorderRadius.circular( unitHeightValue * 4.0),
+                            borderRadius:
+                                BorderRadius.circular(unitHeightValue * 4.0),
                           ),
                           child: AutoSizeText(
                             "\$${quiz.amount}",
@@ -291,16 +301,18 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                       Align(
                         alignment: Alignment.topCenter,
                         child: Container(
-                          margin: EdgeInsets.only(top: unitHeightValue * 180, right: 1),
+                          margin: EdgeInsets.only(
+                              top: unitHeightValue * 180, right: 1),
                           width: unitHeightValue * 200,
-                          padding: EdgeInsets.all( unitHeightValue * 2),
+                          padding: EdgeInsets.all(unitHeightValue * 2),
                           decoration: BoxDecoration(
                             color: blackColor,
                             border: Border.all(
                               color: greenColor,
                               width: unitWidthValue * 2,
                             ),
-                            borderRadius: BorderRadius.circular( unitHeightValue * 6.0),
+                            borderRadius:
+                                BorderRadius.circular(unitHeightValue * 6.0),
                           ),
                           child: AutoSizeText(
                             (quiz.title ?? "").toUpperCase(),
@@ -324,14 +336,18 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                         width: unitWidthValue * 200.0,
                         alignment: Alignment.center,
                         padding: EdgeInsets.only(
-                            left: unitWidthValue * 24, right: unitWidthValue * 24, top: unitHeightValue * 8, bottom: unitHeightValue * 8),
+                            left: unitWidthValue * 24,
+                            right: unitWidthValue * 24,
+                            top: unitHeightValue * 8,
+                            bottom: unitHeightValue * 8),
                         decoration: BoxDecoration(
                           color: whiteColor,
                           border: Border.all(
                             color: greenColor,
                             width: unitWidthValue * 2,
                           ),
-                          borderRadius: BorderRadius.circular( unitHeightValue * 8),
+                          borderRadius:
+                              BorderRadius.circular(unitHeightValue * 8),
                         ),
                         child: Text(
                           "ENDS ${endDate}",
@@ -356,7 +372,8 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                               color: greenColor,
                               width: unitWidthValue * 2.0,
                             ),
-                            borderRadius: BorderRadius.circular( unitHeightValue * 8.0),
+                            borderRadius:
+                                BorderRadius.circular(unitHeightValue * 8.0),
                           ),
                           child: Text(
                             "PLAY NOW",
@@ -378,7 +395,8 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: unitHeightValue * 17.0, horizontal: unitWidthValue * 15.0),
+                    vertical: unitHeightValue * 17.0,
+                    horizontal: unitWidthValue * 15.0),
                 // child: layoutBuilderDot(whiteColor),
               ),
               _leaderBoard(),
@@ -408,7 +426,7 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                 color: blackColor,
                 width: unitWidthValue * 2,
               ),
-              borderRadius: BorderRadius.circular( unitHeightValue * 15.0),
+              borderRadius: BorderRadius.circular(unitHeightValue * 15.0),
             ),
             child: Padding(
               padding: EdgeInsets.all(unitHeightValue * 8.0),
@@ -457,7 +475,8 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                               Center(
                                 child: Padding(
                                   padding: EdgeInsets.only(
-                                      top: unitHeightValue * 5.0, bottom: unitHeightValue * 5.0),
+                                      top: unitHeightValue * 5.0,
+                                      bottom: unitHeightValue * 5.0),
                                   child: Text(
                                     element.rank.toString(),
                                     style: TextStyle(
@@ -471,7 +490,8 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                               Center(
                                 child: Padding(
                                   padding: EdgeInsets.only(
-                                      top: unitHeightValue * 5.0, bottom: unitHeightValue * 5.0),
+                                      top: unitHeightValue * 5.0,
+                                      bottom: unitHeightValue * 5.0),
                                   child: AutoSizeText(
                                     element.userDetail!.name ?? "",
                                     minFontSize: 8,
@@ -487,7 +507,8 @@ class _JackpotTriviaState extends State<JackpotTriviaDetailsScreen> {
                               Center(
                                 child: Padding(
                                   padding: EdgeInsets.only(
-                                      top: unitHeightValue * 5.0, bottom: unitHeightValue * 5.0),
+                                      top: unitHeightValue * 5.0,
+                                      bottom: unitHeightValue * 5.0),
                                   child: Text(
                                     element.score ?? "0",
                                     style: TextStyle(

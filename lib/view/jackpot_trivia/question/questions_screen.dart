@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterjackpot/dialogs/question_seccess_dialog.dart';
+import 'package:flutterjackpot/dialogs/streak_success_dialog.dart';
 import 'package:flutterjackpot/main.dart';
 import 'package:flutterjackpot/utils/admob_utils.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
@@ -21,8 +22,10 @@ import 'package:flutterjackpot/view/jackpot_trivia/question/submit_quiz_model.da
 
 class QuestionsScreen extends StatefulWidget {
   final Quiz quiz;
+  final bool isStreak;
+  final int? originalScore;
 
-  QuestionsScreen(this.quiz);
+  QuestionsScreen(this.quiz, this.isStreak, this.originalScore);
 
   @override
   _QuestionsScreenState createState() => _QuestionsScreenState();
@@ -116,7 +119,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
 
   Widget _questionsBodyWidget(List<Record> record, Quiz quiz) {
     Record rec = record[currentIndex];
-    _length = record.length;
+    _length = widget.isStreak ? 1 : record.length;
 
     return Center(
       child: SingleChildScrollView(
@@ -191,35 +194,37 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               SizedBox(
                 height: unitHeightValue * 20.0,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  _roundedTools(
-                      image: "bomb.png",
-                      value: spinDetails!.theBomb != null
-                          ? spinDetails!.theBomb!
-                          : "0",
-                      onTap: () {
-                        useGadgets(item: "1", count: "-1");
-                      }),
-                  _roundedTools(
-                      image: "player2.png",
-                      value: spinDetails!.thePlayer != null
-                          ? spinDetails!.thePlayer!
-                          : "0",
-                      onTap: () {
-                        useGadgets(item: "4", count: "-1");
-                      }),
-                  _roundedTools(
-                      image: "clock.png",
-                      value: spinDetails!.theTime != null
-                          ? spinDetails!.theTime!
-                          : "0",
-                      onTap: () {
-                        useGadgets(item: "3", count: "-1");
-                      }),
-                ],
-              ),
+              widget.isStreak
+                  ? Container()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        _roundedTools(
+                            image: "bomb.png",
+                            value: spinDetails!.theBomb != null
+                                ? spinDetails!.theBomb!
+                                : "0",
+                            onTap: () {
+                              useGadgets(item: "1", count: "-1");
+                            }),
+                        _roundedTools(
+                            image: "player2.png",
+                            value: spinDetails!.thePlayer != null
+                                ? spinDetails!.thePlayer!
+                                : "0",
+                            onTap: () {
+                              useGadgets(item: "4", count: "-1");
+                            }),
+                        _roundedTools(
+                            image: "clock.png",
+                            value: spinDetails!.theTime != null
+                                ? spinDetails!.theTime!
+                                : "0",
+                            onTap: () {
+                              useGadgets(item: "3", count: "-1");
+                            }),
+                      ],
+                    ),
             ],
           ),
         ),
@@ -235,35 +240,39 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
         ),
         Stack(
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                padding: EdgeInsets.only(
-                    top: unitHeightValue * 1.0,
-                    bottom: unitHeightValue * 1.0,
-                    right: unitWidthValue * 9.0,
-                    left: unitWidthValue * 9.0),
-                margin: EdgeInsets.only(
-                    right: unitWidthValue * 30, top: unitHeightValue * 20),
-                decoration: BoxDecoration(
-                  color: whiteColor,
-                  border: Border.all(
-                    color: greenColor,
-                    width: unitWidthValue * 2,
+            widget.isStreak
+                ? Container()
+                : Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          top: unitHeightValue * 1.0,
+                          bottom: unitHeightValue * 1.0,
+                          right: unitWidthValue * 9.0,
+                          left: unitWidthValue * 9.0),
+                      margin: EdgeInsets.only(
+                          right: unitWidthValue * 30,
+                          top: unitHeightValue * 20),
+                      decoration: BoxDecoration(
+                        color: whiteColor,
+                        border: Border.all(
+                          color: greenColor,
+                          width: unitWidthValue * 2,
+                        ),
+                        borderRadius:
+                            BorderRadius.circular(unitHeightValue * 8.0),
+                      ),
+                      child: AutoSizeText(
+                        "${currentIndex + 1} / $_length",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: unitHeightValue * 26.0,
+                          color: blackColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(unitHeightValue * 8.0),
-                ),
-                child: AutoSizeText(
-                  "${currentIndex + 1} / 10",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: unitHeightValue * 26.0,
-                    color: blackColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
                 decoration: BoxDecoration(
@@ -551,30 +560,51 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           getBonus();
           submitQuiz().then(
             (value) {
-              getBonus();
-              AdMobClass.showRewardAdd(
-                isSpin: false,
-                afterVideoEnd: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
-                      ),
-                      (route) => false);
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => QuestionSuccessDialog(
-                      quiz: quiz,
-                      correctAnswer: correctAnswer,
-                      submitQuiz: submitQuizResponse,
+              if (widget.isStreak) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeScreen(),
                     ),
-                  ).then((value) {
-                    setState(() {
-                      _isLoading = false;
-                    });
+                    (route) => false);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => StreakSuccessDialog(
+                    score: 12,
+                    rank: 64,
+                    originalScore: widget.originalScore,
+                  ),
+                ).then((value) {
+                  setState(() {
+                    _isLoading = false;
                   });
-                },
-              );
+                });
+              } else {
+                getBonus();
+                AdMobClass.showRewardAdd(
+                  isSpin: false,
+                  afterVideoEnd: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(),
+                        ),
+                        (route) => false);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => QuestionSuccessDialog(
+                        quiz: quiz,
+                        correctAnswer: correctAnswer,
+                        submitQuiz: submitQuizResponse,
+                      ),
+                    ).then((value) {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    });
+                  },
+                );
+              }
             },
           );
         } else {
@@ -603,35 +633,56 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               setState(() {
                 _isLoading = true;
               });
-              submitQuiz().then(
-                (value) {
-                  getBonus();
-                  AdMobClass.showRewardAdd(
-                    isSpin: false,
-                    afterVideoEnd: () {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
+              if (widget.isStreak) {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeScreen(),
+                    ),
+                    (route) => false);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => StreakSuccessDialog(
+                    score: 12,
+                    rank: 64,
+                    originalScore: widget.originalScore,
+                  ),
+                ).then((value) {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                });
+              } else {
+                submitQuiz().then(
+                  (value) {
+                    getBonus();
+                    AdMobClass.showRewardAdd(
+                      isSpin: false,
+                      afterVideoEnd: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ),
+                            (route) => false);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              QuestionSuccessDialog(
+                            quiz: quiz,
+                            correctAnswer: correctAnswer,
+                            submitQuiz: submitQuizResponse,
                           ),
-                          (route) => false);
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            QuestionSuccessDialog(
-                          quiz: quiz,
-                          correctAnswer: correctAnswer,
-                          submitQuiz: submitQuizResponse,
-                        ),
-                      ).then((value) {
-                        setState(() {
-                          _isLoading = false;
+                        ).then((value) {
+                          setState(() {
+                            _isLoading = false;
+                          });
                         });
-                      });
-                    },
-                  );
-                },
-              );
+                      },
+                    );
+                  },
+                );
+              }
             } else {
               setState(
                 () {
@@ -728,7 +779,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
             nextQuestionTimer(widget.quiz);
           }
           setState(
-            () {            },
+            () {},
           );
         }
       } else if (item == "3") {

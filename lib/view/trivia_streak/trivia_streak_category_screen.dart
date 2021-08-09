@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterjackpot/dialogs/get_categories_dialogs.dart';
 import 'package:flutterjackpot/dialogs/game_rules_dialogs.dart';
+import 'package:flutterjackpot/dialogs/streak_rules_dialogs.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/common_sizebox_addmob.dart';
 import 'package:flutterjackpot/utils/common/shared_preferences.dart';
@@ -23,6 +24,8 @@ import 'package:video_player/video_player.dart';
 const int CATEGORY_RESET_DURATION = 120;
 
 class TriviaStreakCategoryScreen extends StatefulWidget {
+  final int? score;
+  TriviaStreakCategoryScreen({this.score});
   @override
   _TriviaStreakCategoryScreenState createState() =>
       _TriviaStreakCategoryScreenState();
@@ -58,6 +61,8 @@ class _TriviaStreakCategoryScreenState
     super.initState();
     _timer = new Timer.periodic(Duration(milliseconds: 500), (timer) {
       loadCategoryIndices();
+      setState(() {
+      });
     });
     getQuiz();
     _controller = VideoPlayerController.asset(
@@ -203,11 +208,11 @@ class _TriviaStreakCategoryScreenState
                               fontSize: unitHeightValue * 20),
                         ),
                         onPressed: () {
-                          // showDialog(
-                          //   context: context,
-                          //   builder: (BuildContext context) =>
-                          //       GameRulesDialog(),
-                          // );
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                StreakRulesDialog(),
+                          );
                         },
                         padding: EdgeInsets.all(0),
                         color: blackColor,
@@ -624,7 +629,8 @@ class _TriviaStreakCategoryScreenState
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => QuestionsScreen(selectedQuiz!),
+          builder: (context) =>
+              QuestionsScreen(selectedQuiz!, true, widget.score),
         ),
       ).then((value) {
         setState(() {

@@ -524,12 +524,13 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                     onTap: () async {
                       bool ret = await consumeLife();
                       if (ret) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TriviaStreakCategoryScreen(),
-                          ),
-                        );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              TriviaStreakCategoryScreen(score: score),
+                        ),
+                      );
                       } else {
                         print("No life!");
                       }
