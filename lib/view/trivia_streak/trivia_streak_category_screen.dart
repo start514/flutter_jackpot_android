@@ -55,14 +55,15 @@ class _TriviaStreakCategoryScreenState
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
   Quiz? selectedQuiz;
+  List<bool> categoryLock = List.empty(growable: true);
+  bool isSecondRowEnabled = false;
 
   @override
   void initState() {
     super.initState();
     _timer = new Timer.periodic(Duration(milliseconds: 500), (timer) {
       loadCategoryIndices();
-      setState(() {
-      });
+      setState(() {});
     });
     getQuiz();
     _controller = VideoPlayerController.asset(
@@ -78,6 +79,28 @@ class _TriviaStreakCategoryScreenState
     _initializeVideoPlayerFuture.then((value) {
       _controller.removeListener(onCountDownEnd);
       _controller.addListener(onCountDownEnd);
+    });
+
+    //Initialize Category Locks
+    categoryLock = [false, false, false, true, true, true];
+    Preferences.getString(Preferences.pfKStreakCategoryLock).then((value) {
+      if (value != null && value != "") {
+        categoryLock = List<bool>.from(json.decode(value).map((x) => x));
+        setState(() {});
+      }
+    });
+    Preferences.getString(Preferences.pfKStreakCategorySecondRow).then((value) {
+      Preferences.getString(Preferences.pfKStreakCategorySecondRowDate)
+          .then((valueD) {
+        DateTime secondRowDate = DateTime.now();
+        if (valueD != null && valueD != "")
+          secondRowDate = DateTime.parse(valueD);
+        Duration diff = DateTime.now().difference(secondRowDate);
+        if (value != null && value != "" && diff.inDays < 30) {
+          isSecondRowEnabled = json.decode(value);
+          setState(() {});
+        }
+      });
     });
   }
 
@@ -141,91 +164,87 @@ class _TriviaStreakCategoryScreenState
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               sizedBoxAddMob(unitHeightValue * 42.0),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: unitHeightValue * 45.0,
-                      width: unitWidthValue * 100,
-                      child: RaisedButton(
-                        child: Icon(
-                          Icons.arrow_back_outlined,
-                          color: greenColor,
-                          size: unitHeightValue * 24.0,
-                          semanticLabel:
-                              'Text to announce in accessibility modes',
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        color: blackColor,
-                        textColor: blackColor,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: greenColor, width: unitWidthValue * 2.0),
-                          borderRadius: BorderRadius.circular(29.5),
-                        ),
+              Row(mainAxisAlignment: MainAxisAlignment.start, children: <
+                  Widget>[
+                SizedBox(
+                  height: unitHeightValue * 45.0,
+                  width: unitWidthValue * 100,
+                  child: RaisedButton(
+                    child: Icon(
+                      Icons.arrow_back_outlined,
+                      color: greenColor,
+                      size: unitHeightValue * 24.0,
+                      semanticLabel: 'Text to announce in accessibility modes',
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    color: blackColor,
+                    textColor: blackColor,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: greenColor, width: unitWidthValue * 2.0),
+                      borderRadius: BorderRadius.circular(29.5),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: unitWidthValue * 5,
+                ),
+                Expanded(
+                  child: Container(
+                    // width: unitWidthValue * double.infinity,
+                    padding: EdgeInsets.all(unitHeightValue * 8.0),
+                    decoration: BoxDecoration(
+                      color: blackColor,
+                      border: Border.all(
+                        color: greenColor,
+                        width: unitWidthValue * 2,
                       ),
+                      borderRadius:
+                          BorderRadius.circular(unitHeightValue * 15.0),
                     ),
-                    SizedBox(
-                      width: unitWidthValue * 5,
+                    child: Text(
+                      "TRIVIA STREAK",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: unitHeightValue * 26.0,
+                          color: whiteColor,
+                          fontWeight: FontWeight.bold),
                     ),
-                    Expanded(
-                      child: Container(
-                        // width: unitWidthValue * double.infinity,
-                        padding: EdgeInsets.all(unitHeightValue * 8.0),
-                        decoration: BoxDecoration(
-                          color: blackColor,
-                          border: Border.all(
-                            color: greenColor,
-                            width: unitWidthValue * 2,
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(unitHeightValue * 15.0),
-                        ),
-                        child: Text(
-                          "TRIVIA STREAK",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: unitHeightValue * 26.0,
-                              color: whiteColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                  ),
+                ),
+                SizedBox(
+                  width: unitWidthValue * 5,
+                ),
+                SizedBox(
+                  height: unitHeightValue * 45.0,
+                  width: unitWidthValue * 100,
+                  child: RaisedButton(
+                    child: Text(
+                      "RULES",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: whiteColor,
+                          fontSize: unitHeightValue * 20),
                     ),
-                    SizedBox(
-                      width: unitWidthValue * 5,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => StreakRulesDialog(),
+                      );
+                    },
+                    padding: EdgeInsets.all(0),
+                    color: blackColor,
+                    textColor: blackColor,
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: greenColor, width: unitWidthValue * 2.0),
+                      borderRadius: BorderRadius.circular(unitHeightValue * 10),
                     ),
-                    SizedBox(
-                      height: unitHeightValue * 45.0,
-                      width: unitWidthValue * 100,
-                      child: RaisedButton(
-                        child: Text(
-                          "RULES",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: whiteColor,
-                              fontSize: unitHeightValue * 20),
-                        ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                StreakRulesDialog(),
-                          );
-                        },
-                        padding: EdgeInsets.all(0),
-                        color: blackColor,
-                        textColor: blackColor,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: greenColor, width: unitWidthValue * 2.0),
-                          borderRadius:
-                              BorderRadius.circular(unitHeightValue * 10),
-                        ),
-                      ),
-                    ),
-                  ]),
+                  ),
+                ),
+              ]),
               SizedBox(height: 30),
               _titleView(),
               SizedBox(height: 10),
@@ -248,42 +267,52 @@ class _TriviaStreakCategoryScreenState
     return Container(
       child: Row(
         children: [
-          Container(
-            child: Text(
-              "RE-SHUFFLE (WATCH AD)\n(3 REMAINING TODAY)",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: unitWidthValue * 20,
-                fontWeight: FontWeight.bold,
+          InkWell(
+            child: Container(
+              child: Text(
+                "RE-SHUFFLE (WATCH AD)\n(3 REMAINING TODAY)",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: unitWidthValue * 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
+              decoration: BoxDecoration(
+                border:
+                    Border.all(color: greenColor, width: unitWidthValue * 3),
+                borderRadius: BorderRadius.circular(unitWidthValue * 10),
+                color: Colors.white,
+              ),
+              padding: EdgeInsets.symmetric(
+                  horizontal: unitWidthValue * 10,
+                  vertical: unitHeightValue * 4),
             ),
-            decoration: BoxDecoration(
-              border: Border.all(color: greenColor, width: unitWidthValue * 3),
-              borderRadius: BorderRadius.circular(unitWidthValue * 10),
-              color: Colors.white,
-            ),
-            padding: EdgeInsets.symmetric(
-                horizontal: unitWidthValue * 10, vertical: unitHeightValue * 4),
+            onTap: reshuffleByAd,
           ),
-          Container(
-            child: Text(
-              "RE-SHUFFLE\n(.99 CENTS)",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: unitWidthValue * 20,
-                fontWeight: FontWeight.bold,
+          InkWell(
+            child: Container(
+              child: Text(
+                "RE-SHUFFLE\n(.99 CENTS)",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: unitWidthValue * 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
+              decoration: BoxDecoration(
+                border:
+                    Border.all(color: greenColor, width: unitWidthValue * 3),
+                borderRadius: BorderRadius.circular(unitWidthValue * 10),
+                color: Colors.white,
+              ),
+              padding: EdgeInsets.symmetric(
+                  horizontal: unitWidthValue * 10,
+                  vertical: unitHeightValue * 4),
             ),
-            decoration: BoxDecoration(
-              border: Border.all(color: greenColor, width: unitWidthValue * 3),
-              borderRadius: BorderRadius.circular(unitWidthValue * 10),
-              color: Colors.white,
-            ),
-            padding: EdgeInsets.symmetric(
-                horizontal: unitWidthValue * 10, vertical: unitHeightValue * 4),
-          )
+            onTap: reshuffleByCents,
+          ),
         ],
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
       ),
@@ -292,52 +321,56 @@ class _TriviaStreakCategoryScreenState
   }
 
   Widget _unlock30DaysView() {
-    return Stack(
-      children: [
-        Align(
-          child: Container(
-            child: Text(
-              "DOUBLE YOUR CHANCES!!!\nUNLOCK ALL THREE EXTRA CATEGORIES\nFOR THE NEXT 30 DAYS !!!",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: unitWidthValue * 20,
-                fontWeight: FontWeight.bold,
+    return InkWell(
+      child: Stack(
+        children: [
+          Align(
+            child: Container(
+              child: Text(
+                "DOUBLE YOUR CHANCES!!!\nUNLOCK ALL THREE EXTRA CATEGORIES\nFOR THE NEXT 30 DAYS !!!",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: unitWidthValue * 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
+              decoration: BoxDecoration(
+                border:
+                    Border.all(color: greenColor, width: unitWidthValue * 3),
+                borderRadius: BorderRadius.circular(unitWidthValue * 10),
+                color: Colors.white,
+              ),
+              width: unitWidthValue * 420,
+              height: unitHeightValue * 120,
             ),
-            decoration: BoxDecoration(
-              border: Border.all(color: greenColor, width: unitWidthValue * 3),
-              borderRadius: BorderRadius.circular(unitWidthValue * 10),
-              color: Colors.white,
-            ),
-            width: unitWidthValue * 420,
-            height: unitHeightValue * 120,
           ),
-        ),
-        Align(
-          child: Container(
-            child: Text(
-              "BUY NOW FOR ONLY \$9.99!",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: unitWidthValue * 25,
-                fontWeight: FontWeight.bold,
+          Align(
+            child: Container(
+              child: Text(
+                "BUY NOW FOR ONLY \$9.99!",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: unitWidthValue * 25,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            decoration: BoxDecoration(
-              color: greenColor,
-              border: Border.all(
-                color: Colors.black,
-                width: unitWidthValue * 3,
+              decoration: BoxDecoration(
+                color: greenColor,
+                border: Border.all(
+                  color: Colors.black,
+                  width: unitWidthValue * 3,
+                ),
+                borderRadius: BorderRadius.circular(unitWidthValue * 10),
               ),
-              borderRadius: BorderRadius.circular(unitWidthValue * 10),
+              margin: EdgeInsets.only(top: unitHeightValue * 95),
+              padding: EdgeInsets.symmetric(horizontal: unitWidthValue * 10),
             ),
-            margin: EdgeInsets.only(top: unitHeightValue * 95),
-            padding: EdgeInsets.symmetric(horizontal: unitWidthValue * 10),
+            alignment: Alignment.bottomCenter,
           ),
-          alignment: Alignment.bottomCenter,
-        ),
-      ],
+        ],
+      ),
+      onTap: unlockSecondRow,
     );
   }
 
@@ -453,6 +486,9 @@ class _TriviaStreakCategoryScreenState
       itemCount: 6,
       itemBuilder: (BuildContext context, int position) {
         Quiz _quiz = quiz![categoryIndices[position]];
+        bool isLocked = position > 2;
+        if (isSecondRowEnabled) isLocked = false;
+        if (categoryLock[position] == false) isLocked = false;
         return Container(
           padding: EdgeInsets.all(unitHeightValue * 5.0),
           child: InkWell(
@@ -489,7 +525,7 @@ class _TriviaStreakCategoryScreenState
                     ),
                   ),
                 ),
-                position > 2
+                isLocked
                     ? Align(
                         alignment: Alignment.centerLeft,
                         child: Container(
@@ -553,12 +589,17 @@ class _TriviaStreakCategoryScreenState
               ],
             ),
             onTap: () {
-              _controller.play();
-              setState(() {
-                _isLoading = true;
-                _playVideo = true;
-                selectedQuiz = _quiz;
-              });
+              if (isLocked) {
+                unlockSingleCategory(position);
+              } else {
+                lockSingleCategory(position);
+                _controller.play();
+                setState(() {
+                  _isLoading = true;
+                  _playVideo = true;
+                  selectedQuiz = _quiz;
+                });
+              }
             },
           ),
         );
@@ -639,5 +680,38 @@ class _TriviaStreakCategoryScreenState
         });
       });
     }
+  }
+
+  void unlockSecondRow() async {
+    isSecondRowEnabled = true;
+    await Preferences.setString(Preferences.pfKStreakCategorySecondRow,
+        json.encode(isSecondRowEnabled));
+    await Preferences.setString(Preferences.pfKStreakCategorySecondRowDate,
+        DateTime.now().toIso8601String());
+    setState(() {});
+  }
+
+  void unlockSingleCategory(int position) async {
+    categoryLock[position] = false;
+    await Preferences.setString(
+        Preferences.pfKStreakCategoryLock, json.encode(categoryLock));
+    setState(() {});
+  }
+
+  void lockSingleCategory(int position) async {
+    categoryLock[position] = true;
+    await Preferences.setString(
+        Preferences.pfKStreakCategoryLock, json.encode(categoryLock));
+    setState(() {});
+  }
+
+  void reshuffleByAd() async {
+    reselectIndices();
+    setState(() {});
+  }
+
+  void reshuffleByCents() async {
+    reselectIndices();
+    setState(() {});
   }
 }

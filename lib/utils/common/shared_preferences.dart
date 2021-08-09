@@ -7,12 +7,15 @@ class Preferences {
   static final String pfKConsumableIdNoads = "KConsumableIdNoads";
   static final String pfkConsumableIdPowerUpOne = "kConsumableIdPowerUpOne";
   static final String pfkConsumableIdPowerUpTwo = "kConsumableIdPowerUpTwo";
-  static final String pfkConsumableIdPowerUpThree =
-      "kConsumableIdPowerUpThree";
+  static final String pfkConsumableIdPowerUpThree = "kConsumableIdPowerUpThree";
   static final String pfKConsumableIdLife = "KConsumableIdLife";
   static final String pfKLastLifeConsumeDate = "KLastLifeConsumeDate";
   static final String pfKStreakCategories = "KStreakCategories";
   static final String pfKStreakCategoriesTime = "KStreakCategoriesTime";
+  static final String pfKStreakCategoryLock = "KStreakCategoryLock";
+  static final String pfKStreakCategorySecondRow = "KStreakCategorySecondRow";
+  static final String pfKStreakCategorySecondRowDate =
+      "KStreakCategorySecondRowDate";
 
   static Future<bool> setString(String key, String data) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

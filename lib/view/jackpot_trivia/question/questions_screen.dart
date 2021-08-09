@@ -56,7 +56,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   late List<Record> record;
 
   late Timer _timer;
-  int _start = 16;
+  late int _start = widget.isStreak ? 11 : 16;
   double unitHeightValue = 1;
   double unitWidthValue = 1;
 
