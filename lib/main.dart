@@ -53,11 +53,8 @@ class GetAndCheckDataInSF extends StatefulWidget {
 
 class _GetAndCheckDataInSFState extends State<GetAndCheckDataInSF> {
   bool _isLoading = true;
-  List<String> _adv_loading = [
-    "{placementId: QUIZSTART}",
-    "{placementId: QUIZEND}"
-  ];
-  
+  List<String> _adv_loading = ["QUIZSTART", "QUIZEND"];
+
   // void initAppodeal() async {
 
   //   Appodeal.setAppKeys(
@@ -102,16 +99,33 @@ class _GetAndCheckDataInSFState extends State<GetAndCheckDataInSF> {
     if (Platform.isIOS) {
       gameId = "3939864";
     }
+    this._adv_loading.forEach((element) {
+      UnityAds.isReady(placementId: element).then((isReady) async {
+        if (isReady == null) return;
+        print('Ready Listener: $element => $isReady');
+        if (isReady) {
+          if (this._adv_loading.isEmpty) {
+            return;
+          }
+          this._adv_loading.remove(element.toString());
+          print(this._adv_loading.toString());
+          if (this._adv_loading.isEmpty) {
+            await getState();
+            setState(() => this._isLoading = false);
+          }
+        }
+      });
+    });
     UnityAds.init(
         gameId: gameId,
         listener: (state, args) async {
           print('Init Listener: $state => $args');
           if (state == UnityAdState.ready) {
-            print(args.toString());
+            print(args["placementId"]);
             if (this._adv_loading.isEmpty) {
               return;
             }
-            this._adv_loading.remove(args.toString());
+            this._adv_loading.remove(args["placementId"]);
             print(this._adv_loading.toString());
             if (this._adv_loading.isEmpty) {
               await getState();
@@ -119,7 +133,6 @@ class _GetAndCheckDataInSFState extends State<GetAndCheckDataInSF> {
             }
           }
         });
-
     // Set the app keys
     //initAppodeal();
     WidgetsBinding.instance!
@@ -151,7 +164,6 @@ class _GetAndCheckDataInSFState extends State<GetAndCheckDataInSF> {
             );
             userRecord = model.userRecord;
             spinDetails = model.userRecord!.loginSpinDetails;
-
 
             Navigator.pushAndRemoveUntil(
                 context,

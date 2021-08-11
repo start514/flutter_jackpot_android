@@ -18,17 +18,26 @@ import 'package:provider/provider.dart';
 import 'home/home_screen.dart';
 
 const bool kAutoConsume = true;
-const String _kConsumableId = 'com.triviastax.elitepackage';
-const String _kConsumableId_noads = 'com.triviastax.noads';
-const String _kConsumableId_powerup_one = 'com.triviastax.powerupsone';
-const String _kConsumableId_powerup_two = 'com.triviastax.powerupstwo';
-const String _kConsumableId_powerup_three = 'com.triviastax.powerupsthree';
-const List<String> _kProductIds = <String>[
-  _kConsumableId_powerup_one,
-  _kConsumableId_powerup_two,
-  _kConsumableId_powerup_three,
-  _kConsumableId_noads,
-  _kConsumableId
+String _kConsumableIdElite = Platform.isIOS
+    ? 'com.triviastax.elitepackage1'
+    : 'com.triviastax.elitepackage';
+String _kConsumableIdNoAds =
+    Platform.isIOS ? 'com.triviastax.noads1' : 'com.triviastax.noads';
+String _kConsumableIdPowerupOne = Platform.isIOS
+    ? 'com.triviastax.powerupsone1'
+    : 'com.triviastax.powerupsone';
+String _kConsumableIdPowerupTwo = Platform.isIOS
+    ? 'com.triviastax.powerupstwo1'
+    : 'com.triviastax.powerupstwo';
+String _kConsumableIdPowerupThree = Platform.isIOS
+    ? 'com.triviastax.powerupsthree1'
+    : 'com.triviastax.powerupsthree';
+List<String> _kProductIds = <String>[
+  _kConsumableIdPowerupOne,
+  _kConsumableIdPowerupTwo,
+  _kConsumableIdPowerupThree,
+  _kConsumableIdNoAds,
+  _kConsumableIdElite
 ];
 
 class PowerUPSScreen extends StatefulWidget {
@@ -377,211 +386,71 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
   }
 
   Widget powerUps() {
-    return InkWell(
-      child: Padding(
-          padding: EdgeInsets.all(unitHeightValue * 12.0),
-          child: Column(
-            children: [
-              Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "INCREASE YOUR CHANCES WITH\n POWER-UPS!!!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: unitHeightValue * 26,
-                        fontWeight: FontWeight.bold,
-                        color: whiteColor),
-                  )),
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Align(
-                    child: InkWell(
-                      child: Container(
-                        margin: EdgeInsets.only(top: unitHeightValue * 14.0),
-                        padding: EdgeInsets.only(top: unitHeightValue * 16, bottom: unitHeightValue * 16),
-                        // height: unitHeightValue * 160.0,
-                        width: unitWidthValue * double.infinity,
-                        alignment: Alignment.topCenter,
-                        decoration: BoxDecoration(
-                          color: whiteColor,
-                          border: Border.all(
-                            color: blackColor,
-                            width: unitWidthValue * 5,
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(unitHeightValue * 16.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            _detailButton(
-                                text: "50/50",
-                                image: "bomb.png",
-                                size: 70), //spinDetails!.theBomb!
-                            _detailButton(
-                                text: "Correct\n1,000 pts",
-                                image: "player2.png",
-                                bottom: true,
-                                fontSize: 20,
-                                size: 70), //spinDetails!.thePlayer!,
-                            _detailButton(
-                                text: "+Time",
-                                marginTop: unitHeightValue * 10,
-                                image: "clock.png",
-                                bottom: true,
-                                size: 60), //spinDetails!.theTime!,
-                          ],
-                        ),
-                      ),
-                      onTap: () => {showPurchaseMenu(context, 1)},
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          )),
-      onTap: () {
-        // showPurchaseMenu(context, 0);
-      },
-    );
-  }
-
-  Widget _noAds() {
-    return InkWell(
-      child: Padding(
+    return Padding(
         padding: EdgeInsets.all(unitHeightValue * 12.0),
-        child: Stack(
+        child: Column(
           children: [
-            Align(
-              child: Container(
-                margin: EdgeInsets.only(top: unitHeightValue * 11.0),
-                height: unitHeightValue * 102.0,
-                width: unitWidthValue * double.infinity,
-                decoration: BoxDecoration(
-                  color: greenColor,
-                  border: Border.all(
-                    color: blackColor,
-                    width: unitWidthValue * 2,
+            Container(
+                alignment: Alignment.center,
+                child: Text(
+                  "INCREASE YOUR CHANCES WITH\n POWER-UPS!!!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: unitHeightValue * 26,
+                      fontWeight: FontWeight.bold,
+                      color: whiteColor),
+                )),
+            Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Align(
+                  child: InkWell(
+                    child: Container(
+                      margin: EdgeInsets.only(top: unitHeightValue * 14.0),
+                      padding: EdgeInsets.only(
+                          top: unitHeightValue * 16,
+                          bottom: unitHeightValue * 16),
+                      // height: unitHeightValue * 160.0,
+                      width: unitWidthValue * double.infinity,
+                      alignment: Alignment.topCenter,
+                      decoration: BoxDecoration(
+                        color: whiteColor,
+                        border: Border.all(
+                          color: blackColor,
+                          width: unitWidthValue * 5,
+                        ),
+                        borderRadius:
+                            BorderRadius.circular(unitHeightValue * 16.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          _detailButton(
+                              text: "50/50",
+                              image: "bomb.png",
+                              size: 70), //spinDetails!.theBomb!
+                          _detailButton(
+                              text: "Correct\n1,000 pts",
+                              image: "player2.png",
+                              bottom: true,
+                              fontSize: 20,
+                              size: 70), //spinDetails!.thePlayer!,
+                          _detailButton(
+                              text: "+Time",
+                              marginTop: unitHeightValue * 10,
+                              image: "clock.png",
+                              bottom: true,
+                              size: 60), //spinDetails!.theTime!,
+                        ],
+                      ),
+                    ),
+                    // onTap: () => {showPurchaseMenu(context, 1)},
                   ),
-                  borderRadius: BorderRadius.circular(unitHeightValue * 27.0),
                 ),
-              ),
-            ),
-            Align(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(bottom: unitHeightValue * 10.0),
-                    padding: EdgeInsets.symmetric(
-                        vertical: unitHeightValue * 5.0,
-                        horizontal: unitWidthValue * 20.0),
-                    decoration: new BoxDecoration(
-                      color: whiteColor,
-                      border: Border.all(
-                        color: blackColor,
-                        width: unitWidthValue * 2.5,
-                      ),
-                      borderRadius:
-                          new BorderRadius.all(Radius.elliptical(100, 50)),
-                    ),
-                    child: Text(
-                      "X 15",
-                      style: TextStyle(
-                        color: blackColor,
-                        fontSize: unitHeightValue * 15.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: unitHeightValue * 2.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/bomb.png",
-                        height: unitHeightValue * 40.0,
-                        width: unitWidthValue * 40.0,
-                      ),
-                      Image.asset(
-                        "assets/clock.png",
-                        height: unitHeightValue * 40.0,
-                        width: unitWidthValue * 40.0,
-                      ),
-                      Image.asset(
-                        "assets/player2.png",
-                        height: unitHeightValue * 40.0,
-                        width: unitWidthValue * 40.0,
-                      ),
-                      Image.asset(
-                        "assets/red_heart.png",
-                        height: unitHeightValue * 42.0,
-                        width: unitWidthValue * 42.0,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: unitHeightValue * 11.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: unitHeightValue * 5.0,
-                            horizontal: unitWidthValue * 10.0),
-                        decoration: BoxDecoration(
-                          color: whiteColor,
-                          border: Border.all(
-                            color: blackColor,
-                            width: unitWidthValue * 2.5,
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(unitHeightValue * 20.0),
-                        ),
-                        child: AutoSizeText(
-                          "ELITE PACKAGE",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: unitHeightValue * 5.0,
-                            horizontal: unitWidthValue * 10.0),
-                        decoration: BoxDecoration(
-                          color: whiteColor,
-                          border: Border.all(
-                            color: blackColor,
-                            width: unitWidthValue * 2.5,
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(unitHeightValue * 20.0),
-                        ),
-                        child: AutoSizeText(
-                          "\$ 4.99",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              ],
             ),
           ],
-        ),
-      ),
-      onTap: () {
-        showPurchaseMenu(context, 0);
-      },
-    );
+        ));
   }
 
   Card _buildProductList(int count) {
@@ -601,7 +470,6 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
     if (!_isAvailable) {
       return Card();
     }
-    final ListTile productHeader = ListTile(title: Text(''));
     List<ListTile> productList = <ListTile>[];
     if (_notFoundIds.isNotEmpty) {
       productList.add(ListTile(
@@ -653,7 +521,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
                           productDetails: productDetails,
                           applicationUserName: null,
                           sandboxTesting: true);
-                      if (productDetails.id == _kConsumableId) {
+                      if (productDetails.id == _kConsumableIdNoAds) {
                         _connection.buyConsumable(
                             purchaseParam: purchaseParam,
                             autoConsume: kAutoConsume || Platform.isIOS);
@@ -779,7 +647,8 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
           }
         }
         if (Platform.isAndroid) {
-          if (!kAutoConsume && purchaseDetails.productID == _kConsumableId) {
+          if (!kAutoConsume &&
+              purchaseDetails.productID == _kConsumableIdNoAds) {
             await InAppPurchaseConnection.instance
                 .consumePurchase(purchaseDetails);
           }
@@ -793,7 +662,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
   }
 
   Future<void> whenPurchaseComplete(PurchaseDetails purchaseDetails) async {
-    if (purchaseDetails.productID == _kConsumableId) {
+    if (purchaseDetails.productID == _kConsumableIdElite) {
       await sendRewardWhenPurchaseComplete(
         item: bomb,
         count: "15",
@@ -815,7 +684,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
         purchaseDetails.productID,
       );
 //      navigateToHomeScreen();
-    } else if (purchaseDetails.productID == _kConsumableId_noads) {
+    } else if (purchaseDetails.productID == _kConsumableIdNoAds) {
       await sendRewardWhenPurchaseComplete(
         item: bomb,
         count: "10",
@@ -825,7 +694,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
         purchaseDetails.productID,
       );
 //      navigateToHomeScreen();
-    } else if (purchaseDetails.productID == _kConsumableId_powerup_one) {
+    } else if (purchaseDetails.productID == _kConsumableIdPowerupOne) {
       await sendRewardWhenPurchaseComplete(
         item: bomb,
         count: "2",
@@ -847,7 +716,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
         purchaseDetails.productID,
       );
 //      navigateToHomeScreen();
-    } else if (purchaseDetails.productID == _kConsumableId_powerup_two) {
+    } else if (purchaseDetails.productID == _kConsumableIdPowerupTwo) {
       await sendRewardWhenPurchaseComplete(
         item: bomb,
         count: "5",
@@ -869,7 +738,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
         purchaseDetails.productID,
       );
 //      navigateToHomeScreen();
-    } else if (purchaseDetails.productID == _kConsumableId_powerup_three) {
+    } else if (purchaseDetails.productID == _kConsumableIdPowerupThree) {
       await sendRewardWhenPurchaseComplete(
         item: bomb,
         count: "8",
@@ -902,7 +771,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
 
   void deliverProduct(PurchaseDetails purchaseDetails) async {
     // IMPORTANT!! Always verify a purchase purchase details before delivering the product.
-    if (purchaseDetails.productID == _kConsumableId) {
+    if (purchaseDetails.productID == _kConsumableIdElite) {
       await ConsumableStore.save(purchaseDetails.purchaseID);
       List<String?> consumables = await ConsumableStore.load();
       setState(() {
@@ -943,91 +812,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
             child: new Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildProductList(count!)
-                /*Row(
-                  children: [
-                    ClipOval(
-                      child: CircleAvatar(
-                        maxRadius: 20.0,
-                        minRadius: 20.0,
-                        backgroundImage: AssetImage(
-                          "assets/jackpot_app_icon.png",
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: unitWidthValue * 10.0,
-                    ),
-                    Text(
-                      "Triviastax App Purchase",
-                      style: TextStyle(
-                        color: blackColor,
-                        fontSize: unitHeightValue * 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: unitHeightValue * 20.0),
-                  child: Text(
-                    "\$ 22.0",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                      fontSize: unitHeightValue * 16.0,
-                    ),
-                  ),
-                ),
-                Text(
-                  "This will vary from case to case, but laying out clear terms for your mobile app will limit your liabilities to users that may make claims against you.",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: greyColor,
-                    fontSize: unitHeightValue * 16.0,
-                  ),
-                ),
-                SizedBox(
-                  height: unitHeightValue * 20.0,
-                ),
-                Text(
-                  "By tapping \"BUY\", you agree the App Terms & Condition.",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: greyColor,
-                    fontSize: unitHeightValue * 16.0,
-                  ),
-                ),
-                SizedBox(
-                  height: unitHeightValue * 20.0,
-                ),
-                Text(
-                  "Google Play",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: greyColor,
-                    fontSize: unitHeightValue * 15.0,
-                  ),
-                ),
-                SizedBox(
-                  height: unitHeightValue * 20.0,
-                ),
-                Container(
-                  width: unitWidthValue * double.infinity,
-                  child: RaisedButton(
-                    child: Text(
-                      "BUY",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    color: Colors.green,
-                    textColor: whiteColor,
-                    onPressed: () {},
-                  ),
-                ),*/
-              ],
+              children: [_buildProductList(count!)],
             ),
           ),
         );

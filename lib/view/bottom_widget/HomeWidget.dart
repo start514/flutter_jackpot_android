@@ -304,7 +304,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     ),
                   ).then(onGoBack);
                 },
-                comingSoon: true),
+                comingSoon: false),
             SizedBox(
               height: unitHeightValue * 30.0,
             ),
