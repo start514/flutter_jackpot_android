@@ -32,9 +32,12 @@ class GetStreak {
             json["end_date"] == null ? null : DateTime.parse(json["end_date"]),
         leaders: json["leaders"] == null
             ? null
-            : List<StreakEntry>.from(json["leaders"].map((x) => StreakEntry.fromJson(x))),
-        score: json["score"] == null ? null : int.parse(json["score"]),
-        scoreMax: json["score_max"] == null ? null : int.parse(json["score_max"]),
+            : List<StreakEntry>.from(
+                json["leaders"].map((x) => StreakEntry.fromJson(x))),
+        score: json["score"] == null ? null : int.parse("${json["score"]}"),
+        scoreMax: json["score_max"] == null
+            ? null
+            : int.parse("${json["score_max"]}"),
       );
 
   Map<String, dynamic> toJson() => {
