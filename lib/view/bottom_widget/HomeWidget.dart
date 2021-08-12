@@ -122,84 +122,84 @@ class _HomeWidgetState extends State<HomeWidget> {
                     ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.exit_to_app,
-                      size: 35.5,
-                    ),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return new SimpleDialog(
-                              title: new Text(
-                                "Are You Sure You Want To LogOut This App!",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.all(12.0),
-                                  child: new SimpleDialogOption(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 12.0),
-                                          child: InkWell(
-                                            child: new Text(
-                                              "Cancle",
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      unitHeightValue * 18.0,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.blue),
-                                            ),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ),
-                                        InkWell(
-                                          child: Text(
-                                            "Yes",
-                                            style: TextStyle(
-                                                fontSize:
-                                                    unitHeightValue * 18.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.blue),
-                                          ),
-                                          onTap: () {
-                                            Preferences.setString(
-                                                Preferences.pfUserLogin, "");
-                                            Preferences.setString(
-                                                Preferences.pfTapSpin, "");
-                                            Navigator.pushAndRemoveUntil(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          LoginWithFBAndGoogleScreen(),
-                                                    ),
-                                                    (route) => false)
-                                                .then(onGoBack);
-                                            print("LOGOUT SUCCESSFULLY");
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          });
-                    },
-                  ),
-                ),
+                // Align(
+                //   alignment: Alignment.centerRight,
+                //   child: IconButton(
+                //     icon: Icon(
+                //       Icons.exit_to_app,
+                //       size: 35.5,
+                //     ),
+                //     onPressed: () {
+                //       showDialog(
+                //           context: context,
+                //           builder: (BuildContext context) {
+                //             return new SimpleDialog(
+                //               title: new Text(
+                //                 "Are You Sure You Want To LogOut This App!",
+                //                 textAlign: TextAlign.center,
+                //                 style: TextStyle(
+                //                   fontWeight: FontWeight.bold,
+                //                 ),
+                //               ),
+                //               children: <Widget>[
+                //                 Padding(
+                //                   padding: EdgeInsets.all(12.0),
+                //                   child: new SimpleDialogOption(
+                //                     child: Row(
+                //                       mainAxisAlignment: MainAxisAlignment.end,
+                //                       children: <Widget>[
+                //                         Padding(
+                //                           padding: EdgeInsets.symmetric(
+                //                               horizontal: 12.0),
+                //                           child: InkWell(
+                //                             child: new Text(
+                //                               "Cancle",
+                //                               style: TextStyle(
+                //                                   fontSize:
+                //                                       unitHeightValue * 18.0,
+                //                                   fontWeight: FontWeight.bold,
+                //                                   color: Colors.blue),
+                //                             ),
+                //                             onTap: () {
+                //                               Navigator.pop(context);
+                //                             },
+                //                           ),
+                //                         ),
+                //                         InkWell(
+                //                           child: Text(
+                //                             "Yes",
+                //                             style: TextStyle(
+                //                                 fontSize:
+                //                                     unitHeightValue * 18.0,
+                //                                 fontWeight: FontWeight.bold,
+                //                                 color: Colors.blue),
+                //                           ),
+                //                           onTap: () {
+                //                             Preferences.setString(
+                //                                 Preferences.pfUserLogin, "");
+                //                             Preferences.setString(
+                //                                 Preferences.pfTapSpin, "");
+                //                             Navigator.pushAndRemoveUntil(
+                //                                     context,
+                //                                     MaterialPageRoute(
+                //                                       builder: (context) =>
+                //                                           LoginWithFBAndGoogleScreen(),
+                //                                     ),
+                //                                     (route) => false)
+                //                                 .then(onGoBack);
+                //                             print("LOGOUT SUCCESSFULLY");
+                //                           },
+                //                         ),
+                //                       ],
+                //                     ),
+                //                   ),
+                //                 ),
+                //               ],
+                //             );
+                //           });
+                //     },
+                //   ),
+                // ),
               ],
             ),
             Padding(
