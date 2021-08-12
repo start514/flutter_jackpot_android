@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterjackpot/dialogs/get_categories_dialogs.dart';
 import 'package:flutterjackpot/dialogs/game_rules_dialogs.dart';
 import 'package:flutterjackpot/dialogs/streak_rules_dialogs.dart';
+import 'package:flutterjackpot/utils/admob_utils.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/common_sizebox_addmob.dart';
 import 'package:flutterjackpot/utils/common/consumable_store.dart';
@@ -86,6 +87,12 @@ class _TriviaStreakCategoryScreenState
   bool _loading = true;
   String? _queryProductError;
 
+  int? unlockPosition;
+
+  int adShuffleCount = 0;
+
+  DateTime adShuffleDate = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -116,6 +123,32 @@ class _TriviaStreakCategoryScreenState
         categoryLock = List<bool>.from(json.decode(value).map((x) => x));
         setState(() {});
       }
+    });
+    Preferences.getString(Preferences.pfKStreakADShuffleCount).then((value) {
+      Preferences.getString(Preferences.pfKStreakADShuffleDate)
+          .then((valueDate) async {
+        if (value != null && value != "") {
+          adShuffleCount = int.parse(value);
+        } else {
+          adShuffleCount = 3;
+        }
+        if (valueDate != null && valueDate != "") {
+          adShuffleDate = DateTime.parse(valueDate);
+        }
+        var today = DateTime.now();
+        if (today.day == adShuffleDate.day &&
+            today.month == adShuffleDate.month &&
+            today.year == adShuffleDate.year) {
+        } else {
+          adShuffleCount = 3;
+          await Preferences.setString(
+              Preferences.pfKStreakADShuffleCount, adShuffleCount.toString());
+          await Preferences.setString(
+              Preferences.pfKStreakADShuffleDate, today.toIso8601String());
+        }
+
+        setState(() {});
+      });
     });
     Preferences.getString(Preferences.pfKStreakCategorySecondRow).then((value) {
       Preferences.getString(Preferences.pfKStreakCategorySecondRowDate)
@@ -160,17 +193,27 @@ class _TriviaStreakCategoryScreenState
     // handle invalid purchase here if  _verifyPurchase` failed.
   }
 
-  Future<void> whenPurchaseComplete(PurchaseDetails purchaseDetails) async {
-    if (purchaseDetails.productID == _kConsumableIdNoAds) {
-      // await sendRewardWhenPurchaseComplete(
-      //   item: bomb,
-      //   count: "15",
-      // );
-      // await Preferences.setString(
-      //   Preferences.pfKConsumableId,
-      //   purchaseDetails.productID,
-      // );
-//      navigateToHomeScreen();
+  Future<void> whenPurchaseComplete(String productID) async {
+    if (productID == _kConsumableIdNoAds) {
+      await Preferences.setString(
+        Preferences.pfKConsumableIdNoads,
+        productID,
+      );
+    } else if (productID == _kConsumableIdReshuffleCategory) {
+      reselectIndices();
+      setState(() {});
+    } else if (productID == _kConsumableIdUnlockCategorySingle) {
+      categoryLock[unlockPosition!] = false;
+      await Preferences.setString(
+          Preferences.pfKStreakCategoryLock, json.encode(categoryLock));
+      setState(() {});
+    } else if (productID == _kConsumableIdUnlockCategoryRow) {
+      isSecondRowEnabled = true;
+      await Preferences.setString(Preferences.pfKStreakCategorySecondRow,
+          json.encode(isSecondRowEnabled));
+      await Preferences.setString(Preferences.pfKStreakCategorySecondRowDate,
+          DateTime.now().toIso8601String());
+      setState(() {});
     }
   }
 
@@ -194,7 +237,7 @@ class _TriviaStreakCategoryScreenState
           if (valid) {
 //COMPLETE PURCHASE
 
-            whenPurchaseComplete(purchaseDetails);
+            whenPurchaseComplete(purchaseDetails.productID);
             deliverProduct(purchaseDetails);
           } else {
             _handleInvalidPurchase(purchaseDetails);
@@ -580,7 +623,7 @@ class _TriviaStreakCategoryScreenState
           InkWell(
             child: Container(
               child: Text(
-                "RE-SHUFFLE (WATCH AD)\n(3 REMAINING TODAY)",
+                "RE-SHUFFLE (WATCH AD)\n($adShuffleCount REMAINING TODAY)",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: unitWidthValue * 20,
@@ -997,21 +1040,12 @@ class _TriviaStreakCategoryScreenState
   }
 
   void unlockSecondRow() async {
-    showPurchaseMenu(context, 1);
-    // isSecondRowEnabled = true;
-    // await Preferences.setString(Preferences.pfKStreakCategorySecondRow,
-    //     json.encode(isSecondRowEnabled));
-    // await Preferences.setString(Preferences.pfKStreakCategorySecondRowDate,
-    //     DateTime.now().toIso8601String());
-    // setState(() {});
+    showPurchaseMenu(context, 2);
   }
 
   void unlockSingleCategory(int position) async {
-    showPurchaseMenu(context, 0);
-    // categoryLock[position] = false;
-    // await Preferences.setString(
-    //     Preferences.pfKStreakCategoryLock, json.encode(categoryLock));
-    // setState(() {});
+    unlockPosition = position;
+    showPurchaseMenu(context, 3);
   }
 
   void lockSingleCategory(int position) async {
@@ -1022,17 +1056,38 @@ class _TriviaStreakCategoryScreenState
   }
 
   void reshuffleByAd() async {
-    reselectIndices();
+    var today = DateTime.now();
+    if (today.day == adShuffleDate.day &&
+        today.month == adShuffleDate.month &&
+        today.year == adShuffleDate.year) {
+      if (adShuffleCount == 0) return;
+      adShuffleCount--;
+      await Preferences.setString(
+          Preferences.pfKStreakADShuffleCount, adShuffleCount.toString());
+      await Preferences.setString(
+          Preferences.pfKStreakADShuffleDate, today.toIso8601String());
+    } else {
+      adShuffleCount = 2;
+      await Preferences.setString(
+          Preferences.pfKStreakADShuffleCount, adShuffleCount.toString());
+      await Preferences.setString(
+          Preferences.pfKStreakADShuffleDate, today.toIso8601String());
+    }
+    AdMobClass.showRewardAdd(
+      afterVideoEnd: () {
+        reselectIndices();
+        setState(() {});
+      },
+      isSpin: true,
+    );
     setState(() {});
   }
 
   void reshuffleByCents() async {
-    showPurchaseMenu(context, 2);
-    // reselectIndices();
-    // setState(() {});
+    showPurchaseMenu(context, 1);
   }
 
   void buyNoAds() {
-    showPurchaseMenu(context, 3);
+    showPurchaseMenu(context, 0);
   }
 }

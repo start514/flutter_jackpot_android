@@ -16,6 +16,8 @@ class Preferences {
   static final String pfKStreakCategorySecondRow = "KStreakCategorySecondRow";
   static final String pfKStreakCategorySecondRowDate =
       "KStreakCategorySecondRowDate";
+  static final String pfKStreakADShuffleCount = "KStreakADShuffleCount";
+  static final String pfKStreakADShuffleDate = "KStreakADShuffleDate";
 
   static Future<bool> setString(String key, String data) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
