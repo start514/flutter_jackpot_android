@@ -955,6 +955,7 @@ class _TriviaStreakCategoryScreenState
                   _isLoading = true;
                   _playVideo = true;
                   selectedQuiz = _quiz;
+                  reselectIndices();
                 });
               }
             },

@@ -266,6 +266,21 @@ class _HomeWidgetState extends State<HomeWidget> {
             SizedBox(
               height: unitHeightValue * 15.0,
             ),
+
+            _roundedRowContainer(
+                title: "TRIVIA STREAK",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TriviaStreakScreen(),
+                    ),
+                  ).then(onGoBack);
+                },
+                comingSoon: false),
+            SizedBox(
+              height: unitHeightValue * 15.0,
+            ),
             _roundedRowContainer(
               title: "JACKPOT TRIVIA",
               onTap: () {
@@ -291,21 +306,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                 ).then(onGoBack);
               },
             ),
-            SizedBox(
-              height: unitHeightValue * 15.0,
-            ),
-
-            _roundedRowContainer(
-                title: "TRIVIA STREAK",
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TriviaStreakScreen(),
-                    ),
-                  ).then(onGoBack);
-                },
-                comingSoon: false),
             SizedBox(
               height: unitHeightValue * 30.0,
             ),
