@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterjackpot/dialogs/get_categories_dialogs.dart';
 import 'package:flutterjackpot/dialogs/game_rules_dialogs.dart';
 import 'package:flutterjackpot/dialogs/streak_rules_dialogs.dart';
+import 'package:flutterjackpot/main.dart';
 import 'package:flutterjackpot/utils/admob_utils.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/common_sizebox_addmob.dart';
@@ -1025,6 +1026,7 @@ class _TriviaStreakCategoryScreenState
     if (_controller.value.duration == _controller.value.position &&
         this._playVideo) {
       this._playVideo = false;
+      assetsAudioPlayer.play();
       Navigator.push(
         context,
         MaterialPageRoute(

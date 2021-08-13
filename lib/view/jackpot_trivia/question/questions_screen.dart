@@ -63,6 +63,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
   SubmitQuiz? submitQuizResponse = new SubmitQuiz();
 
   SubmitStreakResponse? submitStreakResponse = new SubmitStreakResponse();
+  AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer();
 
   @override
   void initState() {
@@ -451,7 +452,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
 
                       if (_option.isAnswer == "1") {
                         assetsAudioPlayer.open(
-                          Audio("assets/audios/correct_answer_trivia.m4a"),
+                          Audio("assets/audios/correct answer-trivia.m4a"),
                           autoStart: true,
                           showNotification: false,
                         );
@@ -460,7 +461,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                         print(record.points);
                       } else {
                         assetsAudioPlayer.open(
-                          Audio("assets/audios/wrong_answer_trivia.m4a"),
+                          Audio("assets/audios/wrong answer-trivia.m4a"),
                           autoStart: true,
                           showNotification: false,
                         );
