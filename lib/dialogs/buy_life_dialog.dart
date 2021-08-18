@@ -217,19 +217,62 @@ class _BuyLifeDialogState extends State<BuyLifeDialog> {
                     "html": Style(
                       textAlign: TextAlign.center,
                       color: blackColor,
-                      fontSize: FontSize(16.0),
+                      fontSize: FontSize(30.0 * unitWidthValue),
                       fontWeight: FontWeight.bold,
                     ),
                   },
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                      child: Container(child: Text("NO THANKS!")),
+                      child: Container(
+                        child: Text(
+                          "NO THANKS!",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: unitWidthValue * 24,
+                          ),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: unitHeightValue * 10,
+                          horizontal: unitWidthValue * 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: redColor,
+                          border: Border.all(
+                            color: blackColor,
+                            width: unitWidthValue * 3,
+                          ),
+                          borderRadius:
+                              BorderRadius.circular(unitWidthValue * 12),
+                        ),
+                      ),
                       onTap: noThanks,
                     ),
                     InkWell(
-                      child: Container(child: Text("BUY NOW!")),
+                      child: Container(
+                        child: Text(
+                          "  BUY NOW!  ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: unitWidthValue * 24,
+                          ),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: unitHeightValue * 10,
+                          horizontal: unitWidthValue * 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: greenColor,
+                          border: Border.all(
+                            color: blackColor,
+                            width: unitWidthValue * 3,
+                          ),
+                          borderRadius:
+                              BorderRadius.circular(unitWidthValue * 12),
+                        ),
+                      ),
                       onTap: buyLife,
                     )
                   ],

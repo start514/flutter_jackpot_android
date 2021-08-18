@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutterjackpot/utils/common/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
-const LIFE_GENERATION_PERIOD = 120;
+const LIFE_GENERATION_PERIOD = 7200;
 
 class LifeClass {
   static int life = 5;
@@ -22,9 +22,11 @@ class LifeClass {
     Duration diff = DateTime.now().difference(lastConsumeDate!);
     int wait = diff.inSeconds % LIFE_GENERATION_PERIOD;
     wait = LIFE_GENERATION_PERIOD - wait;
-    int min = (wait / 60).floor();
+    int hour = (wait / 3600).floor();
+    int min = ((wait % 3600) / 60).floor();
     int sec = wait % 60;
-    return DateFormat("IN mm:ss").format(new DateTime(2000, 1, 1, 0, min, sec));
+    return DateFormat("IN 0$hour:mm:ss")
+        .format(new DateTime(2000, 1, 1, hour, min, sec));
   }
 
   static void init() {

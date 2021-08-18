@@ -42,6 +42,9 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   double unitHeightValue = 1;
   double unitWidthValue = 1;
   String endDate = "";
+  int prize1 = 0;
+  int prize2 = 0;
+  int prize3 = 0;
   List<StreakEntry>? leaders;
   int score = 0;
   int scoreMax = 0;
@@ -57,6 +60,9 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
         if (value == null) return;
         _isLoading = false;
         endDate = DateFormat("MM/dd/yy").format(value.endDate!);
+        prize1 = value.prize1!;
+        prize2 = value.prize2!;
+        prize3 = value.prize3!;
         leaders = value.leaders;
         score = value.score!;
         scoreMax = value.scoreMax!;
@@ -720,13 +726,13 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
       int price = 0;
       if (rank == 1) {
         rankstr = "1ST";
-        price = 100;
+        price = prize1;
       } else if (rank == 2) {
         rankstr = "2ND";
-        price = 50;
+        price = prize2;
       } else if (rank == 3) {
         rankstr = "3RD";
-        price = 25;
+        price = prize3;
       }
       widgets.add(
           _leaderView(rankstr, price, leader.score ?? 0, leader.name ?? ""));
