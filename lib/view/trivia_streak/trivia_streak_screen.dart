@@ -348,7 +348,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   }
 
   Widget _myStreakView() {
-    int lifeCalculated = LifeClass.calcLife();
+    int lifeCalculated = LifeClass.getLife();
     return Stack(
       children: [
         Center(
@@ -499,7 +499,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                       ],
                     ),
                     onTap: () async {
-                      if (LifeClass.life > 0) {
+                      if (LifeClass.getLife() > 0) {
                         setState(() {});
                         Navigator.push(
                           context,
@@ -512,7 +512,9 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) => BuyLifeDialog(),
-                        );
+                        ).then((value) {
+                          setState(() {});
+                        });
                       }
                     })
               ],

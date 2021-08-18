@@ -372,12 +372,27 @@ class _StreakSuccessDialogState extends State<StreakSuccessDialog> {
                                 _roundedButtons(
                                   title: isFailed ? "RESTART" : "CONTINUE",
                                   onTap: () {
-                                    if (LifeClass.life == 0) {
+                                    if (LifeClass.getLife() == 0) {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) =>
                                             BuyLifeDialog(),
-                                      );
+                                      ).then((value) {
+                                        if (LifeClass.getLife() > 0) {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  TriviaStreakCategoryScreen(
+                                                score: widget
+                                                    .result!.originalScore,
+                                                // quiz: widget.quiz,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      });
                                     } else {
                                       Navigator.pop(context);
                                       Navigator.push(

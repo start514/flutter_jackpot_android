@@ -6,10 +6,11 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/consumable_store.dart';
+import 'package:flutterjackpot/utils/life_utils.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 const bool kAutoConsume = true;
-String _kConsumableIdBuyLife = 'com.triviastax.buylife';
+String _kConsumableIdBuyLife = 'com.triviastax.streaklife';
 List<String> _kProductIds = <String>[
   _kConsumableIdBuyLife,
 ];
@@ -186,7 +187,10 @@ class _BuyLifeDialogState extends State<BuyLifeDialog> {
   }
 
   Future<void> whenPurchaseComplete(String productID) async {
-    if (productID == _kConsumableIdBuyLife) {}
+    if (productID == _kConsumableIdBuyLife) {
+      await LifeClass.restoreLife();
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -194,7 +198,7 @@ class _BuyLifeDialogState extends State<BuyLifeDialog> {
     unitHeightValue = MediaQuery.of(context).size.height * 0.001;
     unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
     const data =
-        "YOU HAVE 0 LIVES LEFT!<br>DON'T WAIT FOR NEW<br>LIVES! REFRESH NOW<br>FOR ONLY \$1.99 !!!";
+        "YOU HAVE <span style='color: red;'>0</span> LIVES LEFT!<br>DON'T WAIT FOR NEW<br>LIVES! REFRESH NOW<br>FOR ONLY \$1.99 !!!";
     return Dialog(
       backgroundColor: whiteColor,
       shape: RoundedRectangleBorder(
@@ -205,18 +209,32 @@ class _BuyLifeDialogState extends State<BuyLifeDialog> {
         margin: EdgeInsets.all(17.0),
         child: Center(
           child: SingleChildScrollView(
-            child: Container(
-              child: Html(
-                data: "$data",
-                style: {
-                  "html": Style(
-                    textAlign: TextAlign.center,
-                    color: blackColor,
-                    fontSize: FontSize(16.0),
-                    fontWeight: FontWeight.bold,
-                  ),
-                },
-              ),
+            child: Column(
+              children: [
+                Html(
+                  data: "$data",
+                  style: {
+                    "html": Style(
+                      textAlign: TextAlign.center,
+                      color: blackColor,
+                      fontSize: FontSize(16.0),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  },
+                ),
+                Row(
+                  children: [
+                    InkWell(
+                      child: Container(child: Text("NO THANKS!")),
+                      onTap: noThanks,
+                    ),
+                    InkWell(
+                      child: Container(child: Text("BUY NOW!")),
+                      onTap: buyLife,
+                    )
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -338,5 +356,9 @@ class _BuyLifeDialogState extends State<BuyLifeDialog> {
 
   void buyLife() {
     showPurchaseMenu(context, 0);
+  }
+
+  void noThanks() {
+    Navigator.pop(context);
   }
 }

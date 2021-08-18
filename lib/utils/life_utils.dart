@@ -10,7 +10,7 @@ class LifeClass {
   static DateTime? lastConsumeDate;
   static void showVideoAdd(
       {required void afterVideoEnd(), required bool isSpin}) async {}
-  static int calcLife() {
+  static int getLife() {
     if (lastConsumeDate == null) return life;
     Duration diff = DateTime.now().difference(lastConsumeDate!);
     int generatedLife = (diff.inSeconds / LIFE_GENERATION_PERIOD).floor();
@@ -18,7 +18,7 @@ class LifeClass {
   }
 
   static String calcWaitTimer() {
-    if (lastConsumeDate == null || calcLife() == 5) return "FULL";
+    if (lastConsumeDate == null || getLife() == 5) return "FULL";
     Duration diff = DateTime.now().difference(lastConsumeDate!);
     int wait = diff.inSeconds % LIFE_GENERATION_PERIOD;
     wait = LIFE_GENERATION_PERIOD - wait;
@@ -41,7 +41,7 @@ class LifeClass {
   }
 
   static Future<bool> consumeLife() async {
-    int currentLife = calcLife();
+    int currentLife = getLife();
     if (currentLife == 0) {
       return false;
     }
@@ -53,5 +53,15 @@ class LifeClass {
     life = currentLife;
     lastConsumeDate = DateTime.now();
     return true;
+  }
+
+  static Future<void> restoreLife() async {
+    int currentLife = 5;
+    await Preferences.setString(
+        Preferences.pfKConsumableIdLife, currentLife.toString());
+    await Preferences.setString(
+        Preferences.pfKLastLifeConsumeDate, DateTime.now().toIso8601String());
+    life = currentLife;
+    lastConsumeDate = DateTime.now();
   }
 }
