@@ -10,11 +10,13 @@ import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/common_sizebox_addmob.dart';
 import 'package:flutterjackpot/utils/common/shared_preferences.dart';
 import 'package:flutterjackpot/utils/image_utils.dart';
+import 'package:flutterjackpot/view/home/home_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_categories_model.dart';
 import 'package:flutterjackpot/view/trivia_streak/get_streak_model.dart';
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_category_screen.dart';
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_controller.dart';
+import 'package:flutterjackpot/view/winners/winners_screen.dart';
 import 'package:intl/intl.dart';
 
 const LIFE_GENERATION_PERIOD = 120;
@@ -47,7 +49,6 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   DateTime? lastConsumeDate;
   late Timer _timer;
   bool isLeaderBoardShown = false;
-  bool isWinnerBoardShown = false;
 
   @override
   void initState() {
@@ -124,27 +125,18 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                     SizedBox(height: 23),
                     _footerView(),
                   ]
-                : (isWinnerBoardShown
-                    ? <Widget>[
-                        sizedBoxAddMob(unitHeightValue * 42.0),
-                        _navigationView(),
-                        SizedBox(height: 30),
-                        _titleView(),
-                        _winnerView(),
-                        _footerView(),
-                      ]
-                    : <Widget>[
-                        sizedBoxAddMob(unitHeightValue * 42.0),
-                        _navigationView(),
-                        SizedBox(height: 30),
-                        _titleView(),
-                        SizedBox(height: 30),
-                        _leadersView(),
-                        SizedBox(height: 30),
-                        _myStreakView(),
-                        SizedBox(height: 30),
-                        _footerView(),
-                      ]),
+                : <Widget>[
+                    sizedBoxAddMob(unitHeightValue * 42.0),
+                    _navigationView(),
+                    SizedBox(height: 30),
+                    _titleView(),
+                    SizedBox(height: 30),
+                    _leadersView(),
+                    SizedBox(height: 30),
+                    _myStreakView(),
+                    SizedBox(height: 30),
+                    _footerView(),
+                  ],
           ),
         ),
       ),
@@ -262,10 +254,6 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
         ],
       ),
     );
-  }
-
-  Widget _winnerView() {
-    return Container(height: unitHeightValue * 717);
   }
 
   Widget _navigationView() {
@@ -620,10 +608,8 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
             setState(() {
               if (isLeaderBoardShown) {
                 isLeaderBoardShown = false;
-                isWinnerBoardShown = false;
               } else {
                 isLeaderBoardShown = true;
-                isWinnerBoardShown = false;
               }
             });
           },
@@ -646,13 +632,12 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
             ),
           ),
           onTap: () {
-            if (isWinnerBoardShown) {
-              isLeaderBoardShown = false;
-              isWinnerBoardShown = false;
-            } else {
-              isLeaderBoardShown = false;
-              isWinnerBoardShown = true;
-            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WinnersScreen(),
+              ),
+            );
           },
         ),
       ],

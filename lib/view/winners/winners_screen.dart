@@ -20,7 +20,7 @@ class _WinnersState extends State<WinnersScreen> {
 
   bool _isLoading = true;
 
-  bool _isTrivia = true;
+  int tab = 0;
 
   GetWinnersImagesModel? winnersImagesModel;
 
@@ -37,7 +37,7 @@ class _WinnersState extends State<WinnersScreen> {
   @override
   Widget build(BuildContext context) {
     unitHeightValue = MediaQuery.of(context).size.height * 0.001;
-     unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
+    unitWidthValue = MediaQuery.of(context).size.width * 0.0021;
     return Stack(
       children: [
         bgImage(context),
@@ -72,8 +72,7 @@ class _WinnersState extends State<WinnersScreen> {
                     Icons.arrow_back_outlined,
                     color: greenColor,
                     size: unitHeightValue * 24.0,
-                    semanticLabel:
-                        'Text to announce in accessibility modes',
+                    semanticLabel: 'Text to announce in accessibility modes',
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -81,8 +80,9 @@ class _WinnersState extends State<WinnersScreen> {
                   color: blackColor,
                   textColor: blackColor,
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(color: greenColor, width: unitWidthValue * 2.0),
-                    borderRadius: BorderRadius.circular( unitHeightValue * 29.5),
+                    side: BorderSide(
+                        color: greenColor, width: unitWidthValue * 2.0),
+                    borderRadius: BorderRadius.circular(unitHeightValue * 29.5),
                   ),
                 ),
               ),
@@ -91,7 +91,9 @@ class _WinnersState extends State<WinnersScreen> {
               ),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: unitHeightValue * 2, horizontal: unitWidthValue * 8),
+                  padding: EdgeInsets.symmetric(
+                      vertical: unitHeightValue * 2,
+                      horizontal: unitWidthValue * 8),
                   decoration: BoxDecoration(
                     color: blackColor,
                     border: Border.all(
@@ -112,8 +114,9 @@ class _WinnersState extends State<WinnersScreen> {
               )
             ]),
             Padding(
-              padding:
-                  EdgeInsets.symmetric(vertical: unitHeightValue * 10.0, horizontal: unitWidthValue * 12.0),
+              padding: EdgeInsets.symmetric(
+                  vertical: unitHeightValue * 10.0,
+                  horizontal: unitWidthValue * 12.0),
               // child: layoutBuilderDot(whiteColor),
             ),
             Row(
@@ -121,7 +124,7 @@ class _WinnersState extends State<WinnersScreen> {
               children: <Widget>[
                 InkWell(
                   child: Container(
-                    width: unitWidthValue * 180.0,
+                    width: unitWidthValue * 120.0,
                     padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                     decoration: BoxDecoration(
                       color: whiteColor,
@@ -132,7 +135,7 @@ class _WinnersState extends State<WinnersScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      "TRIVIA",
+                      "JACKPOT",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: unitHeightValue * 24,
@@ -143,13 +146,41 @@ class _WinnersState extends State<WinnersScreen> {
                   ),
                   onTap: () {
                     setState(() {
-                      _isTrivia = true;
+                      tab = 0;
                     });
                   },
                 ),
                 InkWell(
                   child: Container(
-                    width: unitWidthValue * 180.0,
+                    width: unitWidthValue * 120.0,
+                    padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                    decoration: BoxDecoration(
+                      color: whiteColor,
+                      border: Border.all(
+                        color: blackColor,
+                        width: unitWidthValue * 2,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      "STREAK",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: unitHeightValue * 24,
+                        color: blackColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      tab = 2;
+                    });
+                  },
+                ),
+                InkWell(
+                  child: Container(
+                    width: unitWidthValue * 120.0,
                     padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                     decoration: BoxDecoration(
                       color: whiteColor,
@@ -171,7 +202,7 @@ class _WinnersState extends State<WinnersScreen> {
                   ),
                   onTap: () {
                     setState(() {
-                      _isTrivia = false;
+                      tab = 1;
                     });
                   },
                 ),
@@ -182,23 +213,17 @@ class _WinnersState extends State<WinnersScreen> {
             ),
             Container(
               width: MediaQuery.of(context).size.width - unitWidthValue * 50,
-              height: MediaQuery.of(context).size.height - unitHeightValue * 215,
+              height:
+                  MediaQuery.of(context).size.height - unitHeightValue * 215,
               decoration: BoxDecoration(
                 color: whiteColor,
                 image: DecorationImage(
-                    image: _isTrivia
-                        ? NetworkImage(
-                            winners![0].filename != null
-                                ? UrlWinnersImagePrefixUrl +
-                                    winners![0].filename!
-                                : "",
-                          )
-                        : NetworkImage(
-                            winners![1].filename != null
-                                ? UrlWinnersImagePrefixUrl +
-                                    winners![1].filename!
-                                : "",
-                          )),
+                  image: NetworkImage(
+                    winners![tab].filename != null
+                        ? UrlWinnersImagePrefixUrl + winners![tab].filename!
+                        : "",
+                  ),
+                ),
                 border: Border.all(
                   color: blackColor,
                   width: unitWidthValue * 4,
