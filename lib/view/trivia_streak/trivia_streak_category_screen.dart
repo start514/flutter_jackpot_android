@@ -26,7 +26,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
-const int CATEGORY_RESET_DURATION = 120;
+const int CATEGORY_RESET_DURATION = 900;
 
 const bool kAutoConsume = true;
 String _kConsumableIdUnlockCategorySingle =

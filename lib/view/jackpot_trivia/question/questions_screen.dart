@@ -22,6 +22,8 @@ import 'package:flutterjackpot/view/jackpot_trivia/question/submit_quiz_model.da
 import 'package:flutterjackpot/view/trivia_streak/submit_streak_model.dart';
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_controller.dart';
 
+int streakTry = 0;
+
 class QuestionsScreen extends StatefulWidget {
   final Quiz quiz;
   final bool isStreak;
@@ -567,22 +569,48 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           submitQuiz().then(
             (value) {
               if (widget.isStreak) {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
+                streakTry++;
+                if (streakTry % 5 == 0) {
+                  //Show video and move on
+                  AdMobClass.showRewardAdd(
+                      isSpin: false,
+                      afterVideoEnd: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ),
+                            (route) => false);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              StreakSuccessDialog(
+                            result: submitStreakResponse,
+                          ),
+                        ).then((value) {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        });
+                      });
+                } else {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                      (route) => false);
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => StreakSuccessDialog(
+                      result: submitStreakResponse,
                     ),
-                    (route) => false);
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => StreakSuccessDialog(
-                    result: submitStreakResponse,
-                  ),
-                ).then((value) {
-                  setState(() {
-                    _isLoading = false;
+                  ).then((value) {
+                    setState(() {
+                      _isLoading = false;
+                    });
                   });
-                });
+                }
               } else {
                 getBonus();
                 AdMobClass.showRewardAdd(
@@ -640,22 +668,48 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
               submitQuiz().then(
                 (value) {
                   if (widget.isStreak) {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomeScreen(),
+                    streakTry++;
+                    if (streakTry % 5 == 0) {
+                      //Show video and move on
+                      AdMobClass.showRewardAdd(
+                          isSpin: false,
+                          afterVideoEnd: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomeScreen(),
+                                ),
+                                (route) => false);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  StreakSuccessDialog(
+                                result: submitStreakResponse,
+                              ),
+                            ).then((value) {
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            });
+                          });
+                    } else {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomeScreen(),
+                          ),
+                          (route) => false);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => StreakSuccessDialog(
+                          result: submitStreakResponse,
                         ),
-                        (route) => false);
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => StreakSuccessDialog(
-                        result: submitStreakResponse,
-                      ),
-                    ).then((value) {
-                      setState(() {
-                        _isLoading = false;
+                      ).then((value) {
+                        setState(() {
+                          _isLoading = false;
+                        });
                       });
-                    });
+                    }
                   } else {
                     getBonus();
                     AdMobClass.showRewardAdd(
