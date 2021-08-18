@@ -4,12 +4,14 @@ import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterjackpot/dialogs/buy_life_dialog.dart';
 import 'package:flutterjackpot/dialogs/streak_rules_dialogs.dart';
 import 'package:flutterjackpot/main.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/common_sizebox_addmob.dart';
 import 'package:flutterjackpot/utils/common/shared_preferences.dart';
 import 'package:flutterjackpot/utils/image_utils.dart';
+import 'package:flutterjackpot/utils/life_utils.dart';
 import 'package:flutterjackpot/view/home/home_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_categories_model.dart';
@@ -18,8 +20,6 @@ import 'package:flutterjackpot/view/trivia_streak/trivia_streak_category_screen.
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_controller.dart';
 import 'package:flutterjackpot/view/winners/winners_screen.dart';
 import 'package:intl/intl.dart';
-
-const LIFE_GENERATION_PERIOD = 120;
 
 class TriviaStreakScreen extends StatefulWidget {
   @override
@@ -45,8 +45,6 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   List<StreakEntry>? leaders;
   int score = 0;
   int scoreMax = 0;
-  int life = 5;
-  DateTime? lastConsumeDate;
   late Timer _timer;
   bool isLeaderBoardShown = false;
 
@@ -64,20 +62,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
         scoreMax = value.scoreMax!;
       });
     });
-    Preferences.getString(Preferences.pfKConsumableIdLife).then((value) {
-      if (value != null && value != "") {
-        setState(() {
-          life = int.parse(value);
-        });
-      }
-    });
-    Preferences.getString(Preferences.pfKLastLifeConsumeDate).then((value) {
-      if (value != null && value != "") {
-        setState(() {
-          lastConsumeDate = DateTime.parse(value);
-        });
-      }
-    });
+    LifeClass.init();
   }
 
   @override
@@ -363,7 +348,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   }
 
   Widget _myStreakView() {
-    int lifeCalculated = calcLife();
+    int lifeCalculated = LifeClass.calcLife();
     return Stack(
       children: [
         Center(
@@ -514,8 +499,8 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                       ],
                     ),
                     onTap: () async {
-                      bool ret = await consumeLife();
-                      if (ret) {
+                      if (LifeClass.life > 0) {
+                        setState(() {});
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -524,7 +509,10 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
                           ),
                         );
                       } else {
-                        print("No life!");
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => BuyLifeDialog(),
+                        );
                       }
                     })
               ],
@@ -565,7 +553,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
   }
 
   Widget _footerView() {
-    String waitTimerText = calcWaitTimer();
+    String waitTimerText = LifeClass.calcWaitTimer();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -745,40 +733,6 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
     return Column(
       children: widgets,
     );
-  }
-
-  int calcLife() {
-    if (lastConsumeDate == null) return life;
-    Duration diff = DateTime.now().difference(lastConsumeDate!);
-    int generatedLife = (diff.inSeconds / LIFE_GENERATION_PERIOD).floor();
-    return min(life + generatedLife, 5);
-  }
-
-  String calcWaitTimer() {
-    if (lastConsumeDate == null || calcLife() == 5) return "FULL";
-    Duration diff = DateTime.now().difference(lastConsumeDate!);
-    int wait = diff.inSeconds % LIFE_GENERATION_PERIOD;
-    wait = LIFE_GENERATION_PERIOD - wait;
-    int min = (wait / 60).floor();
-    int sec = wait % 60;
-    return DateFormat("IN mm:ss").format(new DateTime(2000, 1, 1, 0, min, sec));
-  }
-
-  Future<bool> consumeLife() async {
-    int currentLife = calcLife();
-    if (currentLife == 0) {
-      return false;
-    }
-    currentLife--;
-    await Preferences.setString(
-        Preferences.pfKConsumableIdLife, currentLife.toString());
-    await Preferences.setString(
-        Preferences.pfKLastLifeConsumeDate, DateTime.now().toIso8601String());
-    setState(() {
-      life = currentLife;
-      lastConsumeDate = DateTime.now();
-    });
-    return true;
   }
 
   void onTimerTick(Timer timer) {

@@ -13,6 +13,7 @@ import 'package:flutterjackpot/utils/common/common_sizebox_addmob.dart';
 import 'package:flutterjackpot/utils/common/common_toast.dart';
 import 'package:flutterjackpot/utils/common/layout_dot_builder.dart';
 import 'package:flutterjackpot/utils/image_utils.dart';
+import 'package:flutterjackpot/utils/life_utils.dart';
 import 'package:flutterjackpot/view/home/home_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/question/questions_controller.dart';
@@ -780,6 +781,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
       SubmitStreakResponse? streakResponse = await triviaStreakController
           .submitStreak(userID: userRecord!.userID, score: correctAnswer);
       submitStreakResponse = streakResponse;
+      if (correctAnswer == 0) {
+        await LifeClass.consumeLife();
+      }
     } else {
       SubmitQuiz? quiz =
           await submitQuizController.submitQuiz(record, widget.quiz, bonus);

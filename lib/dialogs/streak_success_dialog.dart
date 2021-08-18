@@ -4,11 +4,13 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterjackpot/dialogs/buy_life_dialog.dart';
 import 'package:flutterjackpot/main.dart';
 import 'package:flutterjackpot/utils/colors_utils.dart';
 import 'package:flutterjackpot/utils/common/consumable_store.dart';
 import 'package:flutterjackpot/utils/common/layout_dot_builder.dart';
 import 'package:flutterjackpot/utils/common/shared_preferences.dart';
+import 'package:flutterjackpot/utils/life_utils.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/get_quiz_model.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_triva_details_screen.dart';
 import 'package:flutterjackpot/view/jackpot_trivia/jackpot_trivia_screen.dart';
@@ -370,17 +372,25 @@ class _StreakSuccessDialogState extends State<StreakSuccessDialog> {
                                 _roundedButtons(
                                   title: isFailed ? "RESTART" : "CONTINUE",
                                   onTap: () {
-                                    Navigator.pop(context);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            TriviaStreakCategoryScreen(
-                                          score: widget.result!.originalScore,
-                                          // quiz: widget.quiz,
+                                    if (LifeClass.life == 0) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            BuyLifeDialog(),
+                                      );
+                                    } else {
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              TriviaStreakCategoryScreen(
+                                            score: widget.result!.originalScore,
+                                            // quiz: widget.quiz,
+                                          ),
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    }
                                   },
                                 ),
                               ],
