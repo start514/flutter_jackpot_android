@@ -822,7 +822,7 @@ class _PowerUPSScreenState extends State<PowerUPSScreen> {
 
   Future<void> sendRewardWhenPurchaseComplete(
       {String? item, String? count}) async {
-    // await sendSpinRewardController.sendSpinRewardAPI(item: item, count: count);
+    await sendSpinRewardController.sendSpinRewardAPI(item: item, count: count);
   }
 
   void navigateToHomeScreen() {
