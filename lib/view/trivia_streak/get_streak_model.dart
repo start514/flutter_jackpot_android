@@ -67,19 +67,24 @@ class GetStreak {
 class StreakEntry {
   String? name;
   int? score;
+  int? max_score;
 
   StreakEntry({
     this.name,
     this.score,
+    this.max_score,
   });
 
   factory StreakEntry.fromJson(Map<String, dynamic> json) => StreakEntry(
         name: json["name"] == null ? null : json["name"],
         score: json["score"] == null ? null : int.parse(json["score"]),
+        max_score:
+            json["max_score"] == null ? null : int.parse(json["max_score"]),
       );
 
   Map<String, dynamic> toJson() => {
         "name": name == null ? null : name,
         "score": score == null ? null : score,
+        "max_score": max_score == null ? null : max_score,
       };
 }

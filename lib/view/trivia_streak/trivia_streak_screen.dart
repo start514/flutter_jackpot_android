@@ -139,7 +139,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
     int rank = 0;
     for (StreakEntry leader in leaders ?? []) {
       rank++;
-      int _score = leader.score!;
+      int _score = leader.max_score!;
       widgets.add(_leaderBoardItemView("$rank", leader.name ?? "", "$_score"));
       widgets.add(SizedBox(height: 5));
     }
@@ -644,12 +644,12 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
     return Row(children: [
       Container(
         child: Row(children: [
-          Text("$rank-",
+          AutoSizeText("$rank-",
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: unitHeightValue * 30)),
-          Text("\$$price",
+          AutoSizeText("\$$price",
               style: TextStyle(
                   color: greenColor,
                   fontWeight: FontWeight.bold,
@@ -662,7 +662,7 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
         ),
         padding: EdgeInsets.fromLTRB(unitWidthValue * 15, unitWidthValue * 5,
             unitWidthValue * 15, unitWidthValue * 5),
-        width: unitWidthValue * 150,
+        width: unitWidthValue * 160,
         height: unitHeightValue * 50,
       ),
       Container(
@@ -734,8 +734,8 @@ class _TriviaStreakScreenState extends State<TriviaStreakScreen> {
         rankstr = "3RD";
         price = prize3;
       }
-      widgets.add(
-          _leaderView(rankstr, price, leader.score ?? 0, leader.name ?? ""));
+      widgets.add(_leaderView(
+          rankstr, price, leader.max_score ?? 0, leader.name ?? ""));
       widgets.add(SizedBox(height: 10));
     }
     return Column(
