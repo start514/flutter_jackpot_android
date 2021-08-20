@@ -24,6 +24,7 @@ import 'package:flutterjackpot/view/trivia_streak/submit_streak_model.dart';
 import 'package:flutterjackpot/view/trivia_streak/trivia_streak_controller.dart';
 
 int streakTry = 0;
+const int AD_FREQUENCY = 6;
 
 class QuestionsScreen extends StatefulWidget {
   final Quiz quiz;
@@ -571,7 +572,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
             (value) {
               if (widget.isStreak) {
                 streakTry++;
-                if (streakTry % 5 == 0) {
+                if (streakTry % AD_FREQUENCY == 0) {
                   //Show video and move on
                   AdMobClass.showRewardAdd(
                       isSpin: false,
@@ -670,7 +671,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
                 (value) {
                   if (widget.isStreak) {
                     streakTry++;
-                    if (streakTry % 5 == 0) {
+                    if (streakTry % AD_FREQUENCY == 0) {
                       //Show video and move on
                       AdMobClass.showRewardAdd(
                           isSpin: false,

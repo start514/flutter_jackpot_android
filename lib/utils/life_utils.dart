@@ -3,10 +3,11 @@ import 'dart:math';
 import 'package:flutterjackpot/utils/common/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
-const LIFE_GENERATION_PERIOD = 7200;
+const LIFE_GENERATION_PERIOD = 900;
+const LIFE_DEFAULT = 7;
 
 class LifeClass {
-  static int life = 5;
+  static int life = LIFE_DEFAULT;
   static DateTime? lastConsumeDate;
   static void showVideoAdd(
       {required void afterVideoEnd(), required bool isSpin}) async {}
@@ -14,11 +15,11 @@ class LifeClass {
     if (lastConsumeDate == null) return life;
     Duration diff = DateTime.now().difference(lastConsumeDate!);
     int generatedLife = (diff.inSeconds / LIFE_GENERATION_PERIOD).floor();
-    return min(life + generatedLife, 5);
+    return min(life + generatedLife, LIFE_DEFAULT);
   }
 
   static String calcWaitTimer() {
-    if (lastConsumeDate == null || getLife() == 5) return "FULL";
+    if (lastConsumeDate == null || getLife() == LIFE_DEFAULT) return "FULL";
     Duration diff = DateTime.now().difference(lastConsumeDate!);
     int wait = diff.inSeconds % LIFE_GENERATION_PERIOD;
     wait = LIFE_GENERATION_PERIOD - wait;
@@ -58,7 +59,7 @@ class LifeClass {
   }
 
   static Future<void> restoreLife() async {
-    int currentLife = 5;
+    int currentLife = LIFE_DEFAULT;
     await Preferences.setString(
         Preferences.pfKConsumableIdLife, currentLife.toString());
     await Preferences.setString(
